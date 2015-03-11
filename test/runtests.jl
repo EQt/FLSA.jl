@@ -1,6 +1,8 @@
-using FLSA
-using Base.Test
+tests = ["grid_graph"]
 
-# write your own tests here
-@test 1 == 1
 
+for t in tests
+    tp = joinpath(Pkg.dir("FLSA"),"test","$(t).jl")
+    println("running $(tp) ...")
+    include(tp)
+end

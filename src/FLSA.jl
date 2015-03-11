@@ -1,5 +1,5 @@
 module FLSA
+  using Graphs
 
-# package code goes here
-
+  include("grid_graph.jl")
 end # module
