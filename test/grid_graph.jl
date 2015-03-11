@@ -1,5 +1,6 @@
 using FLSA
 using Base.Test
+using Graphs.source, Graphs.target
 
 @test 1 == 1
 
@@ -23,3 +24,12 @@ E23 =[((1,1),(2,1))
 
 @test FLSA.grid_edges(2,3) == E23
 
+g = FLSA.grid_graph(2,3)
+
+@test g.vertices == V23
+
+for e in g.edges
+    @test (source(e), target(e)) in E23
+end
+
+@test length(g.edges) == length(E23)
