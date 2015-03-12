@@ -16,8 +16,8 @@ end
 
 """Vector of edges of an n1×n2 grid graph"""
 function grid_edges(n1::Integer, n2::Integer)
-    Eh = [((i,j), (i+1,j)) for j in 1:n2,   i in 1:n1-1]
-    Ev = [((i,j), (i,j+1)) for j in 1:n2-1, i in 1:n1]
+    local Eh = [((i,j), (i,j+1)) for j in 1:n2-1, i in 1:n1]
+    local Ev = [((i,j), (i+1,j)) for j in 1:n2,   i in 1:n1-1]
     E = vcat(reshape(Eh, length(Eh)), reshape(Ev, length(Ev)))
 end
 
