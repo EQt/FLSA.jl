@@ -2,6 +2,9 @@ typealias GridNode (Int, Int)
 typealias GridEdge Graphs.Edge{GridNode}
 typealias GridGraph EdgeList{GridNode, GridEdge}
 
+"""Specialized method for GridGraphs"""
+vertex_index(v::GridNode, g::GridGraph) =
+    max(findfirst(x -> x == (2,1), g.vertices)-1, 1)* (v[1]-1) + v[2]
 
 """Vector of nodes of an n1×n2 grid graph"""
 function grid_nodes(n1::Integer, n2::Integer)
