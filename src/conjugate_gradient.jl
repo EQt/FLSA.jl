@@ -11,6 +11,7 @@ function conjugate_gradient{T<:Number, R<:Real}(A::AbstractMatrix{T},
                                                 ɛ::Real = 1e-6,
                                                 max_iter::Integer = 100)
     size(A,1) == size(A,2) || error("Matrix A has to be a square matrix")
+    issym(A) || error("Matrix A has to be a symmetric matrix")
 
     r = A*x - b
     p = -r
