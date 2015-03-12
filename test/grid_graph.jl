@@ -1,5 +1,3 @@
-using FLSA
-using Base.Test
 using Graphs.source, Graphs.target
 
 @test 1 == 1
