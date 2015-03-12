@@ -24,6 +24,7 @@ E23 =[((1,1),(2,1))
 
 g = FLSA.grid_graph(2,3)
 
+@test is_directed(g) == false
 @test g.vertices == V23
 
 for e in g.edges
