@@ -10,7 +10,7 @@ function incidence_matrix{T<:Number}(g::AbstractGraph, ::Type{T} = Int)
     J = Array(Int, nnz)
     R = Array(T, nnz)
 
-    elseif implements_edge_list(g)
+    if implements_edge_list(g)
         @inbounds @sync @parallel for (i, e)=enumerate(edges(g))
             u, v = e
             ui = vertex_index(u, g)
