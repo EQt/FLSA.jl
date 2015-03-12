@@ -1,5 +1,6 @@
-using FLSA
 using Base.Test
+using FLSA
+using Graphs
 
 tests = ["grid_graph", "incidence_matrix"]
 
