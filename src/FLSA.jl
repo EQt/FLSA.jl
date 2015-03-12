@@ -5,7 +5,8 @@ module FLSA
          grid_graph,
          incidence_matrix,
          norm2,
-         conjugate_gradient
+         conjugate_gradient,
+         admm
 
   include("grid_graph.jl")
   include("incidence_matrix.jl")
