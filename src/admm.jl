@@ -14,7 +14,7 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
                                    max_iter::Int = 100,
                                    verbose::Bool = false)
     m, n = size(D)
-    size(y,1) == n || error(@sprintf("y has wrong dimension %d (should be %d", size(y), n))
+    size(y,1) == n || error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
     L = D'*D # Laplacian matrix
     @assert size(L, 1) == n
     @assert size(L, 2) == n
