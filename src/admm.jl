@@ -48,10 +48,8 @@ function admm{T<:Number}(y::AbstractMatrix{T},
                          max_iter::Int = 100,
                          verbose::Bool = false)
     n1, n2 = size(y)
-    n = n1*n2
-    G = grid_graph(n1, n2)
-    D = incidence_matrix(G)
+    n = n1 * n2
+    D = incidence_matrix(y)
     x = admm(reshape(y', n), D, λ, δ, μ; max_iter=max_iter, verbose=verbose)
     return reshape(x, n2, n1)'
 end
-
