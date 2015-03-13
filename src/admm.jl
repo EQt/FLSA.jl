@@ -17,6 +17,8 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
     size(y) == n || error(@sprintf("y has wrong dimension %d (should be %d",
                                    size(y), n))
     L = D'*D # Laplacian matrix
+    @assert size(L, 1) == n
+    @assert size(L, 2) == n
     x = copy(y) # initialize x
     b = zeros(n)
     z = zeros(m)
