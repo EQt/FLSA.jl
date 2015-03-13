@@ -14,10 +14,12 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
                                    max_iter::Int = 100,
                                    verbose::Bool = false)
     m, n = size(D)
+    size(y) == n || error(@sprintf("y has wrong dimension %d (should be %d",
+                                   size(y), n))
     L = D'*D # Laplacian matrix
     x = copy(y) # initialize x
     b = zeros(n)
-    v = zeros(m)
+    z = zeros(m)
     k::Unsigned = 1 # iteration number
     while k ≤ max_iter
         k += 1
@@ -27,9 +29,12 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
         
         x = conjugate_gradient(A, c, c)
         # update b
-        b = soft_threshold(D*x + v/μ, λ/μ, )
+        b = soft_threshold(D*x + z/μ, λ/μ, )
         
-        # update v
-        v += δ * (D*x - b)
+        # update z
+        z += δ * (D*x - b)
+        if verbose
+            println(norm2(D*x - b))
+        end
     end
 end
