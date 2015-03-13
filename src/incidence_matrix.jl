@@ -46,3 +46,11 @@ function incidence_matrix{T<:Number}(g::AbstractGraph, ::Type{T} = Int)
     end
     sparse(I, J, R, m, n)
 end
+
+incidence_matrix(n1::Int, n2::Int) =
+    incidence_matrix(grid_graph(n1, n2))
+
+
+incidence_matrix{T<:Number}(y::AbstractMatrix{T}) =
+    incidence_matrix(size(y)...)
+
