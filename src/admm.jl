@@ -38,4 +38,5 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
             println(norm2(D*x - b))
         end
     end
+    x
 end
