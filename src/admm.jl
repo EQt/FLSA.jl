@@ -19,7 +19,7 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
     @assert size(L, 1) == n
     @assert size(L, 2) == n
     x = copy(y) # initialize x
-    b = zeros(n)
+    b = zeros(m)
     z = zeros(m)
     k::Unsigned = 1 # iteration number
     while k ≤ max_iter
