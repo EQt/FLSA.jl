@@ -13,7 +13,7 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
 
     m, n = size(D)
     size(y,1) == n || error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
-    α = β = zeros(m)
+    α = β = λ * sign(D * y)
     t = 1
     k = 1
     while k <= max_iter
