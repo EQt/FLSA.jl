@@ -20,7 +20,7 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
         α₀ = α
         α = pL(β)
         t₁ = (1 + sqrt(1 + 4t^2))/2
-        β = α + (t - 1)/t₁ + (α - α₀)
+        β = α + (t - 1)/t₁ * (α - α₀)
         t = t₁
         k += 1
         if verbose
