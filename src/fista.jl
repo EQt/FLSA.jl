@@ -24,7 +24,7 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
         t = t₁
         k += 1
         if verbose
-            info(@sprintf("%f", norm2(α - α₀)))
+            info(@sprintf("t = %f\t||α - α₀|| = %f", t, norm2(α - α₀)))
         end
     end
     return D'α - y
