@@ -24,10 +24,25 @@ function grid_edges(n1::Integer, n2::Integer)
     E = vcat(reshape(Eh, length(Eh)), reshape(Ev, length(Ev)))
 end
 
+"""Vector of edges of an n1×n2 diagonal grid graph"""
+function dgrid_edges(n1::Integer, n2::Integer)
+    local Ep = [((i,j), (i+1,j+1)) for j in 1:n2-1, i in 1:n1-1]
+    local En = [((i-1,j+1), (i,j)) for j in 1:n2-1,   i in 2:n1]
+    E = vcat(reshape(Ep, length(Ep)), reshape(En, length(En)))
+end
+
 """Construct an incidence list representation of the n1×n2 grid graph"""
 function grid_graph(n1::Int, n2::Int)
     V = grid_nodes(n1, n2)
     E = grid_edges(n1, n2)
+    E = [GridEdge(i, u, v) for (i, (u, v)) in enumerate(E)]
+    edgelist(V, E; is_directed=false)
+end
+
+"""Construct an incidence list representation of the n1×n2 diagonal grid graph"""
+function dgrid_graph(n1::Int, n2::Int)
+    V = grid_nodes(n1, n2)
+    E = dgrid_edges(n1, n2)
     E = [GridEdge(i, u, v) for (i, (u, v)) in enumerate(E)]
     edgelist(V, E; is_directed=false)
 end

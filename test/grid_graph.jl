@@ -28,3 +28,12 @@ for e in g.edges
 end
 
 @test length(g.edges) == length(E23)
+
+F23 = [((1,1),(2,2))
+       ((1,2),(2,3))
+       ((1,2),(2,1))
+       ((1,3),(2,2))]
+@test FLSA.dgrid_edges(2,3) == F23
+
+g = FLSA.dgrid_graph(2,3)
+@test g.vertices == V23
