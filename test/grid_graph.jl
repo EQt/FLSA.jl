@@ -20,6 +20,8 @@ g = FLSA.grid_graph(2,3)
 
 @test is_directed(g) == false
 @test g.vertices == V23
+@test FLSA.num_columns(g) == 3
+@test FLSA.num_rows(g) == 2
 
 for e in g.edges
     @test (source(e), target(e)) in E23
