@@ -30,5 +30,5 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
             info(@sprintf("t = %f\t||α - α₀|| = %f", t, norm2(α - α₀)))
         end
     end
-    return y - D'α 
+    return y - D'*α
 end
