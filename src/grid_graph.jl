@@ -10,7 +10,7 @@ vertex_index(v::GridNode, g::GridGraph) = num_columns(g) * (v[1]-1) + v[2]
 
 """Vector of nodes of an n1×n2 grid graph"""
 function grid_nodes(n1::Integer, n2::Integer)
-    V = [(i,j) for j in 1:n2, i in 1:n1]
+    V = [(i,j) for i in 1:n1, j in 1:n2]
     reshape(V, length(V))
 end
 
