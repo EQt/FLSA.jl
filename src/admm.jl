@@ -50,6 +50,6 @@ function admm{T<:Number}(y::AbstractMatrix{T},
     n1, n2 = size(y)
     n = n1 * n2
     D = incidence_matrix(y)
-    x = admm(reshape(y', n), D, λ, δ, μ; max_iter=max_iter, verbose=verbose)
-    return reshape(x, n2, n1)'
+    x = admm(reshape(y, n), D, λ, δ, μ; max_iter=max_iter, verbose=verbose)
+    return reshape(x, n1, n2)
 end
