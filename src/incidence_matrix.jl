@@ -12,8 +12,8 @@ function incidence_matrix{T<:Number}(g::AbstractGraph, ::Type{T} = Int)
 
     if implements_edge_list(g)
         if isa(g, GridGraph)
-            local n2 = num_columns(g)
-            vertex_index(v, g) = n2 * (v[1]-1) + v[2]
+            local n1 = num_rows(g)
+            vertex_index(v, g) = n1 * (v[2]-1) + v[1]
         end
         @inbounds @sync @parallel for e=edges(g)
             u, v, i = source(e), target(e), edge_index(e)
