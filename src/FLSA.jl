@@ -9,6 +9,7 @@ module FLSA
          admm,
          fista
 
+  include("flsa.jl")
   include("grid_graph.jl")
   include("incidence_matrix.jl")
   include("admm.jl")

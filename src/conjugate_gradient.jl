@@ -1,6 +1,3 @@
-"""L2 norm squared"""
-norm2(x) = (x' * x)[1]
-
 """
 conjugate gradient method to solve A*x = b.
 Break after max_iter iterations or as soon as ||A*x - b|| < ɛ holds.
