@@ -6,7 +6,7 @@ typealias GridGraph EdgeList{GridNode, GridEdge}
 num_rows(g::GridGraph) = max(findfirst(x -> x == (1,2), g.vertices)-1, 1)
 
 """Number of columns of the grid"""
-num_columns(g::GridGraph) = div(num_vertices(g), num_columns(g))
+num_columns(g::GridGraph) = div(num_vertices(g), num_rows(g))
 
 """Specialized method for GridGraphs"""
 vertex_index(v::GridNode, g::GridGraph) = num_columns(g) * (v[1]-1) + v[2]
