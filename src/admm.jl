@@ -54,8 +54,5 @@ end
 
 
 """For convenience (see first admm function)"""
-function admm{T<:Number}(y::AbstractMatrix{T},
-                         λ::Number = 1.0,
-                         δ::Number = 0.1,
-                         μ::Number = 0.1; params...) =
+admm{T<:Number}(y::AbstractMatrix{T}, λ::Number = 1.0, δ::Number = 0.1, μ::Number = 0.1; params...) =
     admm(y, grid_graph(size(y)...), λ, δ, μ; params...)
