@@ -23,7 +23,6 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
     z = zeros(m)
     k::Unsigned = 1 # iteration number
     while k ≤ max_iter
-        k += 1
         # update x
         A = eye(L) + μ*L
         c = y + D'*(μ*b - z)
@@ -35,21 +34,28 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
         # update z
         z += δ * (D*x - b)
         if verbose
-            println(norm2(D*x - b))
+            println(@sprintf("%4d %f", k, flsa(x, y, D, λ)))
         end
+        k += 1
     end
     x
 end
 
+"""For convenience…"""
+function admm{T<:Number}(y::AbstractMatrix{T},
+                         D::AbstractMatrix{T},
+                         λ::Number = 1.0,
+                         δ::Number = 0.1,
+                         μ::Number = 0.1; params...)
+    n1, n2 = size(y)
+    x = admm(reshape(y, n1*n2), D, λ, δ, μ; params...)
+    return reshape(x, n1, n2)
+end
+
+
+"""For convenience (see first admm function)"""
 function admm{T<:Number}(y::AbstractMatrix{T},
                          λ::Number = 1.0,
                          δ::Number = 0.1,
-                         μ::Number = 0.1;
-                         max_iter::Int = 100,
-                         verbose::Bool = false)
-    n1, n2 = size(y)
-    n = n1 * n2
-    D = incidence_matrix(y)
-    x = admm(reshape(y, n), D, λ, δ, μ; max_iter=max_iter, verbose=verbose)
-    return reshape(x, n1, n2)
-end
+                         μ::Number = 0.1; params...) =
+    admm(y, grid_graph(size(y)...), λ, δ, μ; params...)
