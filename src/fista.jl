@@ -32,3 +32,13 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
     end
     return y - D'*α
 end
+
+"""For convenience…"""
+function fista{T<:Number,I<:Number}(y::AbstractMatrix{T},
+                                    D::AbstractMatrix{I},
+                                    λ::Number = 1.0;params...)
+    n1, n2 = size(y)
+    x = fista(reshape(y, n1*n2), D, λ; params...)
+    return reshape(x, n1, n2)
+end
+
