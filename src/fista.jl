@@ -10,12 +10,14 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
                                     L = 8,
                                     max_iter::Int = 100,
                                     verbose::Bool = false)
+    m, n = size(D)
+    size(y,1) == n ||
+      error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
+
     prox(x) = clip(x, -λ, +λ)
     grad(α) = D*(D'*α - y)              # gradient
     pL(α) = prox(α - 1/L*grad(α))
 
-    m, n = size(D)
-    size(y,1) == n || error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
     α = β = λ * sign(D * y)
     t = 1
     k = 1
@@ -25,10 +27,11 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
         t₁ = (1 + sqrt(1 + 4t^2))/2
         β = α + (t - 1)/t₁ * (α - α₀)
         t = t₁
-        k += 1
         if verbose
-            info(@sprintf("t = %f\t||α - α₀|| = %f", t, norm2(α - α₀)))
+            x = y - D'*α
+            println(@sprintf("%4d %f", k, flsa(x, y, D, λ)))
         end
+        k += 1
     end
     return y - D'*α
 end
