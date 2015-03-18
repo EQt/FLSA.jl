@@ -12,9 +12,12 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
                                    δ::Number = 0.1,
                                    μ::Number = 0.1;
                                    max_iter::Int = 100,
-                                   verbose::Bool = false)
+                                   verbose::Bool = false,
+                                   logger = Dict{String, Any}())
     m, n = size(D)
-    size(y,1) == n || error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
+    size(y,1) == n ||
+       error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
+
     L = D'*D # Laplacian matrix
     @assert size(L, 1) == n
     @assert size(L, 2) == n
@@ -34,7 +37,11 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
         # update z
         z += δ * (D*x - b)
         if verbose
-            println(@sprintf("%4d %f", k, flsa(x, y, D, λ)))
+            if !haskey(logger, "flsa")
+                logger["flsa"] = {}
+            end
+            push!(logger["flsa"], flsa(x, y, D, λ))
+            println(@sprintf("%4d %f", k, logger["flsa"][end]))
         end
         k += 1
     end

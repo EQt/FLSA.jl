@@ -10,7 +10,7 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
                                     L = 8,
                                     max_iter::Int = 100,
                                     verbose::Bool = false,
-                                    logger = nothing)
+                                    logger = Dict{String,Any}())
     m, n = size(D)
     size(y,1) == n ||
       error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
@@ -29,8 +29,7 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
         β = α + (t - 1)/t₁ * (α - α₀)
         t = t₁
         if verbose
-            if logger == nothing
-                logger = Dict{String, Any}()
+            if !haskey(logger, "flsa")
                 logger["flsa"] = {}
             end
             x = y - D'*α
