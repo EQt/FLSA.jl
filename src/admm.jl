@@ -42,7 +42,7 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
         A = eye(L) + μ*L
         c = y + D'*(μ*b - z)
         
-        x = conjugate_gradient(A, c, c)
+        x = conjugate_gradient(A, c, x)
         # update b
         b = soft_threshold(D*x + z/μ, λ/μ, )
         
