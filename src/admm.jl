@@ -18,14 +18,26 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
     size(y,1) == n ||
        error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
 
+    tic()
     L = D'*D # Laplacian matrix
     @assert size(L, 1) == n
     @assert size(L, 2) == n
     x = copy(y) # initialize x
     b = zeros(m)
     z = zeros(m)
-    k::Unsigned = 1 # iteration number
+    k= 1 # iteration number
     while k ≤ max_iter
+        time = toq()
+        if verbose
+            if !haskey(logger, "flsa")
+                logger["time"] = {}
+                logger["flsa"] = {}
+            end
+            push!(logger["flsa"], flsa(x, y, D, λ))
+            push!(logger["time"], time)
+            println(@sprintf("%4d %f", k, logger["flsa"][end]))
+        end
+        tic()
         # update x
         A = eye(L) + μ*L
         c = y + D'*(μ*b - z)
@@ -36,13 +48,6 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
         
         # update z
         z += δ * (D*x - b)
-        if verbose
-            if !haskey(logger, "flsa")
-                logger["flsa"] = {}
-            end
-            push!(logger["flsa"], flsa(x, y, D, λ))
-            println(@sprintf("%4d %f", k, logger["flsa"][end]))
-        end
         k += 1
     end
     x
