@@ -58,11 +58,11 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
 end
 
 """For convenience…"""
-function admm{T<:Number}(y::AbstractMatrix{T},
-                         D::AbstractMatrix{T},
-                         λ::Number = 1.0,
-                         δ::Number = 0.1,
-                         μ::Number = 0.1; params...)
+function admm{T<:Number,I<:Number}(y::AbstractMatrix{T},
+                                   D::AbstractMatrix{I},
+                                   λ::Number = 1.0,
+                                   δ::Number = 0.1,
+                                   μ::Number = 0.1; params...)
     n1, n2 = size(y)
     x = admm(reshape(y, n1*n2), D, λ, δ, μ; params...)
     return reshape(x, n1, n2)
