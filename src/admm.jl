@@ -48,7 +48,7 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
         x = conjugate_gradient(A, c, x; ɛ=ɛ_CG)
         ɛ_CG = (ɛ_CG * c)[1]
         # update b
-        b = soft_threshold(D*x + z/μ, λ/μ, )
+        b = soft_threshold(D*x + z/μ, λ/μ)
         
         # update z
         z += δ * (D*x - b)
