@@ -11,6 +11,8 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
                                    λ::Number = 1.0,
                                    δ::Number = 0.1,
                                    μ::Number = 0.1;
+                                   ɛ_CG::Real= 0.1,
+                                   c::Real = 0.5,
                                    max_iter::Int = 100,
                                    verbose::Bool = false,
                                    logger = Dict{String, Any}())
@@ -32,17 +34,19 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
             if !haskey(logger, "flsa")
                 logger["time"] = {}
                 logger["flsa"] = {}
+                logger["ɛ_CG"] = {}
             end
             push!(logger["flsa"], flsa(x, y, D, λ))
             push!(logger["time"], time)
+            push!(logger["ɛ_CG"], ɛ_CG)
             println(@sprintf("%4d %f", k, logger["flsa"][end]))
         end
         tic()
         # update x
         A = eye(L) + μ*L
         c = y + D'*(μ*b - z)
-        
-        x = conjugate_gradient(A, c, x)
+        x = conjugate_gradient(A, c, x; ɛ=ɛ_CG)
+        ɛ_CG = (ɛ_CG * c)[1]
         # update b
         b = soft_threshold(D*x + z/μ, λ/μ, )
         
