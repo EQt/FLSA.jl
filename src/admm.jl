@@ -18,7 +18,6 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
     size(y,1) == n ||
        error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
 
-    tic()
     L = D'*D # Laplacian matrix
     @assert size(L, 1) == n
     @assert size(L, 2) == n
@@ -26,6 +25,7 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
     b = zeros(m)
     z = zeros(m)
     k= 1 # iteration number
+    tic()
     while k ≤ max_iter
         time = toq()
         if verbose
