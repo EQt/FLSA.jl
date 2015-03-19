@@ -22,14 +22,8 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
     α = β = λ * sign(D * y)
     t = 1
     k = 1
+    time = 0
     while k <= max_iter
-        tic()
-        α₀ = α
-        α = pL(β)
-        t₁ = (1 + sqrt(1 + 4t^2))/2
-        β = α + (t - 1)/t₁ * (α - α₀)
-        t = t₁
-        time = toq()
         if verbose
             if !haskey(logger, "flsa")
                 logger["flsa"] = {}
@@ -40,6 +34,13 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
             push!(logger["time"], time)
             println(@sprintf("%4d %f", k, logger["flsa"][end]))
         end
+        tic()
+        α₀ = α
+        α = pL(β)
+        t₁ = (1 + sqrt(1 + 4t^2))/2
+        β = α + (t - 1)/t₁ * (α - α₀)
+        t = t₁
+        time = toq()
         k += 1
     end
     return y - D'*α
