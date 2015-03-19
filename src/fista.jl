@@ -23,17 +23,21 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
     t = 1
     k = 1
     while k <= max_iter
+        tic()
         α₀ = α
         α = pL(β)
         t₁ = (1 + sqrt(1 + 4t^2))/2
         β = α + (t - 1)/t₁ * (α - α₀)
         t = t₁
+        time = toq()
         if verbose
             if !haskey(logger, "flsa")
                 logger["flsa"] = {}
+                logger["time"] = {}
             end
             x = y - D'*α
             push!(logger["flsa"], flsa(x, y, D, λ))
+            push!(logger["time"], time)
             println(@sprintf("%4d %f", k, logger["flsa"][end]))
         end
         k += 1
