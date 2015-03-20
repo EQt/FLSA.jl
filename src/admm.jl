@@ -16,6 +16,7 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
                                    max_iter::Int = 100,
                                    verbose::Bool = false,
                                    logger = Dict{String, Any}(),
+                                   max_time::Number = Inf,
                                    L::Real = 8)
     m, n = size(D)
     size(y,1) == n ||
@@ -28,9 +29,11 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
     b = zeros(m)
     z = zeros(m)
     k= 1 # iteration number
+    total = 0
     tic()
-    while k ≤ max_iter
+    while k ≤ max_iter && total ≤ max_time
         time = toq()
+        total += time
         if verbose
             if !haskey(logger, "flsa")
                 logger["time"] = {}
