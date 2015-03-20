@@ -9,8 +9,8 @@ Solve the FLSA by the ALTERNATING DIRECTION METHOD OF MULTIPLIERS.
 function admm{T<:Number,I<:Number}(y::Vector{T},
                                    D::AbstractMatrix{I},
                                    λ::Number = 1.0,
-                                   δ::Number = 0.1,
-                                   μ::Number = 0.1;
+                                   δ::Number = 0.5,
+                                   μ::Number = 0.5;
                                    ɛ_CG::Real= 0.1,
                                    ɛ_c::Real = 0.5,
                                    max_iter::Int = 100,
