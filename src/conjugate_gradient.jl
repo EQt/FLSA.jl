@@ -12,7 +12,6 @@ function conjugate_gradient{T<:Number, R<:Real}(A::AbstractMatrix{T},
 
     r = A*x - b
     p = -r
-    println("ɛ=", ɛ)
     ɛ = max(ɛ*norm(A, Inf) * norm(b, Inf), 1e-6)
     r_norm2 = norm2(r)
     k::Unsigned = 1
