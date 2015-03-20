@@ -15,7 +15,8 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
                                    c::Real = 0.5,
                                    max_iter::Int = 100,
                                    verbose::Bool = false,
-                                   logger = Dict{String, Any}())
+                                   logger = Dict{String, Any}(),
+                                   L::Real = 8)
     m, n = size(D)
     size(y,1) == n ||
        error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
