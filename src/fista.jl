@@ -33,7 +33,7 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
                 logger["flsa"] = {}
                 logger["time"] = {}
             end
-            x = y - D'*α
+            x = y - λ*D'*α
             push!(logger["flsa"], flsa(x, y, D, λ))
             push!(logger["time"], time)
             println(@sprintf("%4d %f", k, logger["flsa"][end]))
@@ -49,7 +49,7 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
         t = t₁
         k += 1
     end
-    return y - D'*α
+    return y - λ*D'*α
 end
 
 """For convenience…"""
