@@ -8,4 +8,4 @@ y = rand(n)
 
 x = conjugate_gradient(A, b, y; ɛ=ɛ, max_iter=1000)
 
-@test norm2(A*x - b) <= ɛ
+@test norm2(A*x - b) <= ɛ * norm(A, Inf) * norm(b, Inf)
