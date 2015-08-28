@@ -10,7 +10,9 @@ module FLSA
          fista,
          PWL,
          Knot,
-         call
+         call,
+         find_x,
+         clip
 
   include("flsa.jl")
   include("grid_graph.jl")
