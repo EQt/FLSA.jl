@@ -7,11 +7,14 @@ module FLSA
          norm2,
          conjugate_gradient,
          admm,
-         fista
+         fista,
+         PWL,
+         Knot
 
   include("flsa.jl")
   include("grid_graph.jl")
   include("incidence_matrix.jl")
   include("admm.jl")
   include("fista.jl")
+  include("pwl.jl")
 end # module
