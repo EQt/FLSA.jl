@@ -65,9 +65,13 @@ end
 -(f::PWL) = PWL([Knot(k.x, -k.y) for k in f.knots])
 -(f::PWL, g::PWL) = f + (-g)
 
-"Return copy(f) PWL clipped to [x_lower, x_upper]."
+"Return clipped f to [x_lower, x_upper]"
 function clip(f::PWL, x_lower::Number, x_upper::Number)
-    knots = self.knots_in_range(x_lower, x_upper)
+    i0 = findfirst(k -> k.x >= x_lower, f.knots)
+    i1 = findlast( k -> k.x <= x_upper, f.knots)
+    knots = [Knot(x_lower, call(f, x_lower)),
+             f.knots[i0:i1],
+             Knot(x_upper, call(f, x_upper))]
     PWL([Knot(-INF, call(f,x_lower)), knots, Knot(+INF, call(f,x_upper))])
 end
 
