@@ -9,7 +9,8 @@ module FLSA
          admm,
          fista,
          PWL,
-         Knot
+         Knot,
+         call
 
   include("flsa.jl")
   include("grid_graph.jl")
