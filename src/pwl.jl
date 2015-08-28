@@ -80,20 +80,20 @@ function +(f::PWL, g::PWL)
 end
 
 -(f::PWL) = PWL([Knot(k.x, -k.y) for k in f.knots])
+-(f::PWL, g::PWL) = f + (-g)
 
-##     def __sub__(self, other):
-##         """substract to PWLs"""
-##         return self + (-other)
+function clip(f::PWL, x_lower::Number, x_upper::Number)
+    """Return copy(f) PWL clipped to [x_lower, x_upper]."""
+    knots = self.knots_in_range(x_lower, x_upper)
+    PWL([Knot(-INF, call(f,x_lower)), knots, Knot(+INF, call(f,x_upper))])
+end
+
 
 ### Not needed right now as it works good enough in Julia out of the box
 ## function show(f::PWL)
 ##     return "\n".join(map(lambda p: "(% 8.2f, % 8.2f)" % p, f.knots))
 ## end
 
-##     def clip(self, x_lower, x_upper):
-##         """Return copy(self) PWL clipped to [x_lower, x_upper]."""
-##         knots = self.knots_in_range(x_lower, x_upper)
-##         return PWL([(-INF, self(x_lower))] + knots + [(+INF, self(x_upper))])
 
 
 ##     def plot(self, xmin=-INF, xmax=+INF):
@@ -111,9 +111,3 @@ end
 ##         p0, p1 = self.knots[i0], self.knots[i1]
 ##         lam = (y - p0[1]) / float(p1[1] - p0[1])
 ##         return (1-lam)*p0[0] + lam*p1[0]
-
-
-##     def knots_in_range(self, xmin, xmax):
-##         """return knots within the range [xmin, xmax]"""
-##         mid = [k for k in self.knots if xmin <= k[0] and k[0] <= xmax]
-##         return [(xmin, self(xmin))] + mid + [(xmax, self(xmax))]
