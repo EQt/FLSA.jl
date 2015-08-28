@@ -24,6 +24,7 @@ function call(f::PWL, x::Number)
     if length(f.knots) == 1
         return f.knots[1].y
     end
+    return x
 end
 
 testf = PWL([Knot(1,1), Knot(2,1)])
@@ -63,21 +64,20 @@ testf = PWL([Knot(1,1), Knot(2,1)])
 ##             print("p1=", p1)
 ##             raise
 
-##     def __add__(self, other):
-##         """add to PWLs"""
-##         if isinstance(other, Number):
-##             return PWL([(x, y+other) for x, y in self.knots])
-##         if not isinstance(other, PWL):
-##             raise TypeError('Unsupported type ' + str(type(other)))
-##         xs = sorted(map(lambda p: p[0], self.knots + other.knots))
-##         xs_unique, x_old = [], float('-inf')
-##         for x in xs:
-##             if x > x_old + EPS:
-##                 xs_unique.append(x)
-##                 x_old = x
-##         rsum = lambda x: self(x) + other(x)
-##         knots = [(x, rsum(x)) for x in xs_unique]
-##         return PWL(knots)
+function +(f::PWL, g::PWL)
+    knots = vcat(f.knots, g.knots)
+    sort!(knots, by=k -> k.x)
+    x_old = Inf
+    for (i,k) in enumerate(knots)
+        if (k.x <= x_old + EPS)
+            deleteat!(knots, i)
+        else
+            k.y = call(f, k.x) + call(g, k.x)
+        end
+        x_old = k.x
+    end
+    return PWL(knots)
+end
 
 ##     def __radd__(self, other):
 ##         if isinstance(other, Number):
