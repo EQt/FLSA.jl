@@ -105,21 +105,6 @@ function clip(f::PWL, x_lower::Number, x_upper::Number)
 end
 
 
-### Not needed right now as it works good enough in Julia out of the box
-## function show(f::PWL)
-##     return "\n".join(map(lambda p: "(% 8.2f, % 8.2f)" % p, f.knots))
-## end
-
-
-
-##     def plot(self, xmin=-INF, xmax=+INF):
-##         """plot using matplotlib"""
-##         import matplotlib.pyplot as plt
-##         knots = [k for k in self.knots if xmin <= k[0] and k[0] <= xmax]
-##         knots = [(xmin, self(xmin))] + knots + [(xmax, self(xmax))]
-##         plt.plot([k[0] for k in knots], [k[1] for k in knots], '-o')
-
-
 ##     def find_x(self, y):
 ##         """find x s.t. PWL(x)=y"""
 ##         i0 = [i for i,p in enumerate(self.knots) if p[1] <= y][-1]
