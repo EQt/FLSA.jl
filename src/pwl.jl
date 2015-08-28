@@ -1,3 +1,5 @@
+using Compat
+
 INF = 100
 EPS = 1e-9
 
@@ -42,7 +44,7 @@ function call(f::PWL, x::Number)
 end
 
 function +(f::PWL, g::PWL)
-    knots = vcat(f.knots, g.knots)
+    knots = deepcopy([f.knots, g.knots])
     sort!(knots, by=k -> k.x)
     x_old = -Inf
     off = 0
@@ -70,10 +72,11 @@ function clip(f::PWL, x_lower::Number, x_upper::Number)
 end
 
 
-##     def find_x(self, y):
-##         """find x s.t. PWL(x)=y"""
-##         i0 = [i for i,p in enumerate(self.knots) if p[1] <= y][-1]
-##         i1 = i0+1
-##         p0, p1 = self.knots[i0], self.knots[i1]
-##         lam = (y - p0[1]) / float(p1[1] - p0[1])
-##         return (1-lam)*p0[0] + lam*p1[0]
+"""find x s.t. PWL(x)=y (assumes that f is strictly increasing)"""
+function find_x(f::PWL, y::Number)
+    i0 = findlast(k -> k.y <= y, f.knots)
+    i1 = i0+1
+    p0, p1 = f.knots[i0], f.knots[i1]
+    lam = (y - p0.y) / (p1.y - p0.y)
+    return (1-lam)*p0.x + lam*p1.x
+end
