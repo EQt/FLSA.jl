@@ -12,3 +12,9 @@ p3 = PWL([Knot(-1,-1), Knot(0,0), Knot(1,0)])
 @test call(p3, -0.5) == -0.5
 @test call(p3, 2) == 0
 @test call(p3, 20) == 0
+
+p4 = p3 + constid
+@test call(p4, -5) == -10.0
+@test call(p4, -0.5) == -1.0
+@test call(p4, 2) == 2
+@test call(p4, 20) == 20
