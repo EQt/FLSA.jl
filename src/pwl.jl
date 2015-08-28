@@ -93,8 +93,10 @@ testf = PWL([Knot(1,1), Knot(2,1)])
 ##         """substract to PWLs"""
 ##         return self + (-other)
 
-##     def __str__(self):
-##         return "\n".join(map(lambda p: "(% 8.2f, % 8.2f)" % p, self.knots))
+### Not needed right now as it works good enough in Julia out of the box
+## function show(f::PWL)
+##     return "\n".join(map(lambda p: "(% 8.2f, % 8.2f)" % p, f.knots))
+## end
 
 ##     def clip(self, x_lower, x_upper):
 ##         """Return copy(self) PWL clipped to [x_lower, x_upper]."""
