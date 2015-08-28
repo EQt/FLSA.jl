@@ -39,8 +39,6 @@ function call(f::PWL, x::Number)
     return (1-lam)*p0.y + lam*p1.y
 end
 
-testf = PWL([Knot(1,1), Knot(2,1)])
-
 ## class PWL:
 ##     def __init__(self, knots):
 ##         """knots is list of (x_i, y_i)"""
