@@ -79,9 +79,7 @@ function +(f::PWL, g::PWL)
     return PWL(knots)
 end
 
-##     def __neg__(self):
-##         """mirror at x axis"""
-##         return PWL([(x, -y) for x,y in self.knots])
+-(f::PWL) = PWL([Knot(k.x, -k.y) for k in f.knots])
 
 ##     def __sub__(self, other):
 ##         """substract to PWLs"""
