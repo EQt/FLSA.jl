@@ -75,6 +75,7 @@ end
 """find x s.t. PWL(x)=y (assumes that f is strictly increasing)"""
 function find_x(f::PWL, y::Number)
     i0 = findlast(k -> k.y <= y, f.knots)
+    if (i0 == findlast(f.knots)) i0 -= 1 end
     i1 = i0+1
     p0, p1 = f.knots[i0], f.knots[i1]
     lam = (y - p0.y) / (p1.y - p0.y)
