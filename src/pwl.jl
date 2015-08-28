@@ -77,14 +77,18 @@ end
 function +(f::PWL, g::PWL)
     knots = vcat(f.knots, g.knots)
     sort!(knots, by=k -> k.x)
-    x_old = Inf
-    for (i,k) in enumerate(knots)
-        if (k.x <= x_old + EPS)
-            deleteat!(knots, i)
+    x_old = -Inf
+    off = 0
+    for i = 1:length(knots)
+        if (knots[i+off].x <= x_old + EPS)
+            deleteat!(knots, i+off)
+            off -= 1
         else
-            k.y = call(f, k.x) + call(g, k.x)
+            x_old = knots[i+off].x
         end
-        x_old = k.x
+    end
+    for k in knots
+        k.y = call(f, k.x) + call(g, k.x)
     end
     return PWL(knots)
 end
