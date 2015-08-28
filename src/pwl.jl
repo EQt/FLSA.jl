@@ -79,12 +79,6 @@ function +(f::PWL, g::PWL)
     return PWL(knots)
 end
 
-##     def __radd__(self, other):
-##         if isinstance(other, Number):
-##             return PWL([(x, y+other) for x, y in self.knots])
-##         else:
-##             raise RuntimeError('this should not happen')
-
 ##     def __neg__(self):
 ##         """mirror at x axis"""
 ##         return PWL([(x, -y) for x,y in self.knots])
