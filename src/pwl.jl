@@ -1,6 +1,9 @@
 INF = 100
 EPS = 1e-9
 
+"""
+Point in a PWL
+"""
 type Knot
     x::Float64
     y::Float64
