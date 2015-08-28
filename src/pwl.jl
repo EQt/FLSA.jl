@@ -6,16 +6,15 @@ type Knot
     y::Float64
 end
 
+"""
+Piecewise linear function.
+The function is stored as a list of knots.
+TODO: consider storing it as a list of (x_i, slope_i).
+"""
 type PWL
-    """
-    Piecewise linear function.
-    The function is stored as a list of knots.
-    TODO: consider storing it as a list of (x_i, slope_i).
-    """
     knots::Vector{Knot}
 end
 
-using Base
 function call(f::PWL, x::Number)
     # special cases
     if length(f.knots) == 0
@@ -96,8 +95,8 @@ end
 -(f::PWL) = PWL([Knot(k.x, -k.y) for k in f.knots])
 -(f::PWL, g::PWL) = f + (-g)
 
+"Return copy(f) PWL clipped to [x_lower, x_upper]."
 function clip(f::PWL, x_lower::Number, x_upper::Number)
-    """Return copy(f) PWL clipped to [x_lower, x_upper]."""
     knots = self.knots_in_range(x_lower, x_upper)
     PWL([Knot(-INF, call(f,x_lower)), knots, Knot(+INF, call(f,x_upper))])
 end
