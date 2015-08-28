@@ -41,41 +41,6 @@ function call(f::PWL, x::Number)
     return (1-lam)*p0.y + lam*p1.y
 end
 
-## class PWL:
-##     def __init__(self, knots):
-##         """knots is list of (x_i, y_i)"""
-##         self.knots = sorted(knots, key=lambda p: p[0])
-
-##     def __call__(self, x):
-##         """evaluate this function at x"""
-##         try:
-##             # special cases
-##             if len(self.knots) == 0: return 0
-##             if len(self.knots) == 1: return self.knots[0][1]
-##             # find position in knots list
-##             # see http://stackoverflow.com/a/2364277
-##             i0 = next((i for i,p in enumerate(self.knots) if p[0] >= x)) - 1
-##             i1 = i0+1
-##             if i1 >= len(self.knots):
-##                 i1 = len(self.knots)-1
-##                 i0 = i1-1
-##             p0 = self.knots[i0]
-##             p1 = self.knots[i1]
-##             lam = (x - p0[0]) / float(p1[0] - p0[0])
-##             return (1-lam)*p0[1] + lam*p1[1]
-##         except StopIteration:
-##             print("x=%d, knots=%s" % (x, str(self.knots)))
-##             raise
-##         except IndexError:
-##             print("i0=%d, i1=%d, len(knots)=%d" % (i0, i1, len(self.knots)))
-##             raise
-##         except ZeroDivisionError:
-##             print(self)
-##             print("x=%f" % x)
-##             print("p0=", p0)
-##             print("p1=", p1)
-##             raise
-
 function +(f::PWL, g::PWL)
     knots = vcat(f.knots, g.knots)
     sort!(knots, by=k -> k.x)
