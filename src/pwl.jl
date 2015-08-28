@@ -24,7 +24,19 @@ function call(f::PWL, x::Number)
     if length(f.knots) == 1
         return f.knots[1].y
     end
-    return x
+    i1 = findfirst(k -> k.x >= x, f.knots)
+    if (i1 <= 0) # not found ==> take last ones
+        p0 = f.knots[end-1]
+        p1 = f.knots[end]
+    elseif (i1 == 1) # first one
+        p0 = f.knots[i1]
+        p1 = f.knots[i1+1]
+    else
+        p0 = f.knots[i1-1]
+        p1 = f.knots[i1]
+    end
+    lam = (x - p0.x) / (p1.x - p0.x)
+    return (1-lam)*p0.y + lam*p1.y
 end
 
 testf = PWL([Knot(1,1), Knot(2,1)])
