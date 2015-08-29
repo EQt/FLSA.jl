@@ -1,6 +1,3 @@
-"""Clip x within [l,u]"""
-clip(x, l, u) = min(u, max(l, x))
-
 """
 Compute FLSA by FAST ITERATIVE SHRINKAGE/THRESHOLDING ALGORITHM.
 """
@@ -16,7 +13,7 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
     size(y,1) == n ||
       error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
 
-    prox(x) = clip(x, -λ, +λ)
+    prox(x) = clamp(x, -λ, +λ)
     grad(α) = D*(D'*α - y)              # gradient
     pL(α) = prox(α - 1/L*grad(α))
 
