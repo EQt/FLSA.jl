@@ -7,6 +7,7 @@ g = grid_graph(n1, n2)
 w = rand(size(g.edges))
 
 mst, wmst = kruskal_minimum_spantree(g, w)
+# problem: edge indices are relative to g, not gmst
 gmst = graph(vertices(g), mst; is_directed=false)
 
 visitor = LogGraphVisitor(STDOUT)
