@@ -12,7 +12,9 @@ module FLSA
          Knot,
          call,
          find_x,
-         clip
+         clip,
+         DPVisitor,
+         close_vertex!
 
   include("flsa.jl")
   include("grid_graph.jl")
@@ -20,4 +22,5 @@ module FLSA
   include("admm.jl")
   include("fista.jl")
   include("pwl.jl")
+  include("dynamic.jl")
 end # module
