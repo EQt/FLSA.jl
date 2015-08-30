@@ -2,6 +2,8 @@
 using FLSA
 using Graphs
 
+srand(42)
+
 n1, n2 = 4, 2
 g = grid_graph(n1, n2)
 v = vertices(g)
