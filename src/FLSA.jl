@@ -13,8 +13,8 @@ module FLSA
          call,
          find_x,
          clip,
-         DPVisitor,
-         close_vertex!
+         dp_tree,
+         dual_tree
 
   include("flsa.jl")
   include("grid_graph.jl")
