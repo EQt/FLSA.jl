@@ -17,8 +17,5 @@ for e in mst
     add_edge!(gmst, source(e), target(e))
 end
 
-## visitor = DPVisitor(y)
-## alg = DepthFirst()
-## println("Starting ...", typeof(visitor))
-## traverse_graph(gmst, alg, (1,1), visitor)
-
+tm = FLSA.subtree(g, mst, (1,1))
+x = FLSA.dp_tree(y, 0.1, tm)

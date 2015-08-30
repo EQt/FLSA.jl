@@ -12,8 +12,7 @@ type DPVisitor <: AbstractGraphVisitor
         n = length(y)
         lb = fill(-Inf, n)
         ub = fill(+Inf, n)
-        df = [PWL([Knot(0,yi)]) for yi in y]
-        println("Constructing visitor")
+        df = [PWL([]) for i in y]
         new(y, lb, ub, df)
     end
 end
@@ -22,4 +21,28 @@ function Graphs.close_vertex!(vis::DPVisitor, v)
     println("processing $v")
 end
 
+function dp_tree(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph,
+                 verbose::Bool = true)
+    vis = DPVisitor(y)
+    local iroot = vertex_index(t.root, t.graph)
+    dfs_dp_tree(iroot, vis, lambda, t)
+    x_root = find_x(vis.df[iroot], 0)
+    x = zeros(y)
+    x[iroot] = x_root
+    for v in t.dfs_order[2:end]
+        x[v] = clamp(x[t.parent[v]], vis.lb[v], vis.ub[v])
+    end
+    return x
+end
 
+function dfs_dp_tree(v, vis, lambda, t)
+    vis.df[v] = PWL([Knot(-INF, -INF - vis.y[v]),
+                     Knot(+INF, +INF - vis.y[v])])
+    for c in t.children[v]
+        dfs_dp_tree(c, vis, lambda, t)
+        vis.lb[c] = find_x(vis.df[c], -lambda)
+        vis.ub[c] = find_x(vis.df[c], +lambda)
+        vis.df[c] = clip(vis.df[c], vis.lb[c], vis.ub[c])
+        vis.df[v] += vis.df[c]
+    end
+end
