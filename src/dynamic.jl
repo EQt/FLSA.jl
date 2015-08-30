@@ -46,3 +46,20 @@ function dfs_dp_tree(v, vis, lambda, t)
         vis.df[v] += vis.df[c]
     end
 end
+
+function dual_tree(y::Vector{Float64}, x::Vector{Float64}, t::TreeSubGraph)
+    m = length(t.edges)
+    alpha = zeros(length(t.edges))
+    local iroot = vertex_index(t.root, t.graph)
+    dfs_dual_tree(iroot, alpha, t, x,  deepcopy(y))
+    return alpha
+end
+
+function dfs_dual_tree(v, alpha, t, x, y)
+    for c in t.children[v]
+        dfs_dual_tree(c, alpha, t, x, y)
+        ie = t.edge_index[(min(c,v), max(c,v))]
+        alpha[ie] = sign(c-v)*(x[c] - y[c])
+        y[v] -= alpha[ie]
+    end
+end

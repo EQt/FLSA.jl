@@ -9,6 +9,7 @@ type TreeSubGraph{V,E}
     parent::Vector{Int}
     children::Vector{Vector{Int}}
     dfs_order::Vector{Int}
+    edge_index::Dict{V,Int}
 end
 
 function subtree(graph, edges, root)
@@ -16,7 +17,8 @@ function subtree(graph, edges, root)
     parent = fill(-1, n)
     children = fill(Int[], n)
     dfs_order = fill(-1, n)
-    tree = TreeSubGraph(graph, edges, root, parent, children, dfs_order)
+    ei = Dict{typeof(vertices(graph)[1]), Int}()
+    tree = TreeSubGraph(graph, edges, root, parent, children, dfs_order, ei)
     init_tree(tree)
     tree
 end
@@ -45,7 +47,11 @@ function init_tree(t::TreeSubGraph)
             push!(stack, u)
         end
     end
+    for (k,e) in enumerate(t.edges)
+        i, j = source(e), target(e)
+        i, j = vertex_index(i, t.graph), vertex_index(j, t.graph)
+        i, j = min(i,j), max(i,j)
+        t.edge_index[(i,j)] = k
+    end
     t
 end
-
-                           

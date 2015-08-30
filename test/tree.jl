@@ -19,3 +19,4 @@ end
 
 tm = FLSA.subtree(g, mst, (1,1))
 x = FLSA.dp_tree(y, 0.1, tm)
+alpha = FLSA.dual_tree(y, x, tm)
