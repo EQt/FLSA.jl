@@ -17,8 +17,8 @@ for e in mst
     add_edge!(gmst, source(e), target(e))
 end
 
-visitor = DPVisitor(y)
-alg = DepthFirst()
-println("Starting ...", typeof(visitor))
-traverse_graph(gmst, alg, (1,1), visitor)
+## visitor = DPVisitor(y)
+## alg = DepthFirst()
+## println("Starting ...", typeof(visitor))
+## traverse_graph(gmst, alg, (1,1), visitor)
 
