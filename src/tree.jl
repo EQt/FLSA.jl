@@ -15,6 +15,10 @@ function subtree(graph, edges, root)
     local neighbors = fill(Int64[], n)
     parent = fill(-1, n)
     children = fill(Int64[], n)
-    
+    for e in edges
+        is, it = vertex_index(source(e), graph), vertex_index(target(e), graph)
+        push!(neighbors[is], it)
+        push!(neighbors[it], is)
+    end
     TreeSubGraph(graph, edges, root, parent, children)
 end
