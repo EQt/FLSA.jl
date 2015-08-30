@@ -22,5 +22,7 @@ module FLSA
   include("admm.jl")
   include("fista.jl")
   include("pwl.jl")
+  include("tree.jl")
   include("dynamic.jl")
+
 end # module
