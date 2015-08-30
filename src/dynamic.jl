@@ -1,8 +1,3 @@
-"Compute the derivate for a line and exentds bounds accordingly"
-function dp_line(y::Vector{Number}, bounds)
-    error("Not implemented yet")
-end
-
 type DPVisitor <: AbstractGraphVisitor
     y::Vector{Float64}
     lb::Vector{Float64}
@@ -47,8 +42,9 @@ function dfs_dp_tree(v, vis, lambda, t)
     end
 end
 
+"""Compute the dual solution to x on a tree (sub)graph"""
 function dual_tree(y::Vector{Float64}, x::Vector{Float64}, t::TreeSubGraph)
-    m = length(t.edges)
+    local m = length(t.edges)
     alpha = zeros(length(t.edges))
     local iroot = vertex_index(t.root, t.graph)
     dfs_dual_tree(iroot, alpha, t, x,  deepcopy(y))
