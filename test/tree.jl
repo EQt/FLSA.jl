@@ -17,6 +17,8 @@ for e in mst
     add_edge!(gmst, source(e), target(e))
 end
 
+lambda = 0.1
 tm = FLSA.subtree(g, mst, (1,1))
-x = FLSA.dp_tree(y, 0.1, tm)
+x = FLSA.dp_tree(y, lambda, tm)
 alpha = FLSA.dual_tree(y, x, tm)
+abs(alpha) .<= lambda

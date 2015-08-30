@@ -59,7 +59,7 @@ function dfs_dual_tree(v, alpha, t, x, y)
     for c in t.children[v]
         dfs_dual_tree(c, alpha, t, x, y)
         ie = t.edge_index[(min(c,v), max(c,v))]
-        alpha[ie] = sign(c-v)*(x[c] - y[c])
-        y[v] -= alpha[ie]
+        alpha[ie] = sign(v-c)*(x[c] - y[c])
+        y[v] -= sign(c-v)*alpha[ie]
     end
 end
