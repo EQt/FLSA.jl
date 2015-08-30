@@ -23,12 +23,13 @@ end
 
 function init_tree(t::TreeSubGraph)
     local n = num_vertices(t.graph)
-    local neighbors = fill(Int[], n)
+    local neighbors = [Int[] for i=1:n ]
     for e in t.edges
         is, it = vertex_index(source(e), t.graph), vertex_index(target(e), t.graph)
         push!(neighbors[is], it)
         push!(neighbors[it], is)
     end
+    for i=1:n println("neighbors[$i] = $(neighbors[i])") end
     local dfs_num::Int = 1
     local stack = [vertex_index(t.root, t.graph)]
     while !isempty(stack)
@@ -44,7 +45,7 @@ function init_tree(t::TreeSubGraph)
             push!(stack, u)
         end
     end
-    tree
+    t
 end
 
                            
