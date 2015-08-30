@@ -31,7 +31,9 @@ function init_tree(t::TreeSubGraph)
     end
     for i=1:n println("neighbors[$i] = $(neighbors[i])") end
     local dfs_num::Int = 1
-    local stack = [vertex_index(t.root, t.graph)]
+    iroot = vertex_index(t.root, t.graph)
+    t.parent[iroot] = iroot
+    local stack = [iroot]
     while !isempty(stack)
         v = pop!(stack)
         t.dfs_order[dfs_num] = v
