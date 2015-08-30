@@ -16,6 +16,7 @@ function Graphs.close_vertex!(vis::DPVisitor, v)
     println("processing $v")
 end
 
+"""Compute x=FLSA(y, lambda) on a a (sub)tree t"""
 function dp_tree(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph,
                  verbose::Bool = true)
     vis = DPVisitor(y)
