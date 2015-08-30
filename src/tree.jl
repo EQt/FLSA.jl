@@ -29,7 +29,6 @@ function init_tree(t::TreeSubGraph)
         push!(neighbors[is], it)
         push!(neighbors[it], is)
     end
-    for i=1:n println("neighbors[$i] = $(neighbors[i])") end
     local dfs_num::Int = 1
     iroot = vertex_index(t.root, t.graph)
     t.parent[iroot] = iroot
@@ -42,7 +41,6 @@ function init_tree(t::TreeSubGraph)
         for u in t.children[v]
             t.parent[u] = v
             iv = findfirst(neighbors[u], v)
-            println("iv = $iv, length(nei) = $(length(neighbors[u]))")
             deleteat!(neighbors[u], iv)
             push!(stack, u)
         end
