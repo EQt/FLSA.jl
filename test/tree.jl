@@ -23,4 +23,4 @@ lambda = 0.1
 tm = FLSA.subtree(g, mst, (1,1))
 x = FLSA.dp_tree(y, lambda, tm)
 alpha = FLSA.dual_tree(y, x, tm)
-abs(alpha) .<= lambda
+abs(alpha) .<= lambda + 1e-9
