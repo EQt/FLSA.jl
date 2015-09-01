@@ -29,11 +29,14 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
             if !haskey(logger, "flsa")
                 logger["flsa"] = {}
                 logger["time"] = {}
+                logger["gap"] = {}
             end
             x = y - D'*α
             push!(logger["flsa"], flsa(x, y, D, λ))
             push!(logger["time"], time)
-            println(@sprintf("%4d %f", k, logger["flsa"][end]))
+            push!(logger["gap"], duality_gap(α, λ, y, D))
+            println(@sprintf("%4d %f %f", k,
+                             logger["flsa"][end], logger["gap"][end]))
         end
         if k == max_iter
             break
