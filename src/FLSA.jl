@@ -4,6 +4,7 @@ module FLSA
   export num_vertices,
          grid_graph,
          incidence_matrix,
+         vertex_index,
          norm2,
          conjugate_gradient,
          admm,
