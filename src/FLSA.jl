@@ -2,6 +2,7 @@ module FLSA
 using Graphs
 
 export num_vertices,
+       igraph,
        grid_graph,
        incidence_matrix,
        vertex_index,
@@ -19,6 +20,7 @@ export num_vertices,
        duality_gap
 
 include("flsa.jl")
+include("igraph.jl")
 include("grid_graph.jl")
 include("incidence_matrix.jl")
 include("admm.jl")
