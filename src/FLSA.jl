@@ -14,7 +14,8 @@ module FLSA
          find_x,
          clip,
          dp_tree,
-         dual_tree
+         dual_tree,
+         duality_gap
 
   include("flsa.jl")
   include("grid_graph.jl")
