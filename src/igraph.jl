@@ -13,7 +13,7 @@ function igraph{V,E}(g::AbstractGraph{V,E},
             ed[i] = IEdge(e.index, v, u)
         end
     end
-    simple_edgelist(num_vertices(g), ed; is_directed=false)
+    edgelist(collect(1:num_vertices(g)), ed; is_directed=false)
 end
 
 """Fast implementation of vertex_index"""
