@@ -31,4 +31,18 @@ for i in t.dfs_order[end:-1:1]
     events[i] = sort!([[Knot(true,  lb[c], c) for c in t.children[i]]
                        [Knot(false, ub[c], c) for c in t.children[i]]])
     x = y[i] - lambda
+
+end
+
+function dp_tree_pwl(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph)
+    for i in t.dfs_order[end:-1:1]
+        # compute lb[i]
+        lbis = deepcopy(t.children[i])
+        sort!(lbis, by=c->lb[c])
+        if lb[first(lbis)] > y[i] - lambda
+            lb[i] = y[i] - lambda
+        else
+            lbx[i] = lb[first(lbis)]
+        end
+    end
 end
