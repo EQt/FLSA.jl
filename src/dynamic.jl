@@ -22,6 +22,10 @@ function dp_tree(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph,
     vis = DPVisitor(y)
     local iroot = vertex_index(t.root, t.graph)
     dfs_dp_tree(iroot, vis, lambda, t)
+    backtrace_dp_tree(vis, iroot, t, y)
+end
+
+function  backtrace_dp_tree(vis, iroot, t, y)
     x_root = find_x(vis.df[iroot], 0)
     x = zeros(y)
     x[iroot] = x_root
