@@ -26,13 +26,18 @@ slope = fill(1.0, n)
 ub = fill(Inf, n)
 lb = fill(-Inf, n)
 events = fill(Knot[], n)
+lbi = fill(1,n)
 
 for i in t.dfs_order[end:-1:1]
     events[i] = sort!([[Knot(true,  lb[c], c) for c in t.children[i]]
                        [Knot(false, ub[c], c) for c in t.children[i]]],
                       by=k->k.x)
-    x = y[i] - lambda
-
+    lb[i] = y[i] - lambda # prognose
+    next_x = events[lbi[i]]
+    while lb[i] > next_x
+        lb[i] = next_x
+        df = slope*lb[i]
+    end
 end
 
 function dp_tree_pwl(y::Vector{Float64}, lambda::Float64, t) #t::TreeSubGraph)
