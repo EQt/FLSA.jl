@@ -1,3 +1,22 @@
+macro logitfista()
+    return quote
+        if verbose
+            if !haskey(logger, "flsa")
+                logger["flsa"] = {}
+                logger["time"] = {}
+                logger["gap"] = {}
+            end
+            x = y - D'*α
+            push!(logger["flsa"], flsa(x, y, D, λ))
+            push!(logger["time"], time)
+            push!(logger["gap"], duality_gap(α, λ, y, D))
+            println(@sprintf("%4d %f %f", k,
+                             logger["flsa"][end], logger["gap"][end]))
+        end
+    end
+end
+
+
 """
 Compute FLSA by FAST ITERATIVE SHRINKAGE/THRESHOLDING ALGORITHM.
 """
@@ -25,22 +44,8 @@ function fista{T<:Number,I<:Number}(y::Vector{T},
     while k <= max_iter+1 && total ≤ max_time
         time = toq()
         total += time
-        if verbose
-            if !haskey(logger, "flsa")
-                logger["flsa"] = {}
-                logger["time"] = {}
-                logger["gap"] = {}
-            end
-            x = y - D'*α
-            push!(logger["flsa"], flsa(x, y, D, λ))
-            push!(logger["time"], time)
-            push!(logger["gap"], duality_gap(α, λ, y, D))
-            println(@sprintf("%4d %f %f", k,
-                             logger["flsa"][end], logger["gap"][end]))
-        end
-        if k == max_iter
-            break
-        end
+        @logitfista
+        if k == max_iter break end
         tic()
         α₀ = α
         α = pL(β)
