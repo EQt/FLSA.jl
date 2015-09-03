@@ -16,12 +16,9 @@ function Graphs.close_vertex!(vis::DPVisitor, v)
     println("processing $v")
 end
 
-"""Compute x=FLSA(y, lambda) on a a (sub)tree t"""
-function dp_tree(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph,
-                 verbose::Bool = true)
-    vis = DPVisitor(y)
-    local iroot = vertex_index(t.root, t.graph)
-    dfs_dp_tree(iroot, vis, lambda, t)
+
+
+function  backtrace_dp_tree(vis, iroot, t, y)
     x_root = find_x(vis.df[iroot], 0)
     x = zeros(y)
     x[iroot] = x_root
@@ -29,6 +26,34 @@ function dp_tree(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph,
         x[v] = clamp(x[t.parent[v]], vis.lb[v], vis.ub[v])
     end
     return x
+end
+
+"""Compute x=FLSA(y, lambda) on a a (sub)tree t, recursively"""
+function dp_tree(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph)
+    vis = DPVisitor(y)
+    for i in 1:num_vertices(t.graph)
+        vis.df[i] = PWL([Knot(-INF, -INF - vis.y[i]),
+                         Knot(+INF, +INF - vis.y[i])])
+    end
+    for c in t.dfs_order[end:-1:1]
+        v = t.parent[c]
+        vis.lb[c] = find_x(vis.df[c], -lambda)
+        vis.ub[c] = find_x(vis.df[c], +lambda)
+        vis.df[c] = clip(vis.df[c], vis.lb[c], vis.ub[c])
+        vis.df[v] += vis.df[c]
+    end
+
+    local iroot = vertex_index(t.root, t.graph)
+    backtrace_dp_tree(vis, iroot, t, y)
+end
+
+
+"""Compute x=FLSA(y, lambda) on a a (sub)tree t, recursively"""
+function dp_tree_rec(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph)
+    vis = DPVisitor(y)
+    local iroot = vertex_index(t.root, t.graph)
+    dfs_dp_tree(iroot, vis, lambda, t)
+    backtrace_dp_tree(vis, iroot, t, y)
 end
 
 function dfs_dp_tree(v, vis, lambda, t)
