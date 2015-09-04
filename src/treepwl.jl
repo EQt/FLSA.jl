@@ -39,11 +39,11 @@ type PWLNode
 end
 
 """Find and extract the next knot from the lower in a node"""
-function min_knot!(n::PWLNode)
+function min_knot!(n::PWLNode, t::TreeSubGraph)
 end
 
 """Find and extract the next knot from the upper in a node"""
-function max_knot!(n::PWLNode)
+function max_knot!(n::PWLNode, t::TreeSubGraph)
 end
 
 
