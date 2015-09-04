@@ -33,7 +33,7 @@ slope = fill(1.0, n)
 ub = fill(Inf, n)
 lb = fill(-Inf, n)
 events = fill(Knot[], n)
-lbi = zeros(Int, n)
+lbi = fill(1, n)
 
 for i in t.dfs_order[end:-1:1]
     events[i] = [[Knot(true,  lb[c], c) for c in t.children[i]]
@@ -41,9 +41,23 @@ for i in t.dfs_order[end:-1:1]
     sort!(events[i], by=k->k.x)
     oldx = y[i]
     lb[i] = y[i] - lambda # prognose
-    for (lbi[i], knot) in enumerate(events[i])
+    j = lbi[i]
+    while j <= length(events[i])
+        j += 1
+        knot = events[i][j]
         if lb[i] < knot.x break end
         lb[i] += slope[i]*(knot.x - oldx)
+        oldx = knot.x
+        if knot.islb
+            
+        else
+            lbi[knot.i] += 1
+            knot.i = t.parent[knot.i]
+            knot.x = ub[knot.i]
+            sort!(events[i], by=k->k.x, lo=j)
+            j -= 1
+        end
+        # TODO: resort events[i]
     end
 end
 
