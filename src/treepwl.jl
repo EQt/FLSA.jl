@@ -36,9 +36,9 @@ events = fill(Knot[], n)
 lbi = zeros(Int, n)
 
 for i in t.dfs_order[end:-1:1]
-    events[i] = sort!([[Knot(true,  lb[c], c) for c in t.children[i]]
-                       [Knot(false, ub[c], c) for c in t.children[i]]],
-                      by=k->k.x)
+    events[i] = [[Knot(true,  lb[c], c) for c in t.children[i]]
+                 [Knot(false, ub[c], c) for c in t.children[i]]]
+    sort!(events[i], by=k->k.x)
     oldx = y[i]
     lb[i] = y[i] - lambda # prognose
     for (lbi[i], knot) in enumerate(events[i])
