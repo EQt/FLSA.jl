@@ -22,6 +22,13 @@ type Knot
     i::Int
 end
 
+"""
+function dp_tree_pwl(y::Vector{Float64}, lambda::Float64, t) #t::TreeSubGraph)
+    for i in t.dfs_order[end:-1:1]
+    end
+end
+"""
+
 slope = fill(1.0, n)
 ub = fill(Inf, n)
 lb = fill(-Inf, n)
@@ -40,7 +47,3 @@ for i in t.dfs_order[end:-1:1]
     end
 end
 
-function dp_tree_pwl(y::Vector{Float64}, lambda::Float64, t) #t::TreeSubGraph)
-    for i in t.dfs_order[end:-1:1]
-    end
-end
