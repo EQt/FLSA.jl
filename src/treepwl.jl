@@ -33,17 +33,17 @@ slope = fill(1.0, n)
 ub = fill(Inf, n)
 lb = fill(-Inf, n)
 events = fill(Knot[], n)
-lbi = fill(1,n)
+lbi = zeros(Int, n)
 
 for i in t.dfs_order[end:-1:1]
     events[i] = sort!([[Knot(true,  lb[c], c) for c in t.children[i]]
                        [Knot(false, ub[c], c) for c in t.children[i]]],
                       by=k->k.x)
+    oldx = y[i]
     lb[i] = y[i] - lambda # prognose
-    next_x = events[lbi[i]]
-    while lb[i] > next_x
-        lb[i] = next_x
-        df = slope*lb[i]
+    for (lbi[i], knot) in enumerate(events[i])
+        if lb[i] < knot.x break end
+        lb[i] += slope[i]*(knot.x - oldx)
     end
 end
 
