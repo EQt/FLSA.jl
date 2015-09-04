@@ -34,16 +34,24 @@ type PWLNode
     function PWLNode(children, y, v, lb, ub)
         events = [[Knot(true,  lb[c], c) for c in children]
                   [Knot(false, ub[c], c) for c in children]]
-        new(events, 1, lenght(events), 1, y, v, -Inf, +Inf)
+        sort!(events, by=k->k.x)
+        new(events, 1, length(events), 1, y, v, -Inf, +Inf)
     end
 end
 
+
 """Find and extract the next knot from the lower in a node"""
-function min_knot!(n::PWLNode, t::TreeSubGraph)
+function min_knot!(n::PWLNode)
+    if n.a >= length(n.events)
+        return Inf
+    end
+    e = n.events[n.a]
+    n.a += 1
+    return e.x
 end
 
 """Find and extract the next knot from the upper in a node"""
-function max_knot!(n::PWLNode, t::TreeSubGraph)
+function max_knot!(n::PWLNode, t::FLSA.TreeSubGraph)
 end
 
 
