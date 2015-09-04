@@ -22,6 +22,36 @@ type Knot
     i::Int
 end
 
+type PWLNode
+    events::Vector{Knot}
+    a::Int  # index of lowest events, not occured yet
+    b::Int  # index of highest events, not occured yet
+    slope::Int
+    y::Float64
+    v::Int  # node index
+    lb::Float64
+    ub::Float64
+    function PWLNode(children, y, v, lb, ub)
+        events = [[Knot(true,  lb[c], c) for c in children]
+                  [Knot(false, ub[c], c) for c in children]]
+        new(events, 1, lenght(events), 1, y, v, -Inf, +Inf)
+    end
+end
+
+"""Find and extract the next knot from the lower in a node"""
+function min_knot!(n::PWLNode)
+end
+
+"""Find and extract the next knot from the upper in a node"""
+function max_knot!(n::PWLNode)
+end
+
+
+type PWLTree
+    nodes::Vector{PWLNode}
+end
+
+
 """
 function dp_tree_pwl(y::Vector{Float64}, lambda::Float64, t) #t::TreeSubGraph)
     for i in t.dfs_order[end:-1:1]
@@ -36,8 +66,6 @@ events = fill(Knot[], n)
 lbi = fill(1, n)
 
 for i in t.dfs_order[end:-1:1]
-    events[i] = [[Knot(true,  lb[c], c) for c in t.children[i]]
-                 [Knot(false, ub[c], c) for c in t.children[i]]]
     sort!(events[i], by=k->k.x)
     oldx = y[i]
     lb[i] = y[i] - lambda # prognose
