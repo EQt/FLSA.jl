@@ -1,20 +1,4 @@
 """Piecewise linear function over a tree"""
-using FLSA
-using Graphs
-
-srand(42)
-
-lambda = 0.1
-n1, n2 = 4, 2
-g = grid_graph(n1, n2)
-v = vertices(g)
-n = length(v)
-w = rand(size(g.edges))
-y = rand(n1*n2)
-
-mst, wmst = kruskal_minimum_spantree(g, w)
-t = FLSA.subtree(g, mst, (1,1))
-
 
 type Knot
     islb::Bool
@@ -41,6 +25,20 @@ end
 
 type PWLTree
     nodes::Vector{PWLNode}
+    children::Vector{Vector{Int}}
+    pre_order::Vector{Int}
+    parent::Vector{Int}
+    root::Int
+    y::Vector{Float64}
+    function PWLTree(parents, root, y)
+        n = length(children)
+        children = fill(Int[], n)
+        for (v,p) in enumerate(parents)
+            push!(children[p], v)
+        end
+        nodes = [PWLNode(children[i], y[i], i, -Inf, Inf) for i in 1:n]
+        return new(nodes, children, [], parents, root, y)
+    end
 end
 
 """Find and extract the next knot from the lower in a node"""
@@ -62,42 +60,3 @@ function max_knot!(n::PWLNode)
     n.b -= 1
     return e.x
 end
-
-
-"""
-function dp_tree_pwl(y::Vector{Float64}, lambda::Float64, t) #t::TreeSubGraph)
-    for i in t.dfs_order[end:-1:1]
-    end
-end
-"""
-
-slope = fill(1.0, n)
-ub = fill(Inf, n)
-lb = fill(-Inf, n)
-events = fill(Knot[], n)
-lbi = fill(1, n)
-
-for i in t.dfs_order[end:-1:1]
-    sort!(events[i], by=k->k.x)
-    oldx = y[i]
-    lb[i] = y[i] - lambda # prognose
-    j = lbi[i]
-    while j <= length(events[i])
-        j += 1
-        knot = events[i][j]
-        if lb[i] < knot.x break end
-        lb[i] += slope[i]*(knot.x - oldx)
-        oldx = knot.x
-        if knot.islb
-            
-        else
-            lbi[knot.i] += 1
-            knot.i = t.parent[knot.i]
-            knot.x = ub[knot.i]
-            sort!(events[i], by=k->k.x, lo=j)
-            j -= 1
-        end
-        # TODO: resort events[i]
-    end
-end
-

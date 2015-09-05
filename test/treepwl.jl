@@ -1,3 +1,16 @@
+srand(42)
+
+lambda = 0.1
+n1, n2 = 4, 2
+g = grid_graph(n1, n2)
+v = vertices(g)
+n = length(v)
+w = rand(size(g.edges))
+y = rand(n1*n2)
+
+mst, wmst = kruskal_minimum_spantree(g, w)
+t = FLSA.subtree(g, mst, (1,1))
+
 children = Array{Int}[[], [], [], [1,2,3]]
 lb = [1, 2.5, 2, -Inf]
 ub = [3.2, 3, 4.5, Inf]
@@ -23,4 +36,11 @@ facts("TESTING max_knot! on a simple node (depth 1)") do
     @fact max_knot!(anode) --> 2.0
     @fact max_knot!(anode) --> 1.0
     @fact max_knot!(anode) --> -Inf
+end
+
+facts("A simple PWLTree for the previous example") do
+    parents = [4, 4, 4, 4]
+    root = 4
+    y = [2, 3, 2.5, 2.2]
+    tree = FLSA.PWLTree(parents, root, y)
 end
