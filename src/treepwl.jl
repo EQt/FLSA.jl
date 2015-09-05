@@ -31,7 +31,7 @@ type PWLTree
     root::Int
     y::Vector{Float64}
     function PWLTree(parents, root, y)
-        n = length(children)
+        n = length(parents)
         children = fill(Int[], n)
         for (v,p) in enumerate(parents)
             push!(children[p], v)
