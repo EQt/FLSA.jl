@@ -17,7 +17,11 @@ export num_vertices,
        clip,
        dp_tree,
        dual_tree,
-       duality_gap
+       duality_gap,
+       min_knot!,
+       max_knot!,
+       PWLNode,
+       PWLTree
 
 include("flsa.jl")
 include("igraph.jl")
