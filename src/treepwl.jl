@@ -63,3 +63,17 @@ function max_knot!(n::PWLNode)
     n.b -= 1
     return e.x
 end
+
+
+"""Collect bounds from children and sort events"""
+function prepare_events!(t::PWLTree, v::Int)
+    node = t.nodes[v]
+    for e in node.events
+        if e.islb
+            e.x = t.nodes[e.i].lb
+        else
+            e.x = t.nodes[e.i].ub
+        end
+    end
+    sort!(node.events, by=k->k.x)
+end
