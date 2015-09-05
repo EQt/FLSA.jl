@@ -39,7 +39,8 @@ type PWLTree
         lb = fill(-Inf, n)
         ub = fill(+Inf, n)
         nodes = [PWLNode(children[i], y[i], i, lb, ub) for i in 1:n]
-        return new(nodes, children, [], parents, root, y)
+        pre_order = collect(1:n)
+        return new(nodes, children, pre_order, parents, root, y)
     end
 end
 
