@@ -34,7 +34,7 @@ type PWLTree
         n = length(parents)
         children = fill(Int[], n)
         for (v,p) in enumerate(parents)
-            push!(children[p], v)
+            if v != root push!(children[p], v) end
         end
         lb = fill(-Inf, n)
         ub = fill(+Inf, n)
