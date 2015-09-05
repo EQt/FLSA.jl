@@ -36,7 +36,9 @@ type PWLTree
         for (v,p) in enumerate(parents)
             push!(children[p], v)
         end
-        nodes = [PWLNode(children[i], y[i], i, -Inf, Inf) for i in 1:n]
+        lb = fill(-Inf, n)
+        ub = fill(+Inf, n)
+        nodes = [PWLNode(children[i], y[i], i, lb, ub) for i in 1:n]
         return new(nodes, children, [], parents, root, y)
     end
 end
