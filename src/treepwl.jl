@@ -45,9 +45,10 @@ type PWLTree
 end
 
 """Find and extract the next knot from the lower in a node"""
-function min_knot!(n::PWLNode)
+function min_knot!(t::PWLTree, v::Int)
+    n = t.nodes[v]
     if n.a > length(n.events)
-        return Inf
+        return -Inf
     end
     e = n.events[n.a]
     n.a += 1
@@ -55,9 +56,10 @@ function min_knot!(n::PWLNode)
 end
 
 """Find and extract the next knot from the upper in a node"""
-function max_knot!(n::PWLNode)
+function max_knot!(t::PWLTree, v::Int)
+    n = t.nodes[v]
     if n.b <= 0
-        return -Inf
+        return Inf
     end
     e = n.events[n.b]
     n.b -= 1
@@ -82,5 +84,15 @@ end
 """Clip node v from below until the derivative becomes c.
 Return stop position x."""
 function clip_min!(t::PWLTree, v::Int, c::Float64)
-    
+    prepare_events(t, v)
+    node = t.nodes[v]
+    oldx = node.y
+    x = node.y - c # forecast
+    df = 0.0
+    xe = min_knot!(t, v)
+    while x < xe
+        df += node.slope * (x - oldx)
+        xe = min_knot(t, v)
+    end
+    return x
 end
