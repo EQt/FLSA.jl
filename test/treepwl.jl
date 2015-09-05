@@ -13,3 +13,14 @@ facts("TESTING min_knot! on a simple node (depth 1)") do
     @fact min_knot!(anode) --> 4.5
     @fact min_knot!(anode) --> Inf
 end
+
+facts("TESTING max_knot! on a simple node (depth 1)") do
+    anode = PWLNode(children[4], y4, 4, lb, ub)
+    @fact max_knot!(anode) --> 4.5
+    @fact max_knot!(anode) --> 3.2
+    @fact max_knot!(anode) --> 3.0
+    @fact max_knot!(anode) --> 2.5
+    @fact max_knot!(anode) --> 2.0
+    @fact max_knot!(anode) --> 1.0
+    @fact max_knot!(anode) --> -Inf
+end
