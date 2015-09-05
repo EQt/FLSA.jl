@@ -30,6 +30,7 @@ facts("simple PWLTree") do
     root = 4
     y = [2, 3, 2.5, 2.2]
     tree = FLSA.PWLTree(parents, root, y)
+    @fact Set(tree.children[4]) --> Set(1,2,3)
 end
 
 facts("A complete running example") do
