@@ -42,7 +42,7 @@ end
 
 """Find and extract the next knot from the lower in a node"""
 function min_knot!(n::PWLNode)
-    if n.a >= length(n.events)
+    if n.a > length(n.events)
         return Inf
     end
     e = n.events[n.a]
