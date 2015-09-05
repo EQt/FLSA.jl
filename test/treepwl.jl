@@ -51,3 +51,4 @@ facts("A complete running example") do
         t = FLSA.subtree(g, mst, (1,1))
     end
 end
+

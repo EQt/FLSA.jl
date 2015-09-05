@@ -77,3 +77,10 @@ function prepare_events!(t::PWLTree, v::Int)
     end
     sort!(node.events, by=k->k.x)
 end
+
+
+"""Clip node v from below until the derivative becomes c.
+Return stop position x."""
+function clip_min!(t::PWLTree, v::Int, c::Float64)
+    
+end
