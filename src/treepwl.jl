@@ -39,6 +39,9 @@ type PWLNode
     end
 end
 
+type PWLTree
+    nodes::Vector{PWLNode}
+end
 
 """Find and extract the next knot from the lower in a node"""
 function min_knot!(n::PWLNode)
@@ -58,11 +61,6 @@ function max_knot!(n::PWLNode)
     e = n.events[n.b]
     n.b -= 1
     return e.x
-end
-
-
-type PWLTree
-    nodes::Vector{PWLNode}
 end
 
 
