@@ -4,24 +4,25 @@ facts("simple node (depth 1)") do
     ub = [3.2, 3, 4.5, Inf]
     y4 = 2.5
     context("min_knot!") do
-        anode = PWLNode(children[4], y4, 4, lb, ub)
-        @fact min_knot!(anode) --> 1.0
-        @fact min_knot!(anode) --> 2.0
-        @fact min_knot!(anode) --> 2.5
-        @fact min_knot!(anode) --> 3.0
-        @fact min_knot!(anode) --> 3.2
-        @fact min_knot!(anode) --> 4.5
-        @fact min_knot!(anode) --> Inf
+        n = PWLNode(children[4], y4, 4, lb, ub)
+        anode = PWLTree(n)
+        @fact min_knot!(anode, 1) --> 1.0
+        @fact min_knot!(anode, 1) --> 2.0
+        @fact min_knot!(anode, 1) --> 2.5
+        @fact min_knot!(anode, 1) --> 3.0
+        @fact min_knot!(anode, 1) --> 3.2
+        @fact min_knot!(anode, 1) --> 4.5
+        @fact min_knot!(anode, 1) --> -Inf
     end
     context("max_knot!") do
-        anode = PWLNode(children[4], y4, 4, lb, ub)
-        @fact max_knot!(anode) --> 4.5
-        @fact max_knot!(anode) --> 3.2
-        @fact max_knot!(anode) --> 3.0
-        @fact max_knot!(anode) --> 2.5
-        @fact max_knot!(anode) --> 2.0
-        @fact max_knot!(anode) --> 1.0
-        @fact max_knot!(anode) --> -Inf
+        anode = PWLTree(PWLNode(children[4], y4, 4, lb, ub))
+        @fact max_knot!(anode, 1) --> 4.5
+        @fact max_knot!(anode, 1) --> 3.2
+        @fact max_knot!(anode, 1) --> 3.0
+        @fact max_knot!(anode, 1) --> 2.5
+        @fact max_knot!(anode, 1) --> 2.0
+        @fact max_knot!(anode, 1) --> 1.0
+        @fact max_knot!(anode, 1) --> Inf
     end
 end
 

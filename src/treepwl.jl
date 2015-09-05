@@ -30,6 +30,13 @@ type PWLTree
     parent::Vector{Int}
     root::Int
     y::Vector{Float64}
+
+    """for convinience (testing): tree consisting of just one node"""
+    function PWLTree(n::PWLNode)
+        new([n], Vector{Int}[[]], [1], [1], 1, [n.y])
+    end
+    
+
     function PWLTree(parents, root, y)
         n = length(parents)
         children = fill(Int[], n)
