@@ -1,13 +1,13 @@
 """Piecewise linear function over a tree"""
 
-type Knot
+type Event
     islb::Bool
     x::Float64
     i::Int
 end
 
 type PWLNode
-    events::Vector{Knot}
+    events::Vector{Event}
     a::Int  # index of lowest events, not occured yet
     b::Int  # index of highest events, not occured yet
     slope::Int
@@ -16,8 +16,8 @@ type PWLNode
     lb::Float64
     ub::Float64
     function PWLNode(children, y, v, lb, ub)
-        events = [[Knot(true,  lb[c], c) for c in children]
-                  [Knot(false, ub[c], c) for c in children]]
+        events = [[Event(true,  lb[c], c) for c in children]
+                  [Event(false, ub[c], c) for c in children]]
         sort!(events, by=k->k.x)
         new(events, 1, length(events), 1, y, v, -Inf, +Inf)
     end
