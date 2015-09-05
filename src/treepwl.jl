@@ -51,7 +51,13 @@ function min_knot!(n::PWLNode)
 end
 
 """Find and extract the next knot from the upper in a node"""
-function max_knot!(n::PWLNode, t::FLSA.TreeSubGraph)
+function max_knot!(n::PWLNode)
+    if n.b <= 0
+        return -Inf
+    end
+    e = n.events[n.b]
+    n.b -= 1
+    return e.x
 end
 
 
