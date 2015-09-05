@@ -33,7 +33,7 @@ facts("simple PWLTree") do
 end
 
 facts("A complete running example") do
-    @pending do
+    @pending begin
         srand(42)
         lambda = 0.1
         n1, n2 = 4, 2
