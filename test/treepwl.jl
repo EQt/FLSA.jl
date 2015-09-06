@@ -1,3 +1,7 @@
+module TestFLSA
+using FLSA
+using FactCheck
+
 facts("simple node (depth 1)") do
     children = Array{Int}[[], [], [], [1,2,3]]
     lb = [1, 2.5, 2, -Inf]
@@ -53,3 +57,4 @@ facts("A complete running example") do
     end
 end
 
+end
