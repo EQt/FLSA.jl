@@ -34,10 +34,15 @@ facts("simple PWLTree") do
     parents = [4, 4, 4, 4]
     root = 4
     y = [2, 3, 2.5, 2.2]
-    tree = FLSA.PWLTree(parents, root, y)
+    tree = FLSA.PWLTree(parents, root, y, i->1.0)
     @fact Set(tree.children[4]) --> Set(1,2,3)
+    for i=1:3
+        @fact tree.children[i] --> isempty "$tree.children[i]"
+    end
     FLSA.prepare_events!(tree, 4)
-    @pending map(k->k.x, tree.nodes[4].events) --> []
+    @fact map(k->k.x, tree.nodes[4].events) --> sort!([[y[1:3] .+ 1],
+                                                       [y[1:3] .- 1],
+                                                       y[4] + 4, y[4] - 4])
 end
 
 
