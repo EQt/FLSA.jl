@@ -125,7 +125,7 @@ function clip_max!(t::PWLTree, v::Int, c::Float64)
     forecast() = (c + node.offset) / node.slope
     x = forecast()
     xk = min_knot!(t, v)
-    while x > xk
+    while x < xk
         x = forecast()
     end
     return x
