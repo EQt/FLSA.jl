@@ -11,7 +11,7 @@ type PWLNode
     a::Int  # index of lowest events, not occured yet
     b::Int  # index of highest events, not occured yet
     slope::Int
-    y::Float64
+    offset::Float64
     v::Int  # node index
     lb::Float64
     ub::Float64
@@ -87,7 +87,8 @@ function prepare_events!(t::PWLTree, v::Int)
     # append children's events
     for c in t.children[v]
         cn = t.nodes[c]
-        node.events = [node.events, cn.events[cn.a:cn.b]]
+        cevents = cn.events[cn.a:cn.b]
+        node.events = [node.events, cevents]
     end
     sort!(node.events, by=k->k.x)
 end
@@ -98,12 +99,11 @@ Return stop position x."""
 function clip_min!(t::PWLTree, v::Int, c::Float64)
     prepare_events(t, v)
     node = t.nodes[v]
-    x = node.y - c # forecast
-    df = 0.0
-    xe = min_knot!(t, v)
-    while x < xe
-        df += node.slope * (x - oldx)
-        xe = min_knot(t, v)
+    forecast() = (c + node.offset) / node.slope
+    x = forecast()
+    xk = min_knot!(t, v)
+    while x > xk
+        x = forecast()
     end
     return x
 end
