@@ -58,6 +58,7 @@ function min_knot!(t::PWLTree, v::Int)
         return -Inf
     end
     e = n.events[n.a]
+    n.slope += e.slope
     n.a += 1
     return e.x
 end
@@ -69,6 +70,7 @@ function max_knot!(t::PWLTree, v::Int)
         return Inf
     end
     e = n.events[n.b]
+    n.slope += e.slope
     n.b -= 1
     return e.x
 end
