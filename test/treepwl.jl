@@ -57,6 +57,9 @@ facts("simple PWLTree (depth 2)") do
 
     FLSA.prepare_events!(tree, 3)
     @fact map(k->k.x, tree.nodes[3].events) --> [y[1] - 1, y[1] + 1]
+    FLSA.prepare_events!(tree, 4)
+    events = [[y[1:2] .+ 1], [y[1:2] .- 1], y[3] + 2, y[3] - 2]
+    @fact map(k->k.x, tree.nodes[4].events) --> sort!(events)
 end
 
 facts("A complete running example") do

@@ -84,6 +84,10 @@ function prepare_events!(t::PWLTree, v::Int)
             e.x = t.nodes[e.i].ub
         end
     end
+    # append children's events
+    for c in t.children[v]
+        node.events = [node.events, t.nodes[c].events]
+    end
     sort!(node.events, by=k->k.x)
 end
 
