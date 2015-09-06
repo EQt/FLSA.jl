@@ -32,8 +32,8 @@ type PWLTree
     y::Vector{Float64}
 
     """for convinience (testing): tree consisting of just one node"""
-    function PWLTree(n::PWLNode)
-        new([n], Vector{Int}[[]], [1], [1], 1, [n.offset])
+    function PWLTree(n::PWLNode, y=zeros(int(length(n.events)/2)))
+        new([n], Vector{Int}[[]], [1], [1], 1, [y, n.offset])
     end
     
 
