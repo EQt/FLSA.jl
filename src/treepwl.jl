@@ -19,7 +19,7 @@ type PWLNode
         events = [[Event(true,  lb[c], c) for c in children]
                   [Event(false, ub[c], c) for c in children]]
         sort!(events, by=k->k.x)
-        new(events, 1, length(events), 1, y, v, -Inf, +Inf)
+        new(events, 1, length(events), 1, y, v, lb[v], ub[v])
     end
 end
 
@@ -37,21 +37,21 @@ type PWLTree
     end
     
 
-    function PWLTree(parents, root, y)
+    function PWLTree(parents, root, y, lambda=i->1.0)
         n = length(parents)
         children = fill(Int[], n)
         for (v,p) in enumerate(parents)
             if v != root push!(children[p], v) end
         end
-        lb = fill(-Inf, n)
-        ub = fill(+Inf, n)
+        lb = [y[i] - (1+length(children[i]))*lambda(i) for i=1:n]
+        ub = [y[i] + (1+length(children[i]))*lambda(i) for i=1:n]
         nodes = [PWLNode(children[i], y[i], i, lb, ub) for i in 1:n]
         pre_order = collect(1:n)
         return new(nodes, children, pre_order, parents, root, y)
     end
 end
 
-"""Find and extract the next knot from the lower in a node"""
+"""Find and extract the next knot from the lower in a node; adapt v.slope"""
 function min_knot!(t::PWLTree, v::Int)
     n = t.nodes[v]
     if n.a > length(n.events)
@@ -62,7 +62,7 @@ function min_knot!(t::PWLTree, v::Int)
     return e.x
 end
 
-"""Find and extract the next knot from the upper in a node"""
+"""Find and extract the next knot from the upper in a node; adapt v.slope"""
 function max_knot!(t::PWLTree, v::Int)
     n = t.nodes[v]
     if n.b <= 0
