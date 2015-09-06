@@ -59,6 +59,8 @@ function min_knot!(t::PWLTree, v::Int)
     end
     e = n.events[n.a]
     n.slope += e.slope
+    @assert(e.i in 1:length(t.y), "e.i = $(e.i), length(t.y) = $(length(t.y))")
+    n.offset += sign(e.slope)*t.y[e.i]
     n.a += 1
     return e.x
 end
@@ -71,6 +73,8 @@ function max_knot!(t::PWLTree, v::Int)
     end
     e = n.events[n.b]
     n.slope += e.slope
+    @assert(e.i in 1:length(t.y), "e.i = $(e.i), length(t.y) = $(length(t.y))")
+    n.offset -= sign(e.slope)*t.y[e.i]
     n.b -= 1
     return e.x
 end
@@ -102,6 +106,20 @@ end
 """Clip node v from below until the derivative becomes c.
 Return stop position x."""
 function clip_min!(t::PWLTree, v::Int, c::Float64)
+    prepare_events(t, v)
+    node = t.nodes[v]
+    forecast() = (c + node.offset) / node.slope
+    x = forecast()
+    xk = min_knot!(t, v)
+    while x > xk
+        x = forecast()
+    end
+    return x
+end
+
+"""Clip node v from above until the derivative becomes c.
+Return stop position x."""
+function clip_max!(t::PWLTree, v::Int, c::Float64)
     prepare_events(t, v)
     node = t.nodes[v]
     forecast() = (c + node.offset) / node.slope
