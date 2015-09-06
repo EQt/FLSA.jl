@@ -86,7 +86,8 @@ function prepare_events!(t::PWLTree, v::Int)
     end
     # append children's events
     for c in t.children[v]
-        node.events = [node.events, t.nodes[c].events]
+        cn = t.nodes[c]
+        node.events = [node.events, cn.events[cn.a:cn.b]]
     end
     sort!(node.events, by=k->k.x)
 end
@@ -97,7 +98,6 @@ Return stop position x."""
 function clip_min!(t::PWLTree, v::Int, c::Float64)
     prepare_events(t, v)
     node = t.nodes[v]
-    oldx = node.y
     x = node.y - c # forecast
     df = 0.0
     xe = min_knot!(t, v)
