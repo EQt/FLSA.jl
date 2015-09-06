@@ -39,7 +39,7 @@ type PWLTree
 
     function PWLTree(parents, root, y, lambda=i->1.0)
         n = length(parents)
-        children = fill(Int[], n)
+        children = [Int[] for i=1:n]
         for (v,p) in enumerate(parents)
             if v != root push!(children[p], v) end
         end
