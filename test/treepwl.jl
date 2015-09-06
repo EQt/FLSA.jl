@@ -30,7 +30,7 @@ facts("simple node (depth 1)") do
     end
 end
 
-facts("simple PWLTree") do
+facts("simple PWLTree (depth 1)") do
     parents = [4, 4, 4, 4]
     root = 4
     y = [2, 3, 2.5, 2.2]
@@ -44,6 +44,20 @@ facts("simple PWLTree") do
     @fact map(k->k.x, tree.nodes[4].events) --> sort!(events)
 end
 
+facts("simple PWLTree (depth 2)") do
+    parents = [3, 4, 4, 4]
+    root = 4
+    y = [2, 3, 2.5, 2.2]
+    tree = FLSA.PWLTree(parents, root, y, i->1.0)
+    for i=1:2
+        @fact tree.children[i] --> isempty "$tree.children[i]"
+    end
+    @fact Set(tree.children[3]) --> Set(1)
+    @fact Set(tree.children[4]) --> Set(2,3)
+
+    FLSA.prepare_events!(tree, 3)
+    @fact map(k->k.x, tree.nodes[3].events) --> [y[1] - 1, y[1] + 1]
+end
 
 facts("A complete running example") do
     @pending begin
