@@ -1,7 +1,7 @@
 """Piecewise linear function over a tree"""
 
 type Event
-    islb::Bool
+    slope::Float64  # change of the slope, for lb, slope > 0, for ub, slope < 0
     x::Float64
     i::Int
 end
@@ -16,8 +16,8 @@ type PWLNode
     lb::Float64
     ub::Float64
     function PWLNode(children, y, v, lb, ub)
-        events = [[Event(true,  lb[c], c) for c in children]
-                  [Event(false, ub[c], c) for c in children]]
+        events = [[Event(+1, lb[c], c) for c in children]
+                  [Event(-1, ub[c], c) for c in children]]
         sort!(events, by=k->k.x)
         new(events, 1, length(events), 1, y, v, lb[v], ub[v])
     end
@@ -33,7 +33,7 @@ type PWLTree
 
     """for convinience (testing): tree consisting of just one node"""
     function PWLTree(n::PWLNode)
-        new([n], Vector{Int}[[]], [1], [1], 1, [n.y])
+        new([n], Vector{Int}[[]], [1], [1], 1, [n.offset])
     end
     
 
@@ -78,7 +78,7 @@ end
 function prepare_events!(t::PWLTree, v::Int)
     node = t.nodes[v]
     for e in node.events
-        if e.islb
+        if e.slope > 0
             e.x = t.nodes[e.i].lb
         else
             e.x = t.nodes[e.i].ub
@@ -88,6 +88,9 @@ function prepare_events!(t::PWLTree, v::Int)
     for c in t.children[v]
         cn = t.nodes[c]
         cevents = cn.events[cn.a:cn.b]
+        for e in cevents
+            e.slope += sign(e.slope)*1
+        end
         node.events = [node.events, cevents]
     end
     sort!(node.events, by=k->k.x)
