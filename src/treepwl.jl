@@ -153,12 +153,19 @@ function clip_max!(t::PWLTree, v::Int, c::Float64)
     forecast() = (c + node.offset) / node.slope
     x = forecast()
     xk = max_knot!(t, v)
-    @debug "clip_max!($v): x = $x, xk = $xk, v = $v"
+    @debug "clip_max!($v): x = $x, xk = $xk"
     while x < xk
         @debug "clip_max!($v): node.offset = $(node.offset), c = $c, node.slope = $(node.slope)"
         @debug "clip_max!($v): x = $x, xk = $xk"
         x = forecast()
         xk = max_knot!(t, v)
+    end
+    node.b += 1
+    e = Event(-1, -(t.y[v] - t.lam(v)), x, v)
+    if node.b >= length(node.events)
+        push!(node.events, e)
+    else
+        node.events[node.b] = e
     end
     return x
 end
