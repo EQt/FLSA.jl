@@ -93,7 +93,7 @@ function max_knot!(t::PWLTree, v::Int)
     end
     e = n.events[n.b]
     if e.i == v return -Inf end
-    @debug "max_knot!($v): n.b=$(n.b), old offset = $(n.offset), slope = $(n.slope)"
+    @debug "max_knot!($v): n.b=$(n.b), old offset = $(n.offset), slope = $(n.slope), e.offset = $(e.offset)"
     n.slope  -= e.slope
     n.offset -= e.offset
     n.b      -= 1
@@ -165,7 +165,7 @@ function clip_max!(t::PWLTree, v::Int, c::Float64)
         xk = max_knot!(t, v)
     end
     node.b += 1
-    e = Event(-1, -(t.y[v] - t.lam(v)), x, v)
+    e = Event(-1, -(t.y[v] + t.lam(v)), x, v)
     if node.b > length(node.events)
         node.a = min(node.a, node.b)
         push!(node.events, e)
