@@ -128,7 +128,6 @@ end
 """Clip node v from below until the derivative becomes c.
 Return stop position x."""
 function clip_min!(t::PWLTree, v::Int, c::Float64)
-    prepare_events!(t, v)
     node = t.nodes[v]
     node.slope = 1.0
     node.offset = sum([t.y[v], [t.lam(i) for i in t.children[v]]])
@@ -150,7 +149,6 @@ end
 """Clip node v from above until the derivative becomes c.
 Return stop position x."""
 function clip_max!(t::PWLTree, v::Int, c::Float64)
-    prepare_events!(t, v)
     node = t.nodes[v]
     node.slope = 1.0
     node.offset = sum([t.y[v], [-t.lam(i) for i in t.children[v]]])
