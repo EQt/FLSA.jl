@@ -89,8 +89,10 @@ facts("A 4 node, 3 level tree") do
         context("forward tree") do
             tf = FLSA.PWLTree(parents, root, y, i->1.0)
             FLSA.forward_dp_treepwl(tf)
-            @fact tf.nodes[1].lb --> 2.5
-            @fact tf.nodes[1].ub --> 4.5
+            for i=1:4
+                @fact tf.nodes[i].lb --> roughly(vis.lb[i]) "lb i = $i"
+                @fact tf.nodes[i].ub --> roughly(vis.ub[i]) "lb i = $i"
+            end
         end
     end
 end
