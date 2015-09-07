@@ -138,7 +138,7 @@ function clip_min!(t::PWLTree, v::Int, c::Float64)
         @debug "clip_min!($v): node.offset = $(node.offset), c = $c, node.slope = $(node.slope)"
         @debug "clip_min!($v): x = $x, xk = $xk"
     end
-    push_event(t, v, Event(-node.slope, -node.offset-t.lam(v), x, v))
+    push_event(t, v, Event(node.slope, node.offset-t.lam(v), x, v))
     @debug "clip_min!($v): x=$x, events --> $(node.events), [a,b] = [$(node.a), $(node.b)]"
     return x
 end
