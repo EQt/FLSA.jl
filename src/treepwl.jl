@@ -108,6 +108,7 @@ function prepare_events!(t::PWLTree, v::Int)
         cn = t.nodes[c]
         node.events = [node.events, cn.events[cn.a:cn.b]]
     end
+    node.a, node.b = 1, length(node.events)
     sort!(node.events, by=k->k.x)
     @debug "events($v): $([(e.i, e.x) for e in node.events])"
 end
@@ -130,6 +131,14 @@ function clip_min!(t::PWLTree, v::Int, c::Float64)
         xk = min_knot!(t, v)
         @debug "clip_min!($v): node.offset = $(node.offset), c = $c, node.slope = $(node.slope)"
         @debug "clip_min!($v): x = $x, xk = $xk"
+    end
+    node.a -= 1
+    e = Event(1, t.y[v] - t.lam(v), x, v)
+    if node.a <= 0
+        node.a = 1
+        unshift!(node.events, e)
+    else
+        node.events[node.a] = e
     end
     return x
 end
