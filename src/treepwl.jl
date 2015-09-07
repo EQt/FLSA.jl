@@ -22,9 +22,7 @@ type PWLNode
     lb::Float64
     ub::Float64
     function PWLNode(children, y::Vector{Float64}, v, lb, ub)
-        events = [[Event(+1, +y[c], lb[c], c) for c in children]
-                  [Event(-1, -y[c], ub[c], c) for c in children]]
-        sort!(events, by=k->k.x)
+        events = []
         new(events, 1, length(events), 1, y[v], v, lb[v], ub[v])
     end
 end
@@ -105,7 +103,6 @@ end
 """Collect bounds from children and sort events"""
 function prepare_events!(t::PWLTree, v::Int)
     node = t.nodes[v]
-    node.events = []
     for c in t.children[v]
         cn = t.nodes[c]
         node.events = [node.events, cn.events[cn.a:cn.b]]
@@ -113,6 +110,13 @@ function prepare_events!(t::PWLTree, v::Int)
     node.a, node.b = 1, length(node.events)
     sort!(node.events, by=k->k.x)
     @debug "events($v): $(node.events)"
+end
+
+function push_event(t, v, e::Event)
+    p = t.parent[v]
+    if p != v
+        push!(t.nodes[p].events, e)
+    end
 end
 
 
@@ -134,15 +138,7 @@ function clip_min!(t::PWLTree, v::Int, c::Float64)
         @debug "clip_min!($v): node.offset = $(node.offset), c = $c, node.slope = $(node.slope)"
         @debug "clip_min!($v): x = $x, xk = $xk"
     end
-    node.a -= 1
-    e = Event(node.slope, node.offset-t.lam(v), x, v)
-    if node.a <= 0
-        node.a = 1
-        node.b = max(node.b, node.a)
-        unshift!(node.events, e)
-    else
-        node.events[node.a] = e
-    end
+    push_event(t, v, Event(-node.slope, -node.offset-t.lam(v), x, v))
     @debug "clip_min!($v): x=$x, events --> $(node.events), [a,b] = [$(node.a), $(node.b)]"
     return x
 end
@@ -164,14 +160,7 @@ function clip_max!(t::PWLTree, v::Int, c::Float64)
         x = forecast()
         xk = max_knot!(t, v)
     end
-    node.b += 1
-    e = Event(-node.slope, -node.offset-t.lam(v), x, v)
-    if node.b > length(node.events)
-        node.a = min(node.a, node.b)
-        push!(node.events, e)
-    else
-        node.events[node.b] = e
-    end
+    push_event(t, v, Event(-node.slope, -node.offset-t.lam(v), x, v))
     @debug "clip_max!($v): x=$x, events --> $(node.events), [a,b] = [$(node.a), $(node.b)]"
     return x
 end
