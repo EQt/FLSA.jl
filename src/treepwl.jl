@@ -110,7 +110,7 @@ end
 """Clip node v from below until the derivative becomes c.
 Return stop position x."""
 function clip_min!(t::PWLTree, v::Int, c::Float64)
-    prepare_events(t, v)
+    prepare_events!(t, v)
     node = t.nodes[v]
     forecast() = (c + node.offset) / node.slope
     x = forecast()
@@ -124,7 +124,7 @@ end
 """Clip node v from above until the derivative becomes c.
 Return stop position x."""
 function clip_max!(t::PWLTree, v::Int, c::Float64)
-    prepare_events(t, v)
+    prepare_events!(t, v)
     node = t.nodes[v]
     forecast() = (c + node.offset) / node.slope
     x = forecast()
@@ -146,9 +146,9 @@ end
 function forward_dp_treepwl(t)
     for i in t.pre_order[end:-1:1]
         n = t.nodes[i]
-        prepare_events(t, i)
-        n.lb = clip_min!(t, i, -lam(i))
-        n.ub = clip_max!(t, i, +lam(i))
+        prepare_events!(t, i)
+        n.lb = clip_min!(t, i, -t.lam(i))
+        n.ub = clip_max!(t, i, +t.lam(i))
     end
 end
 
