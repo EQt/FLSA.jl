@@ -149,11 +149,10 @@ function clip_min!(t::PWLTree, v::Int, c::Float64)
     node = t.nodes[v]
     node.slope = 1.0
     node.offset = sum([t.y[v], [t.lam(i) for i in t.children[v]]])
-    @debug "clip_min!($v): node.offset = $(node.offset), c = $c, y=$(t.y[v])"
     forecast() = (c + node.offset) / node.slope
     x = forecast()
     xk = min_knot(t, v)
-    @debug "clip_min!($v): Starting at x = $x, xk = $xk"
+    @debug "clip_min!($v): BEGIN x = $x, xk = $xk"
     while x > xk
         x = forecast()
         @debug "clip_min!($v): forecast --> x = $x"
@@ -162,7 +161,7 @@ function clip_min!(t::PWLTree, v::Int, c::Float64)
         @debug "clip_min!($v): x = $x, xk = $xk"
     end
     push_event(t, v, Event(node.slope, node.offset-t.lam(v), x, v))
-    @debug "clip_min!($v): lb=$x, events --> $(node.events), [a,b] = [$(node.a), $(node.b)]"
+    @debug "clip_min!($v): END   lb=$x, events --> $(node.events), [a,b] = [$(node.a), $(node.b)]"
     return x
 end
 
@@ -172,11 +171,10 @@ function clip_max!(t::PWLTree, v::Int, c::Float64)
     node = t.nodes[v]
     node.slope = 1.0
     node.offset = sum([t.y[v], [-t.lam(i) for i in t.children[v]]])
-    @debug "clip_max!($v): node.offset = $(node.offset), c = $c, y=$(t.y[v])"
     forecast() = (c + node.offset) / node.slope
     x = forecast()
     xk = max_knot(t, v)
-    @debug "clip_max!($v): x = $x, xk = $xk"
+    @debug "clip_max!($v): BEGIN x = $x, xk = $xk"
     while x < xk
         @debug "clip_max!($v): node.offset = $(node.offset), c = $c, node.slope = $(node.slope)"
         @debug "clip_max!($v): x = $x, xk = $xk"
@@ -184,7 +182,7 @@ function clip_max!(t::PWLTree, v::Int, c::Float64)
         xk = max_knot!(t, v)
     end
     push_event(t, v, Event(-node.slope, -(node.offset+t.lam(v)), x, v))
-    @debug "clip_max!($v): ub=$x, events --> $(node.events), [a,b] = [$(node.a), $(node.b)]"
+    @debug "clip_max!($v): END  ub=$x, events --> $(node.events), [a,b] = [$(node.a), $(node.b)]"
     return x
 end
 
