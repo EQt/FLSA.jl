@@ -104,14 +104,7 @@ end
 """Collect bounds from children and sort events"""
 function prepare_events!(t::PWLTree, v::Int)
     node = t.nodes[v]
-    for e in node.events
-        if e.slope > 0
-            e.x = t.nodes[e.i].lb
-        else
-            e.x = t.nodes[e.i].ub
-        end
-    end
-    # append children's events
+    node.events = []
     for c in t.children[v]
         cn = t.nodes[c]
         cevents = cn.events[cn.a:cn.b]
@@ -180,7 +173,7 @@ function forward_dp_treepwl(t)
         prepare_events!(t, i)
         n.lb = clip_min!(t, i, -t.lam(i))
         n.ub = clip_max!(t, i, +t.lam(i))
-        @debug "forward_dp($i): [$(n.lb), $(n.ub)]"
+        @debug "forward_dp($i): [$(n.lb), $(n.ub)], events --> $(n.events[n.a:n.b])"
     end
 end
 
