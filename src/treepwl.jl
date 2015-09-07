@@ -112,7 +112,7 @@ function prepare_events!(t::PWLTree, v::Int)
     end
     node.a, node.b = 1, length(node.events)
     sort!(node.events, by=k->k.x)
-    @debug "events($v): $([(e.i, e.x) for e in node.events])"
+    @debug "events($v): $(node.events)"
 end
 
 
@@ -135,7 +135,7 @@ function clip_min!(t::PWLTree, v::Int, c::Float64)
         @debug "clip_min!($v): x = $x, xk = $xk"
     end
     node.a -= 1
-    e = Event(1, t.y[v] - t.lam(v), x, v)
+    e = Event(node.slope, node.offset, x, v)
     if node.a <= 0
         node.a = 1
         node.b = max(node.b, node.a)
@@ -165,7 +165,7 @@ function clip_max!(t::PWLTree, v::Int, c::Float64)
         xk = max_knot!(t, v)
     end
     node.b += 1
-    e = Event(-1, -(t.y[v] + t.lam(v)), x, v)
+    e = Event(-node.slope, -node.offset, x, v)
     if node.b > length(node.events)
         node.a = min(node.a, node.b)
         push!(node.events, e)
