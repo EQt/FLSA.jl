@@ -73,6 +73,7 @@ facts("2 node line") do
     root = 2
     parents = [root, root]
     t = FLSA.PWLTree(parents, root, y, i->1.0)
+    FLSA.prepare_events!(t, 2)
     @fact FLSA.clip_min!(t, 2, -1.0) --> roughly(2.5)
     @fact FLSA.clip_max!(t, 2, +1.0) --> roughly(3.5)
 end

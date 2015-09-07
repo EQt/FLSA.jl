@@ -7,6 +7,7 @@ end
 
 type Event
     slope::Float64  # change of the slope, for lb, slope > 0, for ub, slope < 0
+    offset::Float64 # change in the offset part
     x::Float64
     i::Int
 end
@@ -15,16 +16,16 @@ type PWLNode
     events::Vector{Event}
     a::Int  # index of lowest events, not occured yet
     b::Int  # index of highest events, not occured yet
-    slope::Int
-    offset::Float64
+    slope::Int      # current slope
+    offset::Float64 # current offset
     v::Int  # node index
     lb::Float64
     ub::Float64
-    function PWLNode(children, y, v, lb, ub)
-        events = [[Event(+1, lb[c], c) for c in children]
-                  [Event(-1, ub[c], c) for c in children]]
+    function PWLNode(children, y::Vector{Float64}, v, lb, ub)
+        events = [[Event(+1, +y[c], lb[c], c) for c in children]
+                  [Event(-1, -y[c], ub[c], c) for c in children]]
         sort!(events, by=k->k.x)
-        new(events, 1, length(events), 1, y, v, lb[v], ub[v])
+        new(events, 1, length(events), 1, y[v], v, lb[v], ub[v])
     end
 end
 
@@ -43,7 +44,7 @@ type PWLTree
     end
     
 
-    function PWLTree(parents, root, y, lambda=i->1.0)
+    function PWLTree(parents, root, y::Vector{Float64}, lambda=i->1.0)
         n = length(parents)
         children = [Int[] for i=1:n]
         for (v,p) in enumerate(parents)
@@ -51,7 +52,7 @@ type PWLTree
         end
         lb = [y[i] - (1+length(children[i]))*lambda(i) for i=1:n]
         ub = [y[i] + (1+length(children[i]))*lambda(i) for i=1:n]
-        nodes = [PWLNode(children[i], y[i], i, lb, ub) for i in 1:n]
+        nodes = [PWLNode(children[i], y, i, lb, ub) for i in 1:n]
         pre_order = zeros(Int, n)
         stack = [root]
         nr = 1
@@ -76,10 +77,9 @@ function min_knot!(t::PWLTree, v::Int)
     end
     @debug "min_knot!($v): n.a=$(n.a), old offset = $(n.offset)"
     e = n.events[n.a]
-    n.slope += e.slope
-    @assert(e.i in 1:length(t.y), "e.i = $(e.i), length(t.y) = $(length(t.y))")
-    n.offset += sign(e.slope)*(t.y[e.i] - t.lam(e.i))
-    n.a += 1
+    n.slope  += e.slope
+    n.offset += e.offset
+    n.a      += 1
     @debug "min_knot!($v): consume event e.i = $(e.i) --> new offset = $(n.offset)"
     return e.x
 end
@@ -92,10 +92,9 @@ function max_knot!(t::PWLTree, v::Int)
     end
     e = n.events[n.b]
     @debug "max_knot!($v): n.b=$(n.b), old offset = $(n.offset)"
-    n.slope -= e.slope
-    @assert(e.i in 1:length(t.y), "e.i = $(e.i), length(t.y) = $(length(t.y))")
-    n.offset -= sign(e.slope)*(t.y[e.i] + t.lam(e.i))
-    n.b -= 1
+    n.slope  -= e.slope
+    n.offset -= e.offset
+    n.b      -= 1
     @debug "max_knot!($v): consume event e.i = $(e.i) --> new offset = $(n.offset)"
     return e.x
 end
@@ -107,11 +106,7 @@ function prepare_events!(t::PWLTree, v::Int)
     node.events = []
     for c in t.children[v]
         cn = t.nodes[c]
-        cevents = cn.events[cn.a:cn.b]
-        for e in cevents
-            e.slope += sign(e.slope)*1
-        end
-        node.events = [node.events, cevents]
+        node.events = [node.events, cn.events[cn.a:cn.b]]
     end
     sort!(node.events, by=k->k.x)
     @debug "events($v): $([(e.i, e.x) for e in node.events])"
