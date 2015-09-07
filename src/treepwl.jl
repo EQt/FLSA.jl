@@ -137,6 +137,28 @@ end
 
 
 """Compute FLSA on a tree (fast algorithm)"""
-function dp_tree_fast()
+function dp_treepwl(t::PWLTree)
+    forward_dp_treepwl(t)
+    backtrace_dp_treepwl(t)
+end
+
+
+function forward_dp_treepwl(t)
+    for i in t.pre_order[end:-1:1]
+        n = t.nodes[i]
+        prepare_events(t, i)
+        n.lb = clip_min!(t, i, -lam(i))
+        n.ub = clip_max!(t, i, +lam(i))
+    end
+end
+
+
+function backtrace_dp_treepwl(t::PWLTree)
+    x = zeros(y)
+    x[t.root] = clip_min!(t, t.root, 0)
+    for i in t.pre_order[2:end]
+        x[i] = clamp(x[t.parent[i]], t.nodes[i].lb, t.nodes[i].ub)
+    end
+    return x
 end
 
