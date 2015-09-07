@@ -52,7 +52,15 @@ type PWLTree
         lb = [y[i] - (1+length(children[i]))*lambda(i) for i=1:n]
         ub = [y[i] + (1+length(children[i]))*lambda(i) for i=1:n]
         nodes = [PWLNode(children[i], y[i], i, lb, ub) for i in 1:n]
-        pre_order = collect(1:n)
+        pre_order = zeros(Int, n)
+        stack = [root]
+        nr = 1
+        while !isempty(stack)
+            v = pop!(stack)
+            pre_order[nr] = v
+            nr += 1
+            append!(stack, children[v])
+        end
         return new(nodes, children, pre_order, parents, root, y, lambda)
     end
 
