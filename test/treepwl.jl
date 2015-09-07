@@ -66,7 +66,7 @@ facts("simple PWLTree (depth 2)") do
     @fact map(k->k.slope, filter(k->k.i != 1, tree.nodes[4].events)) --> [1,1,-1,-1]
     @fact tree.nodes[4].slope --> 1
 end
-
+=#
 
 facts("2 node line") do
     y = [3.5, 2.5]
@@ -82,6 +82,7 @@ facts("2 node line") do
 end
     
 
+#=
 facts("A 4 node, 3 level tree") do
     begin
         lambda = 1.0
@@ -117,7 +118,7 @@ facts("A 4 node, 3 level tree") do
 end
 =#
 
-
+#=
 facts("A 5 nodes, 4 level tree") do
     begin
         lambda = 1.0
@@ -132,7 +133,6 @@ facts("A 5 nodes, 4 level tree") do
         x = FLSA.dp_tree_naive(y, lambda, tn, vis)
 
         parents = [5, 3, 4, 5, 5]
-
         tf = FLSA.PWLTree(parents, root, y, i->lambda)
         FLSA.forward_dp_treepwl(tf)
         for i=1:4
@@ -141,7 +141,7 @@ facts("A 5 nodes, 4 level tree") do
         end
     end
 end
-
+=#
 
 #=
 facts("A random 4x2 example") do

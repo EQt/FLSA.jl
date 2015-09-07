@@ -67,38 +67,6 @@ type PWLTree
         PWLTree(t.parent, t.root, y, lambda)
 end
 
-"""Find and extract the next knot from the lower in a node; adapt v.slope"""
-function min_knot!(t::PWLTree, v::Int)
-    n = t.nodes[v]
-    if n.a > length(n.events) || n.a > n.b
-        return Inf
-    end
-    @debug "min_knot!($v): n.a=$(n.a), old offset = $(n.offset), slope = $(n.slope)"
-    e = n.events[n.a]
-    if e.i == v return Inf end
-    n.slope  += e.slope
-    n.offset += e.offset
-    n.a      += 1
-    @debug "min_knot!($v): consume event e.i = $(e.i) --> new offset = $(n.offset), slope = $(n.slope)"
-    return e.x
-end
-
-"""Find and extract the next knot from the upper in a node; adapt v.slope"""
-function max_knot!(t::PWLTree, v::Int)
-    n = t.nodes[v]
-    if n.b <= 0 || n.b < n.a
-        return -Inf
-    end
-    e = n.events[n.b]
-    if e.i == v return -Inf end
-    @debug "max_knot!($v): n.b=$(n.b), old offset = $(n.offset), slope = $(n.slope), e.offset = $(e.offset)"
-    n.slope  -= e.slope
-    n.offset -= e.offset
-    n.b      -= 1
-    @debug "max_knot!($v): consume event e.i = $(e.i) --> new offset = $(n.offset), slope = $(n.slope)"
-    return e.x
-end
-
 
 """Peek the next knot from the lower in a node v"""
 function min_knot(t::PWLTree, v::Int)
@@ -119,6 +87,39 @@ function max_knot(t::PWLTree, v::Int)
     end
     e = n.events[n.b]
     return e.x
+end
+
+
+"""Find and extract the next knot from the lower in a node; adapt v.slope"""
+function min_knot!(t::PWLTree, v::Int)
+    n = t.nodes[v]
+    if n.a > length(n.events) || n.a > n.b
+        return Inf
+    end
+    @debug "min_knot!($v): n.a=$(n.a), old offset = $(n.offset), slope = $(n.slope)"
+    e = n.events[n.a]
+    if e.i == v return Inf end
+    n.slope  += e.slope
+    n.offset += e.offset
+    n.a      += 1
+    @debug "min_knot!($v): consume event $e --> new offset = $(n.offset), slope = $(n.slope)"
+    return min_knot(t, v)
+end
+
+"""Find and extract the next knot from the upper in a node; adapt v.slope"""
+function max_knot!(t::PWLTree, v::Int)
+    n = t.nodes[v]
+    if n.b <= 0 || n.b < n.a
+        return -Inf
+    end
+    e = n.events[n.b]
+    if e.i == v return -Inf end
+    @debug "max_knot!($v): n.b=$(n.b), old offset = $(n.offset), slope = $(n.slope), e.offset = $(e.offset)"
+    n.slope  -= e.slope
+    n.offset -= e.offset
+    n.b      -= 1
+    @debug "max_knot!($v): consume event $e --> new offset = $(n.offset), slope = $(n.slope)"
+    return max_knot(t, v)
 end
 
 
