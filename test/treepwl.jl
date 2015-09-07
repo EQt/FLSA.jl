@@ -74,6 +74,12 @@ facts("A 4 node, 3 level tree") do
         E = [Graphs.IEdge(i, u, v) for (i, (u,v)) in enumerate(E)]
         g = Graphs.edgelist(collect(1:4), E; is_directed=false)
         tn = FLSA.subtree(g, E, 4)
+        vis = FLSA.DPVisitor(y)
+        x = FLSA.dp_tree_naive(y, lambda, tn, vis)
+
+        parents = [3, 4, 4, 4]
+        root = 4
+        tf = FLSA.PWLTree(parents, root, y, i->1.0)
     end
 end
 
