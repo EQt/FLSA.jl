@@ -3,6 +3,7 @@ using Graphs
 using FLSA
 using FactCheck
 
+#=
 facts("simple node (depth 1)") do
     children = Array{Int}[[], [], [], [1,2,3]]
     lb = [1, 2.5, 2, -Inf]
@@ -65,6 +66,7 @@ facts("simple PWLTree (depth 2)") do
     @fact map(k->k.slope, filter(k->k.i != 1, tree.nodes[4].events)) --> [1,1,-1,-1]
     @fact tree.nodes[4].slope --> 1
 end
+=#
 
 facts("A 4 node, 3 level tree") do
     begin
@@ -85,6 +87,7 @@ facts("A 4 node, 3 level tree") do
     end
 end
 
+#=
 facts("A random 4x2 example") do
     begin
         srand(42)
@@ -103,5 +106,6 @@ facts("A random 4x2 example") do
         x = FLSA.dp_tree_naive(y, lambda, t, vis)
     end
 end
+=#
 
 end
