@@ -28,8 +28,8 @@ function  backtrace_dp_tree(vis, iroot, t, y)
     return x
 end
 
-"""Compute x=FLSA(y, lambda) on a a (sub)tree t, recursively"""
-function dp_tree(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph)
+"""Compute x=FLSA(y, lambda) on a a (sub)tree t, naive PWL implementation"""
+function dp_tree_naive(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph)
     vis = DPVisitor(y)
     for i in 1:num_vertices(t.graph)
         vis.df[i] = PWL([Knot(-INF, -INF - vis.y[i]),
