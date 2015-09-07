@@ -1,26 +1,26 @@
 """Piecewise linear function over a tree"""
 
 macro debug(msg)
-    :(info($msg))
+#    :(info($msg))
 end
 
 
 type Event
     slope::Float64  # change of the slope, for lb, slope > 0, for ub, slope < 0
     offset::Float64 # change in the offset part
-    x::Float64
-    i::Int
+    x::Float64      # where it will happen
+    i::Int          # node index
 end
 
 type PWLNode
     events::Vector{Event}
-    a::Int  # index of lowest events, not occured yet
-    b::Int  # index of highest events, not occured yet
+    a::Int          # index of lowest events, not occured yet
+    b::Int          # index of highest events, not occured yet
     slope::Int      # current slope
     offset::Float64 # current offset
-    v::Int  # node index
-    lb::Float64
-    ub::Float64
+    v::Int          # node index
+    lb::Float64     # lower bound (computed by clip_min!)
+    ub::Float64     # upper bound (computed by clip_max!)
     function PWLNode(children, y::Vector{Float64}, v, lb, ub)
         events = []
         new(events, 1, length(events), 1, y[v], v, lb[v], ub[v])
@@ -206,8 +206,8 @@ end
 
 
 function backtrace_dp_treepwl(t::PWLTree)
-    x = zeros(y)
-    x[t.root] = clip_min!(t, t.root, 0)
+    x = zeros(t.y)
+    x[t.root] = clip_min!(t, t.root, 0.0)
     for i in t.pre_order[2:end]
         x[i] = clamp(x[t.parent[i]], t.nodes[i].lb, t.nodes[i].ub)
     end
