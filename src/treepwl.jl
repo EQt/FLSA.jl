@@ -121,6 +121,7 @@ function prepare_events!(t::PWLTree, v::Int)
         node.events = [node.events, cevents]
     end
     sort!(node.events, by=k->k.x)
+    @debug "events($v): $([(e.i, e.x) for e in node.events])"
 end
 
 
