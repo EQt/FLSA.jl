@@ -117,7 +117,6 @@ facts("A 4 node, 3 level tree") do
 end
 
 
-#=
 facts("A random 4x2 example") do
     begin
         srand(42)
@@ -128,14 +127,21 @@ facts("A random 4x2 example") do
         n = length(v)
         w = rand(size(g.edges))
         y = rand(n1*n2)
+        root = 1
         
         mst, wmst = kruskal_minimum_spantree(g, w)
-        t = FLSA.subtree(g, mst, 1)
-        tree = FLSA.PWLTree(t, y)
+        t = FLSA.subtree(g, mst, root)
+        tn = FLSA.PWLTree(t, y)
         vis = FLSA.DPVisitor(y)
         x = FLSA.dp_tree_naive(y, lambda, t, vis)
+
+        tf = FLSA.PWLTree(tn.parent, root, y, i->lambda)
+        FLSA.forward_dp_treepwl(tf)
+        for i=1:n
+            @fact tf.nodes[i].lb --> roughly(round(vis.lb[i], 6)) "lb i = $i"
+            @fact tf.nodes[i].ub --> roughly(round(vis.ub[i], 6)) "ub i = $i"
+        end
     end
 end
-=#
 
 end
