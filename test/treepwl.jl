@@ -86,7 +86,12 @@ facts("A 4 node, 3 level tree") do
             @fact FLSA.clip_min!(tf, 1, -1.0) --> 2.5
             @fact FLSA.clip_max!(tf, 1, +1.0) --> 4.5
         end
-        # FLSA.forward_dp_treepwl(tf)
+        context("forward tree") do
+            tf = FLSA.PWLTree(parents, root, y, i->1.0)
+            FLSA.forward_dp_treepwl(tf)
+            @fact tf.nodes[1].lb --> 2.5
+            @fact tf.nodes[1].ub --> 4.5
+        end
     end
 end
 
