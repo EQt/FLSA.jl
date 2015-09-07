@@ -68,6 +68,15 @@ facts("simple PWLTree (depth 2)") do
 end
 =#
 
+facts("2 node line") do
+    y = [3.5, 2.5]
+    root = 2
+    parents = [root, root]
+    t = FLSA.PWLTree(parents, root, y, i->1.0)
+    @fact FLSA.clip_min!(t, 2, -1.0) --> roughly(2.5)
+end
+    
+
 facts("A 4 node, 3 level tree") do
     begin
         lambda = 1.0
