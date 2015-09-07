@@ -12,6 +12,8 @@ type TreeSubGraph{V,E}
     edge_index::Dict{(Int,Int),Int}
 end
 
+typealias ITreeSubGraph TreeSubGraph{Int,IEdge}
+
 function subtree(graph, edges, root)
     local n = num_vertices(graph)
     parent = fill(-1, n)
