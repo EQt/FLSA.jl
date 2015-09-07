@@ -126,7 +126,7 @@ facts("A random 4x2 example") do
         v = vertices(g)
         n = length(v)
         w = rand(size(g.edges))
-        y = rand(n1*n2)
+        y = round(rand(n1*n2), 3)
         root = 1
         
         mst, wmst = kruskal_minimum_spantree(g, w)
