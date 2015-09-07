@@ -18,7 +18,9 @@ end
 
 
 
-function  backtrace_dp_tree(vis, iroot, t, y)
+"""After computing the bounds [lb, ub] for each node, compute solution x
+   by clipping each edge, i.e. backtracing from root to children"""
+function backtrace_dp_tree(vis, iroot, t, y)
     x_root = find_x(vis.df[iroot], 0)
     x = zeros(y)
     x[iroot] = x_root
