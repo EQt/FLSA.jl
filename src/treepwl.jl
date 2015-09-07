@@ -75,13 +75,13 @@ function min_knot!(t::PWLTree, v::Int)
     if n.a > length(n.events)
         return Inf
     end
-    @debug "min_knot!($v): n.a=$(n.a), old offset = $(n.offset)"
+    @debug "min_knot!($v): n.a=$(n.a), old offset = $(n.offset), slope = $(n.slope)"
     e = n.events[n.a]
     if e.i == v return Inf end
     n.slope  += e.slope
     n.offset += e.offset
     n.a      += 1
-    @debug "min_knot!($v): consume event e.i = $(e.i) --> new offset = $(n.offset)"
+    @debug "min_knot!($v): consume event e.i = $(e.i) --> new offset = $(n.offset), slope = $(n.slope)"
     return e.x
 end
 
@@ -93,11 +93,11 @@ function max_knot!(t::PWLTree, v::Int)
     end
     e = n.events[n.b]
     if e.i == v return -Inf end
-    @debug "max_knot!($v): n.b=$(n.b), old offset = $(n.offset)"
+    @debug "max_knot!($v): n.b=$(n.b), old offset = $(n.offset), slope = $(n.slope)"
     n.slope  -= e.slope
     n.offset -= e.offset
     n.b      -= 1
-    @debug "max_knot!($v): consume event e.i = $(e.i) --> new offset = $(n.offset)"
+    @debug "max_knot!($v): consume event e.i = $(e.i) --> new offset = $(n.offset), slope = $(n.slope)"
     return e.x
 end
 
@@ -143,7 +143,7 @@ function clip_min!(t::PWLTree, v::Int, c::Float64)
     else
         node.events[node.a] = e
     end
-    @debug "clip_min!($v): events --> $(node.events), [a,b] = [$(node.a), $(node.b)]"
+    @debug "clip_min!($v): x=$x, events --> $(node.events), [a,b] = [$(node.a), $(node.b)]"
     return x
 end
 
@@ -172,7 +172,7 @@ function clip_max!(t::PWLTree, v::Int, c::Float64)
     else
         node.events[node.b] = e
     end
-    @debug "clip_max!($v): events --> $(node.events), [a,b] = [$(node.a), $(node.b)]"
+    @debug "clip_max!($v): x=$x, events --> $(node.events), [a,b] = [$(node.a), $(node.b)]"
     return x
 end
 
