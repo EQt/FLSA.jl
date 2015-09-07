@@ -1,5 +1,10 @@
 """Piecewise linear function over a tree"""
 
+macro debug(msg)
+    :(info($msg))
+end
+
+
 type Event
     slope::Float64  # change of the slope, for lb, slope > 0, for ub, slope < 0
     x::Float64
@@ -112,11 +117,12 @@ Return stop position x."""
 function clip_min!(t::PWLTree, v::Int, c::Float64)
     prepare_events!(t, v)
     node = t.nodes[v]
-    forecast() = (c - node.offset) / node.slope
+    @debug "node.offset = $(node.offset), c = $c"
+    forecast() = (c + node.offset) / node.slope
     x = forecast()
     xk = min_knot!(t, v)
     while x > xk
-        info("x = $x, xk = $xk")
+        @debug "x = $x, xk = $xk"
         x = forecast()
     end
     return x
