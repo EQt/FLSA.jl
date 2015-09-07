@@ -123,6 +123,7 @@ function clip_min!(t::PWLTree, v::Int, c::Float64)
     forecast() = (c + node.offset) / node.slope
     x = forecast()
     xk = min_knot!(t, v)
+    @debug "x = $x, xk = $xk, v = $v"
     while x > xk
         @debug "node.offset = $(node.offset), c = $c, node.slope = $(node.slope)"
         @debug "x = $x, xk = $xk, v = $v"
