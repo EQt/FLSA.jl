@@ -66,6 +66,17 @@ facts("simple PWLTree (depth 2)") do
     @fact tree.nodes[4].slope --> 1
 end
 
+facts("A 4 node, 3 level tree") do
+    begin
+        lambda = 1.0
+        y = [3.5, 4.0, 2.5, 3.0]
+        E = [(1,3), (2,4), (3,4)]
+        E = [Graphs.IEdge(i, u, v) for (i, (u,v)) in enumerate(E)]
+        g = Graphs.edgelist(collect(1:4), E; is_directed=false)
+        tn = FLSA.subtree(g, E, 4)
+    end
+end
+
 facts("A random 4x2 example") do
     begin
         srand(42)
