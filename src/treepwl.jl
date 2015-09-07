@@ -59,7 +59,7 @@ end
 function min_knot!(t::PWLTree, v::Int)
     n = t.nodes[v]
     if n.a > length(n.events)
-        return -Inf
+        return Inf
     end
     e = n.events[n.a]
     n.slope += e.slope
@@ -73,7 +73,7 @@ end
 function max_knot!(t::PWLTree, v::Int)
     n = t.nodes[v]
     if n.b <= 0
-        return Inf
+        return -Inf
     end
     e = n.events[n.b]
     n.slope += e.slope
@@ -112,10 +112,11 @@ Return stop position x."""
 function clip_min!(t::PWLTree, v::Int, c::Float64)
     prepare_events!(t, v)
     node = t.nodes[v]
-    forecast() = (c + node.offset) / node.slope
+    forecast() = (c - node.offset) / node.slope
     x = forecast()
     xk = min_knot!(t, v)
     while x > xk
+        info("x = $x, xk = $xk")
         x = forecast()
     end
     return x
@@ -161,4 +162,3 @@ function backtrace_dp_treepwl(t::PWLTree)
     end
     return x
 end
-
