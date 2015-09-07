@@ -81,11 +81,12 @@ function max_knot!(t::PWLTree, v::Int)
     if n.b <= 0
         return -Inf
     end
-    @debug "max_knot!: v=$v, n.b=$(n.b)"
     e = n.events[n.b]
-    n.slope += e.slope
+    @debug "max_knot!: v=$v, n.b=$(n.b), old offset = $(n.offset)"
+    n.slope -= e.slope
     @assert(e.i in 1:length(t.y), "e.i = $(e.i), length(t.y) = $(length(t.y))")
-    n.offset -= sign(e.slope)*t.y[e.i]
+    n.offset -= sign(e.slope)*(t.y[e.i] + t.lam(e.i))
+    @debug "max_knot!: new offset = $(n.offset)"
     n.b -= 1
     return e.x
 end
@@ -119,6 +120,7 @@ Return stop position x."""
 function clip_min!(t::PWLTree, v::Int, c::Float64)
     prepare_events!(t, v)
     node = t.nodes[v]
+    node.slope = 1.0
     node.offset = sum([t.y[v], [t.lam(i) for i in t.children[v]]])
     @debug "clip_min!: node.offset = $(node.offset), c = $c"
     forecast() = (c + node.offset) / node.slope
@@ -139,10 +141,13 @@ Return stop position x."""
 function clip_max!(t::PWLTree, v::Int, c::Float64)
     prepare_events!(t, v)
     node = t.nodes[v]
-    @debug "node.offset = $(node.offset), c = $c"
+    node.slope = 1.0
+    node.offset = sum([t.y[v], [-t.lam(i) for i in t.children[v]]])
+    @debug "clip_max!: node.offset = $(node.offset), c = $c, y=$(t.y[v])"
     forecast() = (c + node.offset) / node.slope
     x = forecast()
     xk = max_knot!(t, v)
+    @debug "x = $x, xk = $xk, v = $v"
     while x < xk
         @debug "node.offset = $(node.offset), c = $c, node.slope = $(node.slope)"
         @debug "x = $x, xk = $xk"
