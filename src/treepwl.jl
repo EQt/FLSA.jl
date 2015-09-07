@@ -30,10 +30,11 @@ type PWLTree
     parent::Vector{Int}
     root::Int
     y::Vector{Float64}
+    lam::Function
 
     """for convinience (testing): tree consisting of just one node"""
-    function PWLTree(n::PWLNode, y=zeros(int(length(n.events)/2)))
-        new([n], Vector{Int}[[]], [1], [1], 1, [y, n.offset])
+    function PWLTree(n::PWLNode, y=zeros(int(length(n.events)/2)), lam=i->1.0)
+        new([n], Vector{Int}[[]], [1], [1], 1, [y, n.offset], lam)
     end
     
 
@@ -47,7 +48,7 @@ type PWLTree
         ub = [y[i] + (1+length(children[i]))*lambda(i) for i=1:n]
         nodes = [PWLNode(children[i], y[i], i, lb, ub) for i in 1:n]
         pre_order = collect(1:n)
-        return new(nodes, children, pre_order, parents, root, y)
+        return new(nodes, children, pre_order, parents, root, y, lambda)
     end
 
     PWLTree(t::ITreeSubGraph, y::Vector{Float64}, lambda=i->1.0) =
@@ -133,3 +134,9 @@ function clip_max!(t::PWLTree, v::Int, c::Float64)
     end
     return x
 end
+
+
+"""Compute FLSA on a tree (fast algorithm)"""
+function dp_tree_fast()
+end
+
