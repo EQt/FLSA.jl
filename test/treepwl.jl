@@ -80,6 +80,8 @@ facts("A complete running example") do
         mst, wmst = kruskal_minimum_spantree(g, w)
         t = FLSA.subtree(g, mst, 1)
         tree = FLSA.PWLTree(t, y)
+        vis = FLSA.DPVisitor(y)
+        x = FLSA.dp_tree_naive(y, lambda, t, vis)
     end
 end
 
