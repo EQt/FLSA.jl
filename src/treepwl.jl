@@ -119,7 +119,7 @@ Return stop position x."""
 function clip_min!(t::PWLTree, v::Int, c::Float64)
     prepare_events!(t, v)
     node = t.nodes[v]
-    node.offset = t.y[v] - sum(Float64[t.lam(i) for i in t.children[v]])
+    node.offset = sum([t.y[v], [t.lam(i) for i in t.children[v]]])
     @debug "clip_min!: node.offset = $(node.offset), c = $c"
     forecast() = (c + node.offset) / node.slope
     x = forecast()
