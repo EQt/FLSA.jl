@@ -1,4 +1,5 @@
 module TestFLSA
+using Graphs
 using FLSA
 using FactCheck
 
@@ -66,18 +67,19 @@ facts("simple PWLTree (depth 2)") do
 end
 
 facts("A complete running example") do
-    @pending begin
+    begin
         srand(42)
         lambda = 0.1
         n1, n2 = 4, 2
-        g = FLSA.grid_graph(n1, n2)
+        g = igraph(grid_graph(n1, n2))
         v = vertices(g)
         n = length(v)
         w = rand(size(g.edges))
         y = rand(n1*n2)
         
         mst, wmst = kruskal_minimum_spantree(g, w)
-        t = FLSA.subtree(g, mst, (1,1))
+        t = FLSA.subtree(g, mst, 1)
+        tree = FLSA.PWLTree(t, y)
     end
 end
 
