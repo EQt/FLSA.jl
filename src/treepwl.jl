@@ -100,6 +100,28 @@ function max_knot!(t::PWLTree, v::Int)
 end
 
 
+"""Peek the next knot from the lower in a node v"""
+function min_knot(t::PWLTree, v::Int)
+    n = t.nodes[v]
+    if n.a > length(n.events) || n.a > n.b
+        return Inf
+    end
+    e = n.events[n.a]
+    return e.x
+end
+
+
+"""Peek the next knot from the upper in a node v"""
+function max_knot(t::PWLTree, v::Int)
+    n = t.nodes[v]
+    if n.b <= 0 || n.b < n.a
+        return -Inf
+    end
+    e = n.events[n.b]
+    return e.x
+end
+
+
 """Collect bounds from children and sort events"""
 function prepare_events!(t::PWLTree, v::Int)
     node = t.nodes[v]
@@ -129,7 +151,7 @@ function clip_min!(t::PWLTree, v::Int, c::Float64)
     @debug "clip_min!($v): node.offset = $(node.offset), c = $c, y=$(t.y[v])"
     forecast() = (c + node.offset) / node.slope
     x = forecast()
-    xk = min_knot!(t, v)
+    xk = min_knot(t, v)
     @debug "clip_min!($v): Starting at x = $x, xk = $xk"
     while x > xk
         x = forecast()
@@ -152,7 +174,7 @@ function clip_max!(t::PWLTree, v::Int, c::Float64)
     @debug "clip_max!($v): node.offset = $(node.offset), c = $c, y=$(t.y[v])"
     forecast() = (c + node.offset) / node.slope
     x = forecast()
-    xk = max_knot!(t, v)
+    xk = max_knot(t, v)
     @debug "clip_max!($v): x = $x, xk = $xk"
     while x < xk
         @debug "clip_max!($v): node.offset = $(node.offset), c = $c, node.slope = $(node.slope)"
