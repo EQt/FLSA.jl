@@ -80,6 +80,8 @@ facts("A 4 node, 3 level tree") do
         parents = [3, 4, 4, 4]
         root = 4
         tf = FLSA.PWLTree(parents, root, y, i->1.0)
+        @fact FLSA.clip_min!(tf, 1, 1.0) --> 2.5
+        # FLSA.forward_dp_treepwl(tf)
     end
 end
 
