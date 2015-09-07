@@ -66,7 +66,7 @@ facts("simple PWLTree (depth 2)") do
     @fact tree.nodes[4].slope --> 1
 end
 
-facts("A complete running example") do
+facts("A random 4x2 example") do
     begin
         srand(42)
         lambda = 0.1
