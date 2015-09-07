@@ -133,10 +133,13 @@ Return stop position x."""
 function clip_max!(t::PWLTree, v::Int, c::Float64)
     prepare_events!(t, v)
     node = t.nodes[v]
+    @debug "node.offset = $(node.offset), c = $c"
     forecast() = (c + node.offset) / node.slope
     x = forecast()
-    xk = min_knot!(t, v)
+    xk = max_knot!(t, v)
     while x < xk
+        @debug "node.offset = $(node.offset), c = $c, node.slope = $(node.slope)"
+        @debug "x = $x, xk = $xk"
         x = forecast()
     end
     return x
