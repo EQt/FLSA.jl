@@ -74,7 +74,7 @@ function min_knot!(t::PWLTree, v::Int)
     if n.a > length(n.events)
         return Inf
     end
-    @debug "min_knot!($v): n.b=$(n.b), old offset = $(n.offset)"
+    @debug "min_knot!($v): n.a=$(n.a), old offset = $(n.offset)"
     e = n.events[n.a]
     n.slope += e.slope
     @assert(e.i in 1:length(t.y), "e.i = $(e.i), length(t.y) = $(length(t.y))")
