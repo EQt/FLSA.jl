@@ -49,6 +49,9 @@ type PWLTree
         pre_order = collect(1:n)
         return new(nodes, children, pre_order, parents, root, y)
     end
+
+    PWLTree(t::ITreeSubGraph, y::Vector{Float64}, lambda=i->1.0) =
+        PWLTree(t.parent, t.root, y, lambda)
 end
 
 """Find and extract the next knot from the lower in a node; adapt v.slope"""
