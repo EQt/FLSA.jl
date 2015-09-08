@@ -112,6 +112,8 @@ Return x position of next event
 """
 function step_min_event(t, e::Event)
     @debug "step($e)"
+    if e.s == e.t
+        
     n = t.nodes[e.t]
     ee = try
         find_min_event(n)
@@ -171,7 +173,7 @@ Create a new event for v that corresponds to the new lower bound of v.
 Requires child beeing processed
 """
 function create_min_event(t, v::Int, c::Float64=-t.lam(v))
-    e = Event(t.parent[v], v, 0.0, t.y[v], 1.0)
+    e = Event(v, v, 0.0, t.y[v], 1.0)
     e.offset += sum(map(i->t.lam(i), t.children[v]))
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
@@ -186,7 +188,7 @@ function create_min_event(t, v::Int, c::Float64=-t.lam(v))
 end
 
 function create_max_event(t, v::Int, c::Float64=t.lam(v))
-    e = Event(v, t.parent[v], 0.0, t.y[v], 1.0)
+    e = Event(v, v, 0.0, t.y[v], 1.0)
     e.offset -= sum(map(i->t.lam(i), t.children[v]))
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
