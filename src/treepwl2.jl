@@ -183,8 +183,8 @@ function create_max_event(t, v::Int, c::Float64=t.lam(v))
     while e.x < xk
         xk = step_max_event(t, e)
         e.x = forecast(e)
-        @debug "create($v): events = $(showevents(t.nodes[v]))"
-        @debug "create($v): x = $(e.x), xk = $xk, offset=$(e.offset), slope=$(e.slope)"
+        @debug "create_max($v): events = $(showevents(t.nodes[v]))"
+        @debug "create_max($v): x = $(e.x), xk = $xk, offset=$(e.offset), slope=$(e.slope)"
     end
     t.nodes[v].ub = e.x
     e.slope  = -e.slope
