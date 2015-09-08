@@ -23,7 +23,7 @@ type PWLNode
     ub::Float64     # upper bound (computed by clip_max!)
     function PWLNode(children, y::Vector{Float64}, v, lb, ub)
         events = []
-        resize!(events, length(children))
+        resize!(events, 2*length(children))
         new(events, 1, length(events), 1, y[v], v, lb[v], ub[v])
     end
 end
@@ -43,7 +43,7 @@ type PWLTree
     end
     
 
-    function PWLTree(parents, root, y::Vector{Float64}, lambda=i->1.0)
+    function PWLTree(parents::Vector{Int}, root::Int, y::Vector{Float64}, lambda=i->1.0)
         n = length(parents)
         children = [Int[] for i=1:n]
         for (v,p) in enumerate(parents)
