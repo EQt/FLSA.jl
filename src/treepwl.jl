@@ -14,6 +14,7 @@ end
 
 type PWLNode
     events::Vector{Event}
+    nevents::Int    # actual number of events (rest is preallocated)
     a::Int          # index of lowest events, not occured yet
     b::Int          # index of highest events, not occured yet
     slope::Int      # current slope
@@ -23,8 +24,8 @@ type PWLNode
     ub::Float64     # upper bound (computed by clip_max!)
     function PWLNode(children, y::Vector{Float64}, v, lb, ub)
         events = Event[]
-        # resize!(events, 2*length(children))
-        new(events, 1, length(events), 1, y[v], v, lb[v], ub[v])
+        resize!(events, 2*length(children))
+        new(events, 0, 1, 0, 1, y[v], v, lb[v], ub[v])
     end
 end
 
@@ -128,10 +129,18 @@ function prepare_events!(t::PWLTree, v::Int)
     @debug "events($v): $(node.events)"
 end
 
+
 function push_event(t, v, e::Event)
     p = t.parent[v]
     if p != v
-        push!(t.nodes[p].events, e)
+        pnode = t.nodes[p]
+        ev = pnode.events
+        pnode.nevents += 1
+        if pnode.nevents <= length(ev)
+            ev[pnode.nevents] = e
+        else
+            push!(ev, e)
+        end
     end
 end
 
