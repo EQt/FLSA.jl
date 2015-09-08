@@ -19,7 +19,7 @@ facts("2 node line") do
     @fact FLSA.create_max_event(t, 2, +1.0).x --> roughly(3.5)
 end
     
-
+#=
 facts("A 4 node, 3 level tree") do
     begin
         lambda = 1.0
@@ -105,5 +105,5 @@ facts("A random 4x2 example") do
         end
     end
 end
-
+=#
 end
