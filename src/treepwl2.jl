@@ -131,7 +131,7 @@ end
 
 
 function step_max_event(t, e::Event)
-    n = t.nodes[e.t]
+    n = t.nodes[e.s]
     @debug "step_max($n): BEGIN"
     ee = try
         find_max_event(n)
@@ -140,15 +140,14 @@ function step_max_event(t, e::Event)
         @debug "step_max(): no such event --> parent == $(e.s)"
         if e.s == e.t
             e.slope = -1
-            e.offset = -Inf
+            e.offset = -t.y[e.s] - t.lam(e.s)
             @debug "step_max(): last event --> resetting event to $e"
             return -Inf
         end
         n = t.nodes[e.s]
         @debug "step_max(): next node $n"
-        ee = n.events[n.b]  # = find_max_event(n)
         n.b -= 1            # won't processed again
-        ee
+        n.events[n.b-1]  # = find_max_event(n)
     end
     @debug "step_max(): consuming $(ee)"
     n.b -= 1 # won't processed again
