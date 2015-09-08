@@ -12,7 +12,7 @@ facts("2 node line") do
     @fact e1.x --> roughly(2.5)
     e2 = FLSA.create_max_event(t, 1, +1.0)
     @fact e2.x --> roughly(4.5)
-    n = t.nodes[1]
+    n = t.nodes[2]
     n.events = [e1, e2]
     n.a, n.b = 1, 2
     @fact FLSA.create_min_event(t, 2, -1.0).x --> roughly(2.5)
