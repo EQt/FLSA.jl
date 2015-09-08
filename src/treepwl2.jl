@@ -113,15 +113,15 @@ Return x position of next event
 function step_min_event(t, e::Event)
     @debug "step($e)"
     n = t.nodes[e.t]
-    n.a += 1 # won't processed again
-    try
-        ee = find_min_event(n)
+    ee = try
+        find_min_event(n)
     catch
         e.t = t.parent[e.t]
         n = t.nodes[e.t]
-        ee = n.events[n.a]  # = find_min_event(n)
         n.a += 1            # won't processed again
+        n.events[n.a-1]     # = find_min_event(n)
     end
+    n.a += 1 # won't processed again
     e.t = ee.t
     e.offset += ee.offset
     e.slope  += ee.slope
@@ -132,19 +132,19 @@ end
 
 function step_max_event(t, e::Event)
     n = t.nodes[e.t]
+    @debug "step_max($n): BEGIN"
+    ee = try
+        find_max_event(n)
+    catch
+        e.s = t.parent[e.s]
+        @debug "step_max(): no such event --> parent == $(e.s)"
+        n = t.nodes[e.s]
+        ee = n.events[n.b]  # = find_max_event(n)
+        n.b -= 1            # won't processed again
+        ee
+    end
+    @debug "step_max(): consuming $(ee)"
     n.b -= 1 # won't processed again
-    ee = 
-        try
-            find_max_event(n)
-        catch
-            e.s = t.parent[e.s]
-            @debug "step_max: no such event --> parent == $(e.s)"
-            n = t.nodes[e.s]
-            ee = n.events[n.b]  # = find_max_event(n)
-            n.b -= 1            # won't processed again
-            ee
-        end
-    @debug "step_max: consuming $(ee)"
     e.s = ee.s
     e.offset -= ee.offset
     e.slope  -= ee.slope
