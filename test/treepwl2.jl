@@ -46,6 +46,7 @@ facts("A 4 node, 3 level tree") do
             end
             FLSA.forward_dp_treepwl(tf)
             for i=1:4
+                if i == root; continue; end
                 @fact tf.nodes[i].lb --> roughly(round(vis.lb[i], 6)) "lb i = $i"
                 @fact tf.nodes[i].ub --> roughly(round(vis.ub[i], 6)) "ub i = $i"
             end
