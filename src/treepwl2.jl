@@ -117,6 +117,13 @@ function step_min_event(t, e::Event)
         find_min_event(n)
     catch
         e.t = t.parent[e.t]
+        @debug "step_max(): no such event --> parent == $(e.t)"
+        if e.s == e.t
+            e.slope = +1
+            e.offset = t.y[e.t] - t.lam(e.t)
+            @debug "step_min(): last event --> resetting event to $e"
+            return Inf
+        end
         n = t.nodes[e.t]
         n.a += 1            # won't processed again
         n.events[n.a-1]     # = find_min_event(n)
@@ -147,7 +154,7 @@ function step_max_event(t, e::Event)
         n = t.nodes[e.s]
         @debug "step_max(): next node $n"
         n.b -= 1            # won't processed again
-        n.events[n.b-1]  # = find_max_event(n)
+        n.events[n.b+1]  # = find_max_event(n)
     end
     @debug "step_max(): consuming $(ee)"
     n.b -= 1 # won't processed again
