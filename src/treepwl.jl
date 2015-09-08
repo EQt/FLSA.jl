@@ -94,12 +94,8 @@ end
 """Find and extract the next knot from the lower in a node; adapt v.slope"""
 function extract_min_knot!(t::PWLTree, v::Int)
     n = t.nodes[v]
-    if n.a > length(n.events) || n.a > n.b
-        return Inf
-    end
-    @debug "min_knot!($v): n.a=$(n.a), old offset = $(n.offset), slope = $(n.slope)"
     e = n.events[n.a]
-    if e.i == v return Inf end
+    @debug "min_knot!($v): n.a=$(n.a), old offset = $(n.offset), slope = $(n.slope)"
     n.slope  += e.slope
     n.offset += e.offset
     n.a      += 1
@@ -110,11 +106,7 @@ end
 """Find and extract the next knot from the upper in a node; adapt v.slope"""
 function extract_max_knot!(t::PWLTree, v::Int)
     n = t.nodes[v]
-    if n.b <= 0 || n.b < n.a
-        return -Inf
-    end
     e = n.events[n.b]
-    if e.i == v return -Inf end
     @debug "max_knot!($v): n.b=$(n.b), old offset = $(n.offset), slope = $(n.slope), e.offset = $(e.offset)"
     n.slope  -= e.slope
     n.offset -= e.offset
