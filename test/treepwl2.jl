@@ -55,7 +55,6 @@ facts("A 4 node, 3 level tree") do
 end
 
 
-#=
 facts("A 5 nodes, 4 level tree") do
     begin
         lambda = 1.0
@@ -80,6 +79,7 @@ facts("A 5 nodes, 4 level tree") do
 end
 
 
+#=
 facts("A random 4x2 example") do
     begin
         srand(42)

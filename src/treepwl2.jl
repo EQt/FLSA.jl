@@ -138,7 +138,14 @@ function step_max_event(t, e::Event)
     catch
         e.s = t.parent[e.s]
         @debug "step_max(): no such event --> parent == $(e.s)"
+        if e.s == e.t
+            e.slope = -1
+            e.offset = -Inf
+            @debug "step_max(): last event --> resetting event to $e"
+            return -Inf
+        end
         n = t.nodes[e.s]
+        @debug "step_max(): next node $n"
         ee = n.events[n.b]  # = find_max_event(n)
         n.b -= 1            # won't processed again
         ee
@@ -158,7 +165,7 @@ Create a new event for v that corresponds to the new lower bound of v.
 Requires child beeing processed
 """
 function create_min_event(t, v::Int, c::Float64=-t.lam(v))
-    e = Event(v, v, 0.0, t.y[v], 1.0)
+    e = Event(t.parent[v], v, 0.0, t.y[v], 1.0)
     e.offset += sum(map(i->t.lam(i), t.children[v]))
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
@@ -173,7 +180,7 @@ function create_min_event(t, v::Int, c::Float64=-t.lam(v))
 end
 
 function create_max_event(t, v::Int, c::Float64=t.lam(v))
-    e = Event(v, v, 0.0, t.y[v], 1.0)
+    e = Event(v, t.parent[v], 0.0, t.y[v], 1.0)
     e.offset -= sum(map(i->t.lam(i), t.children[v]))
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
