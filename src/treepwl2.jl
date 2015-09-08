@@ -19,6 +19,7 @@ type PWLNode
     b::Int                  # index of highest, unprocessed event
     lb::Float64             # lower bound (computed by create_min_event)
     ub::Float64             # upper bound (computed by create_max_event)
+    PWLNode() = new([], 1, 0, -Inf, +Inf)
 end
 
 
@@ -37,9 +38,7 @@ type PWLTree
         for (v,p) in enumerate(parents)
             if v != root push!(children[p], v) end
         end
-        lb = [y[i] - (1+length(children[i]))*lambda(i) for i=1:n]
-        ub = [y[i] + (1+length(children[i]))*lambda(i) for i=1:n]
-        nodes = [PWLNode(children[i], y, i, lb, ub) for i in 1:n]
+        nodes = [PWLNode() for i in 1:n]
         pre_order = zeros(Int, n)
         stack = [root]
         nr = 1
@@ -143,7 +142,7 @@ Requires child beeing processed
 """
 function create_min_event(t, v, c::Float64)
     e = Event(v, v, 0.0, t.y[v], 1.0)
-    e.offset += sum(map(i->t.lam(i), t.children[v]])
+    e.offset += sum(map(i->t.lam(i), t.children[v]))
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
     xk = find_min_x(t, v)
@@ -158,7 +157,7 @@ end
 
 function create_max_event(t, v, c::Float64)
     e = Event(v, v, 0.0, t.y[v], 1.0)
-    e.offset -= sum(map(i->t.lam(i), t.children[v]])
+    e.offset -= sum(map(i->t.lam(i), t.children[v]))
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
     xk = find_max_x(t, v)
