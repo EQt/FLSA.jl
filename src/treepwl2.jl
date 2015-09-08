@@ -111,60 +111,38 @@ Undefined behaviour if it does not exist.
 Return x position of next event
 """
 function step_min_event(t, e::Event)
-    @debug "step($e)"
-    if e.s == e.t
-        
+    @debug "step_min($e):"
     n = t.nodes[e.t]
-    ee = try
-        find_min_event(n)
+    try
+        ee = find_min_event(n)
+        n.a += 1 # won't processed again
+        e.t = ee.t
+        e.offset += ee.offset
+        e.slope  += ee.slope
+        sort_events!(t, e.s)
+        return find_min_x(t, e.s)
     catch
         e.t = t.parent[e.t]
-        @debug "step_max(): no such event --> parent == $(e.t)"
-        if e.s == e.t
-            e.slope = +1
-            e.offset = t.y[e.t] - t.lam(e.t)
-            @debug "step_min(): last event --> resetting event to $e"
-            return Inf
-        end
-        n = t.nodes[e.t]
-        n.a += 1            # won't processed again
-        n.events[n.a-1]     # = find_min_event(n)
+        return step_min_event(t, e)
     end
-    n.a += 1 # won't processed again
-    e.t = ee.t
-    e.offset += ee.offset
-    e.slope  += ee.slope
-    sort_events!(t, e.s)
-    return find_min_x(t, e.s)
 end
 
 
 function step_max_event(t, e::Event)
+    @debug "step_max($e):"
     n = t.nodes[e.s]
-    @debug "step_max($n): BEGIN"
-    ee = try
-        find_max_event(n)
+    try
+        ee = find_max_event(n)
+        n.b -= 1 # won't processed again
+        e.s = ee.s
+        e.offset -= ee.offset
+        e.slope  -= ee.slope
+        sort_events!(t, e.t)
+        return find_max_x(t, e.t)
     catch
         e.s = t.parent[e.s]
-        @debug "step_max(): no such event --> parent == $(e.s)"
-        if e.s == e.t
-            e.slope = -1
-            e.offset = -t.y[e.s] - t.lam(e.s)
-            @debug "step_max(): last event --> resetting event to $e"
-            return -Inf
-        end
-        n = t.nodes[e.s]
-        @debug "step_max(): next node $n"
-        n.b -= 1            # won't processed again
-        n.events[n.b+1]  # = find_max_event(n)
+        return step_max_event(t, e)
     end
-    @debug "step_max(): consuming $(ee)"
-    n.b -= 1 # won't processed again
-    e.s = ee.s
-    e.offset -= ee.offset
-    e.slope  -= ee.slope
-    sort_events!(t, e.t)
-    return find_min_x(t, e.t)
 end
 
 
