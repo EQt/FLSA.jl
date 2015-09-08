@@ -22,7 +22,7 @@ type PWLNode
     lb::Float64     # lower bound (computed by clip_min!)
     ub::Float64     # upper bound (computed by clip_max!)
     function PWLNode(children, y::Vector{Float64}, v, lb, ub)
-        events = []
+        events = Event[]
         resize!(events, 2*length(children))
         new(events, 1, length(events), 1, y[v], v, lb[v], ub[v])
     end
