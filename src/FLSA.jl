@@ -32,7 +32,7 @@ include("admm.jl")
 include("fista.jl")
 include("pwl.jl")
 include("tree.jl")
-include("treepwl.jl")
+include("treepwl2.jl")
 include("dynamic.jl")
 
 end # module
