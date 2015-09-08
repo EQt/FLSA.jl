@@ -3,6 +3,11 @@ Faster implementation
 ~~~~~~~~~~~~~~~~~~~~~
 """
 
+macro debug(msg)
+    :(info($msg))
+end
+
+
 """Record what is happening, when a knot of the PWL is hit"""
 type Event
     s::Int          # source node
@@ -63,17 +68,17 @@ sort_events!(n::PWLNode) = sort!(n.events[n.a:n.b], by=k->k.x)
 find_min_event(t, v::Int) = find_min_event(t.nodes[v])
 function find_min_event(n::PWLNode)
     if n.a > length(n.events) || n.a > n.b
-        return None
+        throw(Inf)
     end
     return n.events[n.a]
 end
 
 
-"""Return lowest unprocessed event of node v or None if it does not exist"""
+"""Return lowest unprocessed event of node v or throw if it does not exist"""
 find_max_event(t, v::Int) = find_max_event(t.nodes[v])
 function find_max_event(n::PWLNode)
     if n.b <= 0 || n.b < n.a
-        return None
+        throw(-Inf)
     end
     return n.events[n.b]
 end
@@ -81,17 +86,19 @@ end
 
 """Find the position of the lowest unprocessed event of node v"""
 function find_min_x(t, v)
-    e = find_min_event(t, v)
-    e == None || return Inf
-    return e.x
+    try
+        return find_min_event(t, v).x
+    catch x
+        return x
+    end
 end
 
-
-"""Find the position of the lowest unprocessed event of node v"""
 function find_max_x(t, v)
-    e = find_max_event(t, v)
-    e == None || return -Inf
-    return e.x
+    try
+        return find_max_event(t, v).x
+    catch x
+        return x
+    end
 end
 
 
@@ -101,6 +108,7 @@ Undefined behaviour if it does not exist.
 Return x position of next event
 """
 function step_min_event(t, e::Event)
+    @debug "step($e)"
     n = t.nodes[e.t]
     n.a += 1 # won't processed again
     ee = find_min_event(n)
@@ -146,7 +154,7 @@ function create_min_event(t, v, c::Float64)
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
     xk = find_min_x(t, v)
-    while x > xk
+    while e.x > xk
         xk = step_min_event(t, e)
         e.x = forecast(e)
     end
@@ -161,7 +169,7 @@ function create_max_event(t, v, c::Float64)
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
     xk = find_max_x(t, v)
-    while x < xk
+    while e.x < xk
         xk = step_max_event(t, e)
         e.x = forecast(e)
     end
