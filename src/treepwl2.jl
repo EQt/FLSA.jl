@@ -157,7 +157,7 @@ end
 Create a new event for v that corresponds to the new lower bound of v.
 Requires child beeing processed
 """
-function create_min_event(t, v, c::Float64)
+function create_min_event(t, v::Int, c::Float64=-t.lam(v))
     e = Event(v, v, 0.0, t.y[v], 1.0)
     e.offset += sum(map(i->t.lam(i), t.children[v]))
     forecast(e) = (c + e.offset) / e.slope
@@ -172,8 +172,7 @@ function create_min_event(t, v, c::Float64)
     return e
 end
 
-
-function create_max_event(t, v, c::Float64)
+function create_max_event(t, v::Int, c::Float64=t.lam(v))
     e = Event(v, v, 0.0, t.y[v], 1.0)
     e.offset -= sum(map(i->t.lam(i), t.children[v]))
     forecast(e) = (c + e.offset) / e.slope
@@ -199,8 +198,9 @@ function forward_dp_treepwl(t)
     for i in t.pre_order[end:-1:1]
         n = t.nodes[i]
         childs = t.children[i]
-        n.events = [[create_min_event(t, childs[c]) for c in childs]
-                    [create_max_event(t, childs[c]) for c in childs]]
+        @debug "create($i): childs --> $childs"
+        n.events = [[create_min_event(t, c) for c in childs]
+                    [create_max_event(t, c) for c in childs]]
         n.a, n.b = 1, length(n.events)
         sort_events!(n)
     end
