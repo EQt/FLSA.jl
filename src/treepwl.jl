@@ -1,7 +1,7 @@
 """Piecewise linear function over a tree"""
 
 macro debug(msg)
-#    :(info($msg))
+    :(info($msg))
 end
 
 
