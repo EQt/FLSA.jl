@@ -28,6 +28,9 @@ type PWLNode
 end
 
 
+showevents(n::PWLNode) = "$(n.events[n.a:n.b])"
+
+
 type PWLTree
     nodes::Vector{PWLNode}
     children::Vector{Vector{Int}}
@@ -111,12 +114,13 @@ function step_min_event(t, e::Event)
     @debug "step($e)"
     n = t.nodes[e.t]
     n.a += 1 # won't processed again
-    ee = find_min_event(n)
-    if ee == None
+    try
+        ee = find_min_event(n)
+    catch
         e.t = t.parent[e.t]
         n = t.nodes[e.t]
-        n.a += 1            # won't processed again
         ee = n.events[n.a]  # = find_min_event(n)
+        n.a += 1            # won't processed again
     end
     e.t = ee.t
     e.offset += ee.offset
@@ -129,16 +133,21 @@ end
 function step_max_event(t, e::Event)
     n = t.nodes[e.t]
     n.b -= 1 # won't processed again
-    ee = find_max_event(n)
-    if ee == None
-        e.s = t.parent[e.s]
-        n = t.nodes[e.s]
-        n.b -= 1            # won't processed again
-        ee = n.events[n.b]  # = find_max_event(n)
-    end
+    ee = 
+        try
+            find_max_event(n)
+        catch
+            e.s = t.parent[e.s]
+            @debug "step_max: no such event --> parent == $(e.s)"
+            n = t.nodes[e.s]
+            ee = n.events[n.b]  # = find_max_event(n)
+            n.b -= 1            # won't processed again
+            ee
+        end
+    @debug "step_max: consuming $(ee)"
     e.s = ee.s
-    e.offset += ee.offset
-    e.slope  += ee.slope
+    e.offset -= ee.offset
+    e.slope  -= ee.slope
     sort_events!(t, e.t)
     return find_min_x(t, e.t)
 end
@@ -159,6 +168,7 @@ function create_min_event(t, v, c::Float64)
         e.x = forecast(e)
     end
     t.nodes[v].lb = e.x
+    e.offset -= t.lam(v)
     return e
 end
 
@@ -169,11 +179,17 @@ function create_max_event(t, v, c::Float64)
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
     xk = find_max_x(t, v)
+    @debug "create_max($v): events = $(showevents(t.nodes[v]))"
+    @debug "create_max($v): x = $(e.x), xk = $xk, offset=$(e.offset), slope=$(e.slope)"
     while e.x < xk
         xk = step_max_event(t, e)
         e.x = forecast(e)
+        @debug "create($v): events = $(showevents(t.nodes[v]))"
+        @debug "create($v): x = $(e.x), xk = $xk, offset=$(e.offset), slope=$(e.slope)"
     end
     t.nodes[v].ub = e.x
+    e.slope  = -e.slope
+    e.offset = -e.offset - t.lam(v)
     return e
 end
 
