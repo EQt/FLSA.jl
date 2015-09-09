@@ -19,11 +19,11 @@ end
 
 """Manage the events of a node"""
 type PWLNode
-    minevs::Vector{Event}   # should have fixed size of |children|
-    maxevs::Vector{Event}   # should have fixed size of |children|
     lb::Float64             # lower bound (computed by create_min_event)
     ub::Float64             # upper bound (computed by create_max_event)
-    PWLNode() = new([], [], -Inf, +Inf)
+    minevs::Vector{Event}   # should have fixed size of |children|
+    maxevs::Vector{Event}   # should have fixed size of |children|
+    PWLNode() = new(-Inf, +Inf, [], [])
 end
 
 forecast(e::Event, c) = (c - e.offset)/e.slope
