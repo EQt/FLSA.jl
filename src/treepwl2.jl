@@ -67,6 +67,21 @@ sort_events!(n::PWLNode) = begin
 end
 
 
+function print_tree(t)
+    info("-"^70)
+    for (i,n) in enumerate(t.nodes)
+        println("\n(($i)): [$(n.lb), $(n.ub)]")
+        println("  MIN")
+        for e in n.minevs
+            println("    $e")
+        end
+        println("  MAX")
+        for e in n.maxevs
+            println("    $e")
+        end
+    end
+end
+
 """Return lowest unprocessed event of node v or None if it does not exist"""
 find_min_event(t, v::Int) = find_min_event(t.nodes[v])
 find_min_event(n::PWLNode) = try n.minevs[1] catch throw(+Inf) end
@@ -216,7 +231,9 @@ function forward_dp_treepwl(t)
         n = t.nodes[i]
         childs = t.children[i]
         n.minevs = [create_min_event(t, c) for c in childs]
+        print_tree(t)
         n.maxevs = [create_max_event(t, c) for c in childs]
+        print_tree(t)
         @debug "forward($i): nodes is $n"
         sort_events!(n)
         print_min_chain(t, i)
