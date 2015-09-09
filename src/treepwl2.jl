@@ -174,11 +174,12 @@ end
 
 function print_min_chain(t, v::Int)
     t = deepcopy(t)
+    @debug "BEGIN($v)"
     try
         while true
             n = t.nodes[v]
             e = find_min_event(t, v)
-            @debug "AT($(n.lb)):  $(e.s) ----[ $(e.offset) ] ------>  $(e.t)"
+            @debug "AT($(e.x)):  $(e.s) ----[ $(e.offset) / $(e.slope) ] ------>  $(e.t)"
             xk = step_min_event(t, v)
             v = e.t
         end
@@ -196,8 +197,6 @@ function forward_dp_treepwl(t)
         n.maxevs = [create_max_event(t, c) for c in childs]
         @debug "forward($i): n=$n"
         sort_events!(n)
-        for c in childs
-            print_min_chain(t, c)
-        end
+        print_min_chain(t, i)
     end
 end
