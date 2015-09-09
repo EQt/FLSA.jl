@@ -4,7 +4,6 @@ using FLSA
 using FactCheck
 
 
-#=
 facts("2 node line") do
     y = [3.5, 2.5]
     root = 2
@@ -66,7 +65,7 @@ facts("A 4 node, 3 level tree") do
         end
     end
 end
-=#
+
 
 facts("A 5 nodes, 4 level tree") do
     begin
