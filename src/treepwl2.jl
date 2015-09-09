@@ -4,7 +4,7 @@ Faster implementation
 """
 
 macro debug(msg)
-    :(info($msg))
+#    :(info($msg))
 end
 
 
@@ -185,7 +185,7 @@ function print_min_chain(t, v::Int)
         if y == Inf
             warn("END($v)")
         else
-            error(y)
+            rethrow(y)
         end
     end
 end
