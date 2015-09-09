@@ -21,15 +21,10 @@ end
 type PWLNode
     minevs::Vector{Event}   # should have fixed size of |children|
     maxevs::Vector{Event}   # should have fixed size of |children|
-#    nmin::Int               # index of lowest, unprocessed event
-#    nmax::Int               # index of highest, unprocessed event
     lb::Float64             # lower bound (computed by create_min_event)
     ub::Float64             # upper bound (computed by create_max_event)
     PWLNode() = new([], [], -Inf, +Inf)
 end
-
-
-showevents(n::PWLNode) = "$(n.events[n.a:n.b])"
 
 
 type PWLTree
