@@ -16,13 +16,13 @@ facts("2 node line") do
     @fact e1.s --> 2
     @fact e1.t --> 1
     @fact e1.slope --> roughly(1)
-    @fact e1.offset --> roughly(2.5)
+    @fact e1.offset --> roughly(-2.5)
 
     @fact e2.x --> roughly(4.5)
     @fact e2.s --> 1
     @fact e2.t --> 2
     @fact e2.slope --> roughly(-1)
-    @fact e2.offset --> roughly(-4.5)
+    @fact e2.offset --> roughly(+4.5)
     
     n = t.nodes[2]
     n.minevs = [e1]
@@ -65,7 +65,6 @@ facts("A 4 node, 3 level tree") do
         end
     end
 end
-
 
 facts("A 5 nodes, 4 level tree") do
     begin

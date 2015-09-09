@@ -26,7 +26,7 @@ type PWLNode
     PWLNode() = new([], [], -Inf, +Inf)
 end
 
-forecast(e::Event, c) = (c + e.offset)/e.slope
+forecast(e::Event, c) = (c - e.offset)/e.slope
 
 type PWLTree
     nodes::Vector{PWLNode}
@@ -127,8 +127,8 @@ Requires child beeing processed.
 Insert this event also to the corresponding child node!
 """
 function create_min_event(t, v::Int, c::Float64=-t.lam(v))
-    e = Event(t.parent[v], v, 0.0, t.y[v], 1.0)
-    e.offset += sum(map(i->t.lam(i), t.children[v]))
+    e = Event(t.parent[v], v, 0.0, -t.y[v], 1.0)
+    e.offset -= sum(map(i->t.lam(i), t.children[v]))
     e.x = forecast(e, c)
     xk = find_min_x(t, v)
     @debug "create_min($v): starting e=$e, xk=$xk [y=$(t.y[v])]"
@@ -138,15 +138,15 @@ function create_min_event(t, v::Int, c::Float64=-t.lam(v))
         @debug "create_min($v): forcast e=$e, xk=$xk"
     end
     t.nodes[v].lb = e.x
-    e.offset -= t.lam(v)
+    e.offset += t.lam(t.parent[v])    # compensate status of parent
     unshift!(t.nodes[e.t].minevs, e)
     @debug "create_min($v): adding e --> node[$(e.t)] = $(t.nodes[e.t])"
     return e
 end
 
 function create_max_event(t, v::Int, c::Float64=t.lam(v))
-    e = Event(v, t.parent[v], 0.0, t.y[v], 1.0)
-    e.offset -= sum(map(i->t.lam(i), t.children[v]))
+    e = Event(v, t.parent[v], 0.0, -t.y[v], 1.0)
+    e.offset += sum(map(i->t.lam(i), t.children[v]))
     e.x = forecast(e, c)
     xk = find_max_x(t, v)
     @debug "create_max($v): starting e=$e, xk=$xk [y=$(t.y[v])]"
@@ -157,7 +157,7 @@ function create_max_event(t, v::Int, c::Float64=t.lam(v))
     end
     t.nodes[v].ub = e.x
     e.slope  = -e.slope
-    e.offset = -e.offset - t.lam(v)
+    e.offset = -e.offset + t.lam(t.parent[v])
     unshift!(t.nodes[e.s].maxevs, e)
     @debug "create_max($v): adding e --> node[$(e.s)] = $(t.nodes[e.s])"
     return e
