@@ -4,6 +4,7 @@ using FLSA
 using FactCheck
 
 
+#=
 facts("2 node line") do
     y = [3.5, 2.5]
     root = 2
@@ -31,7 +32,6 @@ facts("2 node line") do
     @fact FLSA.create_max_event(t, 2, +1.0).x --> roughly(3.5)
 end
 
-#=
 facts("A 4 node, 3 level tree") do
     begin
         lambda = 1.0
