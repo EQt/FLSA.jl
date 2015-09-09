@@ -3,7 +3,7 @@ using Graphs
 using FLSA
 using FactCheck
 
-
+#=
 facts("2 node line") do
     y = [3.5, 2.5]
     root = 2
@@ -65,6 +65,7 @@ facts("A 4 node, 3 level tree") do
         end
     end
 end
+=#
 
 facts("A 5 nodes, 4 level tree") do
     begin
@@ -89,7 +90,7 @@ facts("A 5 nodes, 4 level tree") do
     end
 end
 
-
+#=
 facts("A random 4x2 example") do
     begin
         srand(42)
@@ -116,5 +117,5 @@ facts("A random 4x2 example") do
         end
     end
 end
-
+=#
 end
