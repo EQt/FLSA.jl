@@ -92,10 +92,14 @@ function step_min_event(t, e::Event)
     @debug "step_min($e): n=$n"
     try
         ee = shift!(n.minevs)
-        @debug "step_min(): setting t from $(e.t) to $(ee.t)"
+        @debug "step_min($(e.t)): deleted $ee"
+        @debug "step_min($(e.t)): n.minevs = $(n.minevs)"
+        @debug "step_min($(e.t)): setting s from $(e.t) to $(ee.t)"
         e.t = ee.t
         e.offset += ee.offset
         e.slope  += ee.slope
+        eee = pop!(t.nodes[e.t].minevs)
+        @debug "step_min($(e.t)): deleted $eee"
         sort_events!(t, e.s)
         return find_min_x(t, e.s)
     catch
@@ -109,10 +113,14 @@ function step_max_event(t, e::Event)
     @debug "step_max($e): n=$n"
     try
         ee = shift!(n.maxevs)
-        @debug "step_max(): setting s from $(e.s) to $(ee.s)"
+        @debug "step_max($(e.s)): deleted $ee"
+        @debug "step_max($(e.s)): n.maxevs = $(n.maxevs)"
+        @debug "step_max($(e.s)): setting s from $(e.s) to $(ee.s)"
         e.s = ee.s
         e.offset -= ee.offset
         e.slope  -= ee.slope
+        eee = pop!(t.nodes[e.s].maxevs)
+        @debug "step_max($(e.s)): deleted $eee"
         sort_events!(t, e.t)
         return find_max_x(t, e.t)
     catch
