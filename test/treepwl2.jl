@@ -79,7 +79,6 @@ facts("A 5 nodes, 4 level tree") do
 end
 
 
-#=
 facts("A random 4x2 example") do
     begin
         srand(42)
@@ -106,5 +105,5 @@ facts("A random 4x2 example") do
         end
     end
 end
-=#
+
 end

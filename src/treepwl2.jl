@@ -92,8 +92,8 @@ Undefined behaviour if it does not exist.
 Return x position of next event
 """
 function step_min_event(t, e::Event)
-    @debug "step_min($e):"
     n = t.nodes[e.t]
+    @debug "step_min($e): n=$n"
     try
         ee = shift!(n.minevs)
         e.t = ee.t
@@ -108,8 +108,8 @@ end
 
 
 function step_max_event(t, e::Event)
-    @debug "step_max($e):"
     n = t.nodes[e.s]
+    @debug "step_max($e): n=$n"
     try
         ee = shift!(n.maxevs)
         e.s = ee.s
@@ -129,7 +129,7 @@ Requires child beeing processed.
 Insert this event also to the corresponding child node!
 """
 function create_min_event(t, v::Int, c::Float64=-t.lam(v))
-    e = Event(v, v, 0.0, t.y[v], 1.0)
+    e = Event(t.parent[v], v, 0.0, t.y[v], 1.0)
     e.offset += sum(map(i->t.lam(i), t.children[v]))
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
@@ -145,7 +145,7 @@ function create_min_event(t, v::Int, c::Float64=-t.lam(v))
 end
 
 function create_max_event(t, v::Int, c::Float64=t.lam(v))
-    e = Event(v, v, 0.0, t.y[v], 1.0)
+    e = Event(v, t.parent[v], 0.0, t.y[v], 1.0)
     e.offset -= sum(map(i->t.lam(i), t.children[v]))
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
