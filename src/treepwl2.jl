@@ -19,12 +19,13 @@ end
 
 """Manage the events of a node"""
 type PWLNode
-    events::Vector{Event}   # should have fixed size of 2|children|
-    a::Int                  # index of lowest, unprocessed event
-    b::Int                  # index of highest, unprocessed event
+    minevs::Vector{Event}   # should have fixed size of |children|
+    maxevs::Vector{Event}   # should have fixed size of |children|
+#    nmin::Int               # index of lowest, unprocessed event
+#    nmax::Int               # index of highest, unprocessed event
     lb::Float64             # lower bound (computed by create_min_event)
     ub::Float64             # upper bound (computed by create_max_event)
-    PWLNode() = new([], 1, 0, -Inf, +Inf)
+    PWLNode() = new([], [], -Inf, +Inf)
 end
 
 
@@ -64,45 +65,25 @@ type PWLTree
 end
 
 sort_events!(t, v::Int) = sort_events!(t.nodes[v])
-sort_events!(n::PWLNode) = sort!(n.events[n.a:n.b], by=k->k.x)
+sort_events!(n::PWLNode) = begin
+    sort!(n.minevs, by=k->k.x, rev=false)
+    sort!(n.maxevs, by=k->k.x, rev=true)
+end
 
 
 """Return lowest unprocessed event of node v or None if it does not exist"""
 find_min_event(t, v::Int) = find_min_event(t.nodes[v])
-function find_min_event(n::PWLNode)
-    if n.a > length(n.events) || n.a > n.b
-        throw(Inf)
-    end
-    return n.events[n.a]
-end
+find_min_event(n::PWLNode) = try n.minevs[1] catch throw(+Inf) end
 
 
 """Return lowest unprocessed event of node v or throw if it does not exist"""
 find_max_event(t, v::Int) = find_max_event(t.nodes[v])
-function find_max_event(n::PWLNode)
-    if n.b <= 0 || n.b < n.a
-        throw(-Inf)
-    end
-    return n.events[n.b]
-end
+find_max_event(n::PWLNode) = try n.maxevs[1] catch throw(-Inf) end
 
 
 """Find the position of the lowest unprocessed event of node v"""
-function find_min_x(t, v)
-    try
-        return find_min_event(t, v).x
-    catch x
-        return x
-    end
-end
-
-function find_max_x(t, v)
-    try
-        return find_max_event(t, v).x
-    catch x
-        return x
-    end
-end
+find_min_x(t, v) = try find_min_event(t, v).x catch x return x end
+find_max_x(t, v) = try find_max_event(t, v).x catch x return x end
 
 
 """
@@ -114,16 +95,14 @@ function step_min_event(t, e::Event)
     @debug "step_min($e):"
     n = t.nodes[e.t]
     try
-        ee = find_min_event(n)
-        n.a += 1 # won't processed again
+        ee = shift!(n.minevs)
         e.t = ee.t
         e.offset += ee.offset
         e.slope  += ee.slope
         sort_events!(t, e.s)
         return find_min_x(t, e.s)
     catch
-        e.t = t.parent[e.t]
-        return step_min_event(t, e)
+        error("This should not happen!")
     end
 end
 
@@ -132,23 +111,22 @@ function step_max_event(t, e::Event)
     @debug "step_max($e):"
     n = t.nodes[e.s]
     try
-        ee = find_max_event(n)
-        n.b -= 1 # won't processed again
+        ee = shift!(n.maxevs)
         e.s = ee.s
         e.offset -= ee.offset
         e.slope  -= ee.slope
         sort_events!(t, e.t)
         return find_max_x(t, e.t)
     catch
-        e.s = t.parent[e.s]
-        return step_max_event(t, e)
+        error("This should not happen!")
     end
 end
 
 
 """
 Create a new event for v that corresponds to the new lower bound of v.
-Requires child beeing processed
+Requires child beeing processed.
+Insert this event also to the corresponding child node!
 """
 function create_min_event(t, v::Int, c::Float64=-t.lam(v))
     e = Event(v, v, 0.0, t.y[v], 1.0)
@@ -162,6 +140,7 @@ function create_min_event(t, v::Int, c::Float64=-t.lam(v))
     end
     t.nodes[v].lb = e.x
     e.offset -= t.lam(v)
+    unshift!(t.nodes[e.t].minevs, e)
     return e
 end
 
@@ -171,17 +150,14 @@ function create_max_event(t, v::Int, c::Float64=t.lam(v))
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
     xk = find_max_x(t, v)
-    @debug "create_max($v): events = $(showevents(t.nodes[v]))"
-    @debug "create_max($v): x = $(e.x), xk = $xk, offset=$(e.offset), slope=$(e.slope)"
     while e.x < xk
         xk = step_max_event(t, e)
         e.x = forecast(e)
-        @debug "create_max($v): events = $(showevents(t.nodes[v]))"
-        @debug "create_max($v): x = $(e.x), xk = $xk, offset=$(e.offset), slope=$(e.slope)"
     end
     t.nodes[v].ub = e.x
     e.slope  = -e.slope
     e.offset = -e.offset - t.lam(v)
+    unshift!(t.nodes[e.s].maxevs, e)
     return e
 end
 
@@ -191,10 +167,8 @@ function forward_dp_treepwl(t)
     for i in t.pre_order[end:-1:1]
         n = t.nodes[i]
         childs = t.children[i]
-        @debug "create($i): childs --> $childs"
-        n.events = [[create_min_event(t, c) for c in childs]
-                    [create_max_event(t, c) for c in childs]]
-        n.a, n.b = 1, length(n.events)
+        n.minevs = [create_min_event(t, c) for c in childs]
+        n.maxevs = [create_max_event(t, c) for c in childs]
         sort_events!(n)
     end
 end
