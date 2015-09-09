@@ -96,6 +96,7 @@ function step_min_event(t, e::Event)
     @debug "step_min($e): n=$n"
     try
         ee = shift!(n.minevs)
+        @debug "step_min(): setting t from $(e.t) to $(ee.t)"
         e.t = ee.t
         e.offset += ee.offset
         e.slope  += ee.slope
@@ -112,6 +113,7 @@ function step_max_event(t, e::Event)
     @debug "step_max($e): n=$n"
     try
         ee = shift!(n.maxevs)
+        @debug "step_max(): setting s from $(e.s) to $(ee.s)"
         e.s = ee.s
         e.offset -= ee.offset
         e.slope  -= ee.slope
