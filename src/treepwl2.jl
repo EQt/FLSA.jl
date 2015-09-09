@@ -134,13 +134,16 @@ function create_min_event(t, v::Int, c::Float64=-t.lam(v))
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
     xk = find_min_x(t, v)
+    @debug "create_min($v): starting e=$e, xk=$xk [y=$(t.y[v])]"
     while e.x > xk
         xk = step_min_event(t, e)
         e.x = forecast(e)
+        @debug "create_min($v): forcast e=$e, xk=$xk"
     end
     t.nodes[v].lb = e.x
     e.offset -= t.lam(v)
     unshift!(t.nodes[e.t].minevs, e)
+    @debug "create_min($v): adding e --> node[$(e.t)] = $(t.nodes[e.t])"
     return e
 end
 
@@ -150,14 +153,17 @@ function create_max_event(t, v::Int, c::Float64=t.lam(v))
     forecast(e) = (c + e.offset) / e.slope
     e.x = forecast(e)
     xk = find_max_x(t, v)
+    @debug "create_max($v): starting e=$e, xk=$xk [y=$(t.y[v])]"
     while e.x < xk
         xk = step_max_event(t, e)
         e.x = forecast(e)
+        @debug "create_max($v): forcast e=$e, xk=$xk"
     end
     t.nodes[v].ub = e.x
     e.slope  = -e.slope
     e.offset = -e.offset - t.lam(v)
     unshift!(t.nodes[e.s].maxevs, e)
+    @debug "create_max($v): adding e --> node[$(e.s)] = $(t.nodes[e.s])"
     return e
 end
 
@@ -169,6 +175,7 @@ function forward_dp_treepwl(t)
         childs = t.children[i]
         n.minevs = [create_min_event(t, c) for c in childs]
         n.maxevs = [create_max_event(t, c) for c in childs]
+        @debug "forward($i): n=$n"
         sort_events!(n)
     end
 end
