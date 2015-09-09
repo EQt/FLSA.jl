@@ -3,23 +3,35 @@ using Graphs
 using FLSA
 using FactCheck
 
-#=
+
 facts("2 node line") do
     y = [3.5, 2.5]
     root = 2
     parents = [root, root]
     t = FLSA.PWLTree(parents, root, y, i->1.0)
     e1 = FLSA.create_min_event(t, 1, -1.0)
-    @fact e1.x --> roughly(2.5)
     e2 = FLSA.create_max_event(t, 1, +1.0)
+
+    @fact e1.x --> roughly(2.5)
+    @fact e1.s --> 2
+    @fact e1.t --> 1
+    @fact e1.slope --> roughly(1)
+    @fact e1.offset --> roughly(2.5)
+
     @fact e2.x --> roughly(4.5)
+    @fact e2.s --> 1
+    @fact e2.t --> 2
+    @fact e2.slope --> roughly(-1)
+    @fact e2.offset --> roughly(-4.5)
+    
     n = t.nodes[2]
     n.minevs = [e1]
     n.maxevs = [e2]
     @fact FLSA.create_min_event(t, 2, -1.0).x --> roughly(2.5)
     @fact FLSA.create_max_event(t, 2, +1.0).x --> roughly(3.5)
 end
-    
+
+#=
 facts("A 4 node, 3 level tree") do
     begin
         lambda = 1.0
