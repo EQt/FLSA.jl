@@ -98,8 +98,7 @@ function step_min_event(t, e::Event)
         e.t = ee.t
         e.offset += ee.offset
         e.slope  += ee.slope
-        eee = pop!(t.nodes[e.t].minevs)
-        @debug "step_min($(e.t)): deleted $eee"
+        e.x = ee.x
         sort_events!(t, e.s)
         return find_min_x(t, e.s)
     catch
@@ -117,10 +116,9 @@ function step_max_event(t, e::Event)
         @debug "step_max($(e.s)): n.maxevs = $(n.maxevs)"
         @debug "step_max($(e.s)): setting s from $(e.s) to $(ee.s)"
         e.s = ee.s
-        e.offset -= ee.offset
-        e.slope  -= ee.slope
-        eee = pop!(t.nodes[e.s].maxevs)
-        @debug "step_max($(e.s)): deleted $eee"
+        e.offset += ee.offset
+        e.slope  += ee.slope
+        e.x = ee.x
         sort_events!(t, e.t)
         return find_max_x(t, e.t)
     catch
@@ -174,20 +172,44 @@ end
 
 function print_min_chain(t, v::Int)
     t = deepcopy(t)
-    @debug "BEGIN($v)"
+    warn("BEGIN($v)")
     try
         while true
             n = t.nodes[v]
             e = find_min_event(t, v)
-            @debug "AT($(e.x)):  $(e.s) ----[ $(e.offset) / $(e.slope) ] ------>  $(e.t)"
-            xk = step_min_event(t, v)
+            warn("AT($(e.x)):  $(e.s) ----[ $(e.offset) / $(e.slope) ] ------>  $(e.t)")
+            xk = step_min_event(t, e)
             v = e.t
         end
-    catch
-        @debug "END($v)"
+    catch y
+        if y == Inf
+            warn("END($v)")
+        else
+            error(y)
+        end
     end
 end
 
+
+function print_max_chain(t, v::Int)
+    t = deepcopy(t)
+    warn("BEGIN($v)")
+    try
+        while true
+            n = t.nodes[v]
+            e = find_max_event(t, v)
+            warn("AT($(e.x)):  $(e.s) <------[ $(e.offset) / $(e.slope) ] -----  $(e.t)")
+            xk = step_max_event(t, e)
+            v = e.s
+        end
+    catch y
+        if y == -Inf
+            warn("END($v)")
+        else
+            error(y)
+        end
+    end
+end
 
 function forward_dp_treepwl(t)
     for i in t.pre_order[end:-1:1]
@@ -195,8 +217,9 @@ function forward_dp_treepwl(t)
         childs = t.children[i]
         n.minevs = [create_min_event(t, c) for c in childs]
         n.maxevs = [create_max_event(t, c) for c in childs]
-        @debug "forward($i): n=$n"
+        @debug "forward($i): nodes is $n"
         sort_events!(n)
         print_min_chain(t, i)
+        print_max_chain(t, i)
     end
 end
