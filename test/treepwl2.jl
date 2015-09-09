@@ -82,13 +82,13 @@ end
 facts("A random 4x2 example") do
     begin
         srand(42)
-        lambda = 0.1
+        lambda = 1.0
         n1, n2 = 4, 2
         g = igraph(grid_graph(n1, n2))
         v = vertices(g)
         n = length(v)
         w = rand(size(g.edges))
-        y = round(rand(n1*n2), 3)
+        y = round(10*rand(n1*n2), 1)
         root = 1
         
         mst, wmst = kruskal_minimum_spantree(g, w)
