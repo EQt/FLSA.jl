@@ -71,14 +71,8 @@ function print_tree(t)
     info("-"^70)
     for (i,n) in enumerate(t.nodes)
         println("\n(($i)): [$(n.lb), $(n.ub)]")
-        println("  MIN")
-        for e in n.minevs
-            println("    $e")
-        end
-        println("  MAX")
-        for e in n.maxevs
-            println("    $e")
-        end
+        println(" MIN: ", join(map(string, n.minevs), "\n      "))
+        println(" MAX: ", join(map(string, n.maxevs), "\n      "))
     end
 end
 
