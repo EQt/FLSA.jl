@@ -73,6 +73,12 @@ function print_tree(t)
         println("\n(($i)): [$(n.lb), $(n.ub)]")
         println(" MIN: ", join(map(string, n.minevs), "\n      "))
         println(" MAX: ", join(map(string, n.maxevs), "\n      "))
+        if !issorted(n.minevs, by=k->k.x)
+            error("$i: minevs not sorted!")
+        end
+        if !issorted(n.maxevs, by=k->k.x, rev=true)
+            error("$i: minevs not sorted!")
+        end
     end
 end
 
@@ -98,7 +104,7 @@ Return x position of next event
 """
 function step_min_event(t, e::Event)
     n = t.nodes[e.t]
-    @debug "step_min($e): n=$n"
+    @debug "step_min($e)"
     try
         ee = shift!(n.minevs)
         @debug "step_min($(e.t)): deleted $ee"
@@ -109,6 +115,7 @@ function step_min_event(t, e::Event)
         e.slope  += ee.slope
         e.x = ee.x
         sort_events!(t, e.s)
+        @debug "sorting $(e.s)"
         return find_min_x(t, e.s)
     catch
         error("This should not happen!")
@@ -118,7 +125,7 @@ end
 
 function step_max_event(t, e::Event)
     n = t.nodes[e.s]
-    @debug "step_max($e): n=$n"
+    @debug "step_max($e)"
     try
         ee = shift!(n.maxevs)
         @debug "step_max($(e.s)): deleted $ee"
@@ -130,6 +137,7 @@ function step_max_event(t, e::Event)
         e.x = ee.x
         @debug "step_max($(e.s)): returning $e"
         sort_events!(t, e.t)
+        @debug "sorting $(e.t)"
         return find_max_x(t, e.t)
     catch
         error("This should not happen!")
