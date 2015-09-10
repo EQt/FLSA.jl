@@ -163,8 +163,8 @@ function create_min_event(t, v::Int, c::Float64=-t.lam(v))
     end
     t.nodes[v].lb = e.x
     e.offset += t.lam(t.parent[v])    # compensate status of parent
-    push!(t.nodes[e.t].maxevs, e)
-    @debug "create_min($v): adding e --> node[$(e.t)] = $(t.nodes[e.t])"
+    unshift!(t.nodes[e.t].maxevs, e)
+    @debug "create_min($v): adding $e --> node[$(e.t)] = $(t.nodes[e.t])"
     return e
 end
 
@@ -182,8 +182,8 @@ function create_max_event(t, v::Int, c::Float64=t.lam(v))
     t.nodes[v].ub = e.x
     e.slope  = -e.slope
     e.offset = -e.offset + t.lam(t.parent[v])
-    push!(t.nodes[e.s].minevs, e)
-    @debug "create_max($v): adding e --> node[$(e.s)] = $(t.nodes[e.s])"
+    unshift!(t.nodes[e.s].minevs, e)
+    @debug "create_max($v): adding $e --> node[$(e.s)] = $(t.nodes[e.s])"
     return e
 end
 
@@ -234,11 +234,12 @@ function forward_dp_treepwl(t)
         n = t.nodes[i]
         childs = t.children[i]
         n.minevs = [create_min_event(t, c) for c in childs]
+        sort_events!(n)
         print_tree(t)
         n.maxevs = [create_max_event(t, c) for c in childs]
+        sort_events!(n)
         print_tree(t)
         @debug "forward($i): nodes is $n"
-        sort_events!(n)
         ## print_min_chain(t, i)
         ## print_max_chain(t, i)
     end
