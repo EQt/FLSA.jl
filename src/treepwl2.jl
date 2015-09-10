@@ -4,7 +4,7 @@ Faster implementation
 """
 
 macro debug(msg)
-#    :(info($msg))
+    :(info($msg))
 end
 
 
@@ -125,9 +125,10 @@ function step_max_event(t, e::Event)
         @debug "step_max($(e.s)): n.maxevs = $(n.maxevs)"
         @debug "step_max($(e.s)): setting s from $(e.s) to $(ee.s)"
         e.s = ee.s
-        e.offset += ee.offset
-        e.slope  += ee.slope
+        e.offset -= ee.offset
+        e.slope  -= ee.slope
         e.x = ee.x
+        @debug "step_max($(e.s)): returning $e"
         sort_events!(t, e.t)
         return find_max_x(t, e.t)
     catch
@@ -230,7 +231,7 @@ function forward_dp_treepwl(t)
         print_tree(t)
         @debug "forward($i): nodes is $n"
         sort_events!(n)
-        print_min_chain(t, i)
-        print_max_chain(t, i)
+        ## print_min_chain(t, i)
+        ## print_max_chain(t, i)
     end
 end
