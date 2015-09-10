@@ -96,8 +96,8 @@ facts("A random 4x2 example") do
         srand(42)
         lambda = 1.0
         n1, n2 = 4, 2
-        g = igraph(grid_graph(n1, n2))
-        v = vertices(g)
+        g = FLSA.igraph(FLSA.grid_graph(n1, n2))
+        v = FLSA.vertices(g)
         n = length(v)
         w = rand(size(g.edges))
         y = round(10*rand(n1*n2), 1)
