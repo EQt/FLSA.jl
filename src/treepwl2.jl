@@ -84,12 +84,16 @@ end
 
 """Return lowest unprocessed event of node v or None if it does not exist"""
 find_min_event(t, v::Int) = find_min_event(t.nodes[v])
-find_min_event(n::PWLNode) = try n.minevs[1] catch throw(+Inf) end
+find_min_event(n::PWLNode) =
+    try
+        sort_events!(n);
+        n.minevs[1]
+    catch throw(+Inf) end
 
 
 """Return lowest unprocessed event of node v or throw if it does not exist"""
 find_max_event(t, v::Int) = find_max_event(t.nodes[v])
-find_max_event(n::PWLNode) = try n.maxevs[1] catch throw(-Inf) end
+find_max_event(n::PWLNode) = try  sort_events!(n); n.maxevs[1] catch throw(-Inf) end
 
 
 """Find the position of the lowest unprocessed event of node v"""
