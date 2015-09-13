@@ -1,3 +1,5 @@
+using Devectorize
+
 macro logitfista()
     return quote
         if verbose
@@ -20,14 +22,14 @@ end
 """
 Compute FLSA by FAST ITERATIVE SHRINKAGE/THRESHOLDING ALGORITHM.
 """
-function fista{T<:Number,I<:Number}(y::Vector{T},
-                                    D::AbstractMatrix{I},
-                                    λ::Number = 1.0;
-                                    L = 8,
-                                    max_iter::Int = 100,
-                                    verbose::Bool = false,
-                                    logger = Dict{String,Any}(),
-                                    max_time::Real = Inf)
+function fista{MT<:AbstractMatrix}(y::Vector{Float64},
+                                   D::MT,
+                                   λ::Float64 = 1.0;
+                                   L::Float64 = 8,
+                                   max_iter::Int = 100,
+                                   verbose::Bool = false,
+                                   logger = Dict{String,Any}(),
+                                   max_time::Float64 = Inf)
     m, n = size(D)
     size(y,1) == n ||
       error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
