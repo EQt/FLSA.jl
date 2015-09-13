@@ -1,3 +1,6 @@
+"""Naive implementation of the dynamic programming algorithm on trees."""
+
+
 type DPVisitor <: AbstractGraphVisitor
     y::Vector{Float64}
     lb::Vector{Float64}
@@ -12,10 +15,10 @@ type DPVisitor <: AbstractGraphVisitor
     end
 end
 
+
 function Graphs.close_vertex!(vis::DPVisitor, v)
     println("processing $v")
 end
-
 
 
 """After computing the bounds [lb, ub] for each node, compute solution x
@@ -72,6 +75,7 @@ function dfs_dp_tree(v, vis, lambda, t)
     end
 end
 
+
 """Compute the dual solution to x on a tree (sub)graph"""
 function dual_tree(y::Vector{Float64}, x::Vector{Float64}, t::ITreeSubGraph)
     local m = length(t.edges)
@@ -80,6 +84,7 @@ function dual_tree(y::Vector{Float64}, x::Vector{Float64}, t::ITreeSubGraph)
     dfs_dual_tree(iroot, alpha, t, x,  deepcopy(y))
     return alpha
 end
+
 
 function dfs_dual_tree(v, alpha, t, x, y)
     for c in t.children[v]
