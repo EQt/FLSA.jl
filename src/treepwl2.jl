@@ -117,6 +117,8 @@ function step_min_event(t, e::Event2)
         @debug "sorting $(e.s)"
         return find_min_x(t, e.s)
     catch
+        warn("e = $e")
+        print_tree(t)
         error("This should not happen!")
     end
 end
@@ -139,6 +141,8 @@ function step_max_event(t, e::Event2)
         @debug "sorting $(e.t)"
         return find_max_x(t, e.t)
     catch
+        warn("e = $e")
+        print_tree(t)
         error("This should not happen!")
     end
 end
@@ -234,10 +238,12 @@ function forward_dp_treepwl(t)
         childs = t.children[i]
         n.minevs = [create_min_event(t, c) for c in childs]
         sort_events!(n)
-        print_tree(t)
         n.maxevs = [create_max_event(t, c) for c in childs]
         sort_events!(n)
+
         print_tree(t)
+        print_min_chain(t, i)
+        print_max_chain(t, i)
         @debug "forward($i): nodes is $n"
         ## print_min_chain(t, i)
         ## print_max_chain(t, i)
