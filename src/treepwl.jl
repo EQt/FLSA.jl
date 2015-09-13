@@ -1,10 +1,5 @@
 """Piecewise linear function over a tree"""
 
-macro debug(msg)
-    :(info($msg))
-end
-
-
 type Event
     slope::Float64  # change of the slope, for lb, slope > 0, for ub, slope < 0
     offset::Float64 # change in the offset part

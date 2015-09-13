@@ -3,11 +3,6 @@ Faster implementation
 ~~~~~~~~~~~~~~~~~~~~~
 """
 
-macro debug(msg)
-    :(info($msg))
-end
-
-
 """Record what is happening, when a knot of the PWL is hit"""
 type Event
     s::Int          # source node

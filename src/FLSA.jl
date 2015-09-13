@@ -24,6 +24,7 @@ export num_vertices,
        PWLNode,
        PWLTree
 
+include("debug.jl")
 include("flsa.jl")
 include("igraph.jl")
 include("grid_graph.jl")
@@ -34,5 +35,6 @@ include("pwl.jl")
 include("tree.jl")
 include("treepwl2.jl")
 include("dynamic.jl")
+
 
 end # module
