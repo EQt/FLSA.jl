@@ -4,7 +4,7 @@ Faster implementation
 """
 
 """Record what is happening, when a knot of the PWL is hit"""
-type Event
+type Event2
     s::Int          # source node
     t::Int          # target node
     x::Float64      # position
@@ -13,18 +13,18 @@ type Event
 end
 
 """Manage the events of a node"""
-type PWLNode
+type PWLNode2
     lb::Float64             # lower bound (computed by create_min_event)
     ub::Float64             # upper bound (computed by create_max_event)
-    minevs::Vector{Event}   # should have fixed size of |children|
-    maxevs::Vector{Event}   # should have fixed size of |children|
-    PWLNode() = new(-Inf, +Inf, [], [])
+    minevs::Vector{Event2}  # should have fixed size of |children|
+    maxevs::Vector{Event2}   # should have fixed size of |children|
+    PWLNode2() = new(-Inf, +Inf, [], [])
 end
 
-forecast(e::Event, c) = (c - e.offset)/e.slope
+forecast(e::Event2, c) = (c - e.offset)/e.slope
 
-type PWLTree
-    nodes::Vector{PWLNode}
+type PWLTree2
+    nodes::Vector{PWLNode2}
     children::Vector{Vector{Int}}
     pre_order::Vector{Int}
     parent::Vector{Int}
@@ -32,13 +32,13 @@ type PWLTree
     y::Vector{Float64}
     lam::Function
 
-    function PWLTree(parents::Vector{Int}, root::Int, y::Vector{Float64}, lambda=i->1.0)
+    function PWLTree2(parents::Vector{Int}, root::Int, y::Vector{Float64}, lambda=i->1.0)
         n = length(parents)
         children = [Int[] for i=1:n]
         for (v,p) in enumerate(parents)
             if v != root push!(children[p], v) end
         end
-        nodes = [PWLNode() for i in 1:n]
+        nodes = [PWLNode2() for i in 1:n]
         pre_order = zeros(Int, n)
         stack = [root]
         nr = 1
@@ -51,12 +51,12 @@ type PWLTree
         return new(nodes, children, pre_order, parents, root, y, lambda)
     end
 
-    PWLTree(t::ITreeSubGraph, y::Vector{Float64}, lambda=i->1.0) =
-        PWLTree(t.parent, t.root, y, lambda)
+    PWLTree2(t::ITreeSubGraph, y::Vector{Float64}, lambda=i->1.0) =
+        PWLTree2(t.parent, t.root, y, lambda)
 end
 
 sort_events!(t, v::Int) = sort_events!(t.nodes[v])
-sort_events!(n::PWLNode) = begin
+sort_events!(n::PWLNode2) = begin
     sort!(n.minevs, by=k->k.x, rev=false)
     sort!(n.maxevs, by=k->k.x, rev=true)
 end
@@ -79,7 +79,7 @@ end
 
 """Return lowest unprocessed event of node v or None if it does not exist"""
 find_min_event(t, v::Int) = find_min_event(t.nodes[v])
-find_min_event(n::PWLNode) =
+find_min_event(n::PWLNode2) =
     try
         sort_events!(n);
         n.minevs[1]
@@ -88,7 +88,7 @@ find_min_event(n::PWLNode) =
 
 """Return lowest unprocessed event of node v or throw if it does not exist"""
 find_max_event(t, v::Int) = find_max_event(t.nodes[v])
-find_max_event(n::PWLNode) = try  sort_events!(n); n.maxevs[1] catch throw(-Inf) end
+find_max_event(n::PWLNode2) = try  sort_events!(n); n.maxevs[1] catch throw(-Inf) end
 
 
 """Find the position of the lowest unprocessed event of node v"""
@@ -101,7 +101,7 @@ Consume an event, by replacing the values in e.
 Undefined behaviour if it does not exist.
 Return x position of next event
 """
-function step_min_event(t, e::Event)
+function step_min_event(t, e::Event2)
     n = t.nodes[e.t]
     @debug "step_min($e)"
     try
@@ -122,7 +122,7 @@ function step_min_event(t, e::Event)
 end
 
 
-function step_max_event(t, e::Event)
+function step_max_event(t, e::Event2)
     n = t.nodes[e.s]
     @debug "step_max($e)"
     try
@@ -150,7 +150,7 @@ Requires child beeing processed.
 Insert this event also to the corresponding child node!
 """
 function create_min_event(t, v::Int, c::Float64=-t.lam(v))
-    e = Event(t.parent[v], v, 0.0, -t.y[v], 1.0)
+    e = Event2(t.parent[v], v, 0.0, -t.y[v], 1.0)
     e.offset -= sum(map(i->t.lam(i), t.children[v]))
     e.x = forecast(e, c)
     xk = find_min_x(t, v)
@@ -168,7 +168,7 @@ function create_min_event(t, v::Int, c::Float64=-t.lam(v))
 end
 
 function create_max_event(t, v::Int, c::Float64=t.lam(v))
-    e = Event(v, t.parent[v], 0.0, -t.y[v], 1.0)
+    e = Event2(v, t.parent[v], 0.0, -t.y[v], 1.0)
     e.offset += sum(map(i->t.lam(i), t.children[v]))
     e.x = forecast(e, c)
     xk = find_max_x(t, v)

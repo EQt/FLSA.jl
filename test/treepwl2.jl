@@ -8,7 +8,7 @@ facts("2 node line") do
     y = [3.5, 2.5]
     root = 2
     parents = [root, root]
-    t = FLSA.PWLTree(parents, root, y, i->1.0)
+    t = FLSA.PWLTree2(parents, root, y, i->1.0)
     e1 = FLSA.create_min_event(t, 1, -1.0)
     e2 = FLSA.create_max_event(t, 1, +1.0)
 
@@ -45,12 +45,12 @@ facts("A 4 node, 3 level tree") do
         parents = [3, 4, 4, 4]
         root = 4
         context("clip functions") do
-            tf = FLSA.PWLTree(parents, root, y, i->1.0)
+            tf = FLSA.PWLTree2(parents, root, y, i->1.0)
             @fact FLSA.create_min_event(tf, 1, -1.0).x --> 2.5
             @fact FLSA.create_max_event(tf, 1, +1.0).x --> 4.5
         end
         context("forward tree") do
-            tf = FLSA.PWLTree(parents, root, y, i->1.0)
+            tf = FLSA.PWLTree2(parents, root, y, i->1.0)
             @fact length(tf.pre_order) --> 4
             for i=1:4
                 @fact tf.pre_order[i] --> less_than(5) "i = $i"
@@ -81,7 +81,7 @@ facts("A 5 nodes, 4 level tree") do
         x = FLSA.dp_tree_naive(y, lambda, tn, vis)
 
         parents = [5, 3, 4, 5, 5]
-        tf = FLSA.PWLTree(parents, root, y, i->lambda)
+        tf = FLSA.PWLTree2(parents, root, y, i->lambda)
         FLSA.forward_dp_treepwl(tf)
         for i=1:4
             @fact tf.nodes[i].lb --> roughly(round(vis.lb[i], 6)) "lb i = $i"
@@ -105,11 +105,11 @@ facts("A random 4x2 example") do
         
         mst, wmst = kruskal_minimum_spantree(g, w)
         t = FLSA.subtree(g, mst, root)
-        tn = FLSA.PWLTree(t, y)
+        tn = FLSA.PWLTree2(t, y)
         vis = FLSA.DPVisitor(y)
         x = FLSA.dp_tree_naive(y, lambda, t, vis)
 
-        tf = FLSA.PWLTree(tn.parent, root, y, i->lambda)
+        tf = FLSA.PWLTree2(tn.parent, root, y, i->lambda)
         FLSA.forward_dp_treepwl(tf)
         for i=1:n
             @fact tf.nodes[i].lb --> roughly(round(vis.lb[i], 6)) "lb i = $i"
