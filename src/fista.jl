@@ -1,4 +1,4 @@
-using Devectorize
+# using Devectorize
 
 macro logitfista()
     return quote
