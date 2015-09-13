@@ -1,7 +1,11 @@
 module TestFLSA
+
+debug(msg) = println("DEBUG: $msg")
+
 using Graphs
-using FLSA
 using FactCheck
+using FLSA
+
 
 #=
 facts("2 node line") do
