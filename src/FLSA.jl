@@ -22,7 +22,8 @@ export num_vertices,
        min_knot!,
        max_knot!,
        PWLNode,
-       PWLTree
+       PWLTree,
+       PDeQue
 
 include("debug.jl")
 include("flsa.jl")
@@ -33,6 +34,7 @@ include("admm.jl")
 include("fista.jl")
 include("pwl.jl")
 include("tree.jl")
+include("pdeque.jl")
 include("treepwl.jl")
 include("treepwl2.jl")
 include("dynamic.jl")
