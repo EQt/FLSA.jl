@@ -118,14 +118,17 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
         step_min(t, ek)
         ek = find_min(t, v)
     end
+    e.offset = t.lam(p) + e.offset # compensate parent
+    @debug "lower_event!($v): final $e"
     push!(t.nodes[p].pq, e)
+    push!(t.nodes[e.t].pq, deepcopy(e))
     t.nodes[v].lb = e.x
 end
 
 
 function upper_event!(t, v::Int, c::Float64=+t.lam(v))
     p = t.parent[v]
-    e = Event(p, v, 0.0, -t.y[v], 1.0)
+    e = Event(v, p, 0.0, -t.y[v], 1.0)
     e.offset += sum(map(i->t.lam(i), t.children[v]))
     set_forecast!(e, c)
     ek = find_max(t, v)
@@ -135,7 +138,11 @@ function upper_event!(t, v::Int, c::Float64=+t.lam(v))
         step_max(t, ek)
         ek = find_max(t, v)
     end
+    e.slope = -e.slope
+    e.offset = t.lam(p) - e.offset # compensate parent
+    @debug "upper_event!($v): final $e"
     push!(t.nodes[p].pq, e)
+    push!(t.nodes[e.s].pq, deepcopy(e))
     t.nodes[v].ub = e.x
 end
 
