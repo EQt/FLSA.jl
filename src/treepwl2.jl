@@ -125,21 +125,22 @@ end
 
 
 function step_max_event(t, e::Event2)
-    n = t.nodes[e.s]
     @debug "step_max($e)"
     try
+        n = t.nodes[e.t]
         ee = shift!(n.maxevs)
+        @assert ee == e
         @debug "step_max($(e.s)): deleted $ee"
-        @debug "step_max($(e.s)): n.maxevs = $(n.maxevs)"
+        @debug "step_max($(e.s)): n[$(e.t)].maxevs = $(n.maxevs)"
+        ee = find_max_event(t, e.s)
+        @debug "step_max($(e.s)): found next event $ee"
         @debug "step_max($(e.s)): setting s from $(e.s) to $(ee.s)"
         e.s = ee.s
-        e.offset -= ee.offset
-        e.slope  -= ee.slope
         e.x = ee.x
+        e.offset += ee.offset
+        e.slope  += ee.slope
         @debug "step_max($(e.s)): returning $e"
-        sort_events!(t, e.t)
-        @debug "sorting $(e.t)"
-        return find_max_x(t, e.t)
+        return e.x
     catch
         warn("e = $e")
         print_tree(t)
@@ -219,9 +220,9 @@ function print_max_chain(t, v::Int)
         while true
             n = t.nodes[v]
             e = find_max_event(t, v)
+            v = e.s
             warn("AT($(e.x)):  $(e.s) <------[ $(e.offset) / $(e.slope) ] -----  $(e.t)")
             xk = step_max_event(t, e)
-            v = e.s
         end
     catch y
         if y == -Inf
@@ -237,7 +238,6 @@ function forward_dp_treepwl(t)
         n = t.nodes[i]
         childs = t.children[i]
         n.minevs = [create_min_event(t, c) for c in childs]
-        sort_events!(n)
         n.maxevs = [create_max_event(t, c) for c in childs]
         sort_events!(n)
 

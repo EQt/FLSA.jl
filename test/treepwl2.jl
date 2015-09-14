@@ -5,6 +5,7 @@ debug(msg) = println("DEBUG: $msg")
 using Graphs
 using FactCheck
 using FLSA
+reload("FLSA")
 
 
 #=
