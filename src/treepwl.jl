@@ -12,8 +12,8 @@ type Event
     slope::Float64  # delta slope
 end
 
-forecast(e::Event, c) = (c - e.offset)/e.slope
-set_forecast!(e::Event, c) = (e.x = forecast(e, c))
+forecast(e::Event, c::Float64 = 0) = (c - e.offset)/e.slope
+set_forecast!(e::Event, c::Float64 = 0.0) = (e.x = forecast(e, c))
 
 
 """Manage the events of a node"""
@@ -113,9 +113,9 @@ end
 
 function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     p = t.parent[v]
-    e = Event(p, v, 0.0, -t.y[v], 1.0)
+    e = Event(p, v, 0.0, -t.y[v] - c, 1.0)
     e.offset -= sum(map(i->t.lam(i), t.children[v]))
-    set_forecast!(e, c)
+    set_forecast!(e)
     ek = find_min(t, v)
     @debug "lower_event!($v): e  = $e"
     @debug "lower_event!($v): ek = $ek"
@@ -123,13 +123,13 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
         e.offset += ek.offset
         e.slope  += ek.slope
         e.t       = ek.t
-        set_forecast!(e, c)
+        set_forecast!(e)
         @debug "lower_event!($v): e  = $e"
         step_min(t, ek)
         ek = find_min(t, v)
         @debug "lower_event!($v): ek = $ek"
     end
-    e.offset = t.lam(p) + e.offset # compensate parent
+    e.offset = e.offset
     @debug "lower_event!($v): final $e"
     push!(t.nodes[p].pq, e)
     push!(t.nodes[e.t].pq, deepcopy(e))
