@@ -3,7 +3,7 @@ debug(msg) = println("DEBUG: $msg")
 using Graphs
 using FactCheck
 using FLSA
-reload("FLSA")
+
 
 facts("A random 4x2 example") do
     begin
