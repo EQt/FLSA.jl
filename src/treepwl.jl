@@ -12,8 +12,8 @@ type Event
     slope::Float64  # delta slope
 end
 
-forecast(e::Event, c::Float64 = 0) = (c - e.offset)/e.slope
-set_forecast!(e::Event, c::Float64 = 0.0) = (e.x = forecast(e, c))
+forecast(e::Event) = - e.offset/e.slope
+set_forecast!(e::Event) = (e.x = forecast(e))
 
 
 """Manage the events of a node"""
