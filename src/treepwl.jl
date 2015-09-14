@@ -91,7 +91,9 @@ function step_max(t, ek)
     n = t.nodes[ek.s]
     ekk = pop_back!(n.pq)
     @debug "step_max($(ek.s)): ekk = $ekk (will be deleted)"
-    @debug "step_max(): Going from $(ek.s) to $(ekk.s)"
+    ekk = back(n.pq)
+    @debug "step_min($(ek.s)): ekk = $ekk"
+    @debug "step_max($(ek.s)): Going from $(ek.s) to $(ekk.s)"
     ek.s = ekk.s
     ek.slope  += ekk.slope
     ek.offset += ekk.offset
@@ -120,6 +122,7 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     while ek.x < e.x
         e.offset += ek.offset
         e.slope  += ek.slope
+        e.t       = ek.t
         set_forecast!(e, c)
         @debug "lower_event!($v): e  = $e"
         step_min(t, ek)
@@ -143,8 +146,9 @@ function upper_event!(t, v::Int, c::Float64=+t.lam(v))
     @debug "upper_event!($v): e  = $e"
     @debug "upper_event!($v): ek = $ek"
     while ek.x > e.x
-        e.offset += ek.offset
-        e.slope  += ek.slope
+        e.offset -= ek.offset
+        e.slope  -= ek.slope
+        e.s       = ek.s
         set_forecast!(e, c)
         @debug "upper_event!($v): e  = $e"
         step_max(t, ek)
