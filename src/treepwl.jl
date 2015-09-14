@@ -115,8 +115,13 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     @debug "lower_event!($v): e  = $e"
     @debug "lower_event!($v): ek = $ek"
     while ek.x < e.x
+        e.offset += ek.offset
+        e.slope  += ek.slope
+        set_forecast!(e, c)
+        @debug "lower_event!($v): e  = $e"
         step_min(t, ek)
         ek = find_min(t, v)
+        @debug "lower_event!($v): ek = $ek"
     end
     e.offset = t.lam(p) + e.offset # compensate parent
     @debug "lower_event!($v): final $e"
@@ -135,8 +140,13 @@ function upper_event!(t, v::Int, c::Float64=+t.lam(v))
     @debug "upper_event!($v): e  = $e"
     @debug "upper_event!($v): ek = $ek"
     while ek.x > e.x
+        e.offset += ek.offset
+        e.slope  += ek.slope
+        set_forecast!(e, c)
+        @debug "upper_event!($v): e  = $e"
         step_max(t, ek)
         ek = find_max(t, v)
+        @debug "upper_event!($v): ek = $ek"
     end
     e.slope = -e.slope
     e.offset = t.lam(p) - e.offset # compensate parent
