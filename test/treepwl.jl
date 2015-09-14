@@ -19,7 +19,7 @@ facts("A random 4x2 example") do
 
         mst, wmst = kruskal_minimum_spantree(g, w)
         t = FLSA.subtree(g, mst, root)
-        tn = FLSA.PWLTree2(t, y)
+        tn = FLSA.PWLTree(t, y)
         vis = FLSA.DPVisitor(y)
         x = FLSA.dp_tree_naive(y, lambda, t, vis)
 
