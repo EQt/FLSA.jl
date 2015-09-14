@@ -53,3 +53,8 @@ type PWLTree
     PWLTree(t::ITreeSubGraph, y::Vector{Float64}, lambda=i->1.0) =
         PWLTree(t.parent, t.root, y, lambda)
 end
+
+
+function forward_dp_treepwl(t)
+    warn("Not implemented")
+end
