@@ -83,6 +83,29 @@ function step_min(t, ek)
 end
 
 
+function step_max(t, ek)
+    @debug "step_max($(ek.s)): $ek"
+    n = t.nodes[ek.s]
+    ekk = pop_back!(n.pq)
+    @debug "step_max($(ek.s)): ekk = $ekk (will be deleted)"
+    @debug "step_max(): Going from $(ek.s) to $(ekk.s)"
+    ek.s = ekk.s
+    ek.slope  += ekk.slope
+    ek.offset += ekk.offset
+    ek.x = ekk.x
+    pq = t.nodes[ek.t].pq
+    ekk = pop_back!(pq)
+    if abs(ek.slope) <= 1e-6
+        @debug "step_min(): trying to delete ek = $ek"
+        @assert ek == ekk
+        return
+    else
+        push!(pq, ek)
+    end
+end
+
+
+
 function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     p = t.parent[v]
     e = Event(p, v, 0.0, -t.y[v], 1.0)
@@ -101,6 +124,19 @@ end
 
 
 function upper_event!(t, i)
+    p = t.parent[v]
+    e = Event(p, v, 0.0, -t.y[v], 1.0)
+    e.offset += sum(map(i->t.lam(i), t.children[v]))
+    set_forecast!(e, c)
+    ek = find_max(t, v)
+    @debug "upper_event!($v): e  = $e"
+    @debug "upper_event!($v): ek = $ek"
+    while ek.x > e.x
+        step_max(t, ek)
+        ek = find_max(t, v)
+    end
+    push!(t.nodes[p].pq, e)
+    t.nodes[v].ub = e.x
 end
 
 
