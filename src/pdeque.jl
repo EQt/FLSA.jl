@@ -6,6 +6,10 @@ type PDeQue{E}
     by::Function
 end
 
+front{E}(q::PDeQue{E}) = q.elements[1]
+
+back{E}(q::PDeQue{E})  = q.elements[end]
+
 pop_front!{E}(q::PDeQue{E}) = shift!(q.elements)
 
 pop_back!{E}(q::PDeQue{E})  = pop!(q.elements)
