@@ -58,8 +58,8 @@ type PWLTree
 end
 
 
-find_min(n) = front(n.events)
-find_max(n) = back(n.events)
+find_min(t, i) = front(t.nodes[i].events)
+find_max(t, i) = back(t.nodes[i].events)
 
 function step_min(t, ek)
     @debug "step_min($(ek.t)): $ek"
@@ -83,7 +83,18 @@ function step_min(t, ek)
 end
 
 
-function lower_event!(t, i)
+function lower_event!(t, v::Int, c::Float64=-t.lam(v))
+    p = t.parent[v]
+    e = Event(p, v, 0.0, -t.y[v], 1.0)
+    e.offset -= sum(map(i->t.lam(i), t.children[v]))
+    set_forecast!(e, c)
+    ek = find_min(t, v)
+    while ek.x < e.x
+        step_min(t, ek)
+        ek = find_min(t, v)
+    end
+    push!(t.nodes[p].events, e)
+    t.nodes[v].lb = e.x
 end
 
 
