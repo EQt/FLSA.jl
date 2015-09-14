@@ -66,11 +66,14 @@ function step_min(t, ek)
     n = t.nodes[ek.t]
     ekk = pop_front!(n.pq)
     @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
-    @debug "step_min(): Going from $(ek.t) to $(ekk.t)"
+    ekk = front(n.pq)
+    @debug "step_min($(ek.t)): ekk = $ekk"
+    @debug "step_min($(ek.t)): Going from $(ek.t) to $(ekk.t)"
     ek.t = ekk.t
     ek.slope  += ekk.slope
     ek.offset += ekk.offset
     ek.x = ekk.x
+    # update ekk
     pq = t.nodes[ek.s].pq
     ekk = pop_front!(pq)
     if abs(ek.slope) <= 1e-6
