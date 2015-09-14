@@ -1,4 +1,5 @@
 """Prioritized double-ended queue"""
+import Base.push!
 
 type PDeQue{E}
     elements::Vector{E}
