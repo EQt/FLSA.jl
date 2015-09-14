@@ -139,9 +139,9 @@ end
 
 function upper_event!(t, v::Int, c::Float64=+t.lam(v))
     p = t.parent[v]
-    e = Event(v, p, 0.0, -t.y[v], 1.0)
+    e = Event(v, p, 0.0, -t.y[v] - c, 1.0)
     e.offset += sum(map(i->t.lam(i), t.children[v]))
-    set_forecast!(e, c)
+    set_forecast!(e)
     ek = find_max(t, v)
     @debug "upper_event!($v): e  = $e"
     @debug "upper_event!($v): ek = $ek"
@@ -149,14 +149,14 @@ function upper_event!(t, v::Int, c::Float64=+t.lam(v))
         e.offset -= ek.offset
         e.slope  -= ek.slope
         e.s       = ek.s
-        set_forecast!(e, c)
+        set_forecast!(e)
         @debug "upper_event!($v): e  = $e"
         step_max(t, ek)
         ek = find_max(t, v)
         @debug "upper_event!($v): ek = $ek"
     end
-    e.slope = -e.slope
-    e.offset = t.lam(p) - e.offset # compensate parent
+    e.slope  = -e.slope
+    e.offset = -e.offset
     @debug "upper_event!($v): final $e"
     push!(t.nodes[p].pq, e)
     push!(t.nodes[e.s].pq, deepcopy(e))
