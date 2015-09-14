@@ -13,7 +13,7 @@ type Event
 end
 
 forecast(e::Event, c) = (c - e.offset)/e.slope
-set_forecast(e::Event, c) = (e.x = forecast(e, c))
+set_forecast!(e::Event, c) = (e.x = forecast(e, c))
 
 
 """Manage the events of a node"""
@@ -58,20 +58,20 @@ type PWLTree
 end
 
 
-find_min(t, i) = front(t.nodes[i].events)
-find_max(t, i) = back(t.nodes[i].events)
+find_min(t, i) = try front(t.nodes[i].pq) catch Event(i, i, +Inf, 0, 0) end
+find_max(t, i) = try back(t.nodes[i].pq)  catch Event(i, i, -Inf, 0, 0) end
 
 function step_min(t, ek)
     @debug "step_min($(ek.t)): $ek"
     n = t.nodes[ek.t]
-    ekk = pop_front!(n)
+    ekk = pop_front!(n.pq)
     @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
     @debug "step_min(): Going from $(ek.t) to $(ekk.t)"
     ek.t = ekk.t
     ek.slope  += ekk.slope
     ek.offset += ekk.offset
     ek.x = ekk.x
-    pq = t.nodes[ek.s].events
+    pq = t.nodes[ek.s].pq
     ekk = pop_front!(pq)
     if abs(ek.slope) <= 1e-6
         @debug "step_min(): trying to delete ek = $ek"
@@ -89,11 +89,13 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     e.offset -= sum(map(i->t.lam(i), t.children[v]))
     set_forecast!(e, c)
     ek = find_min(t, v)
+    @debug "lower_event!($v): e  = $e"
+    @debug "lower_event!($v): ek = $ek"
     while ek.x < e.x
         step_min(t, ek)
         ek = find_min(t, v)
     end
-    push!(t.nodes[p].events, e)
+    push!(t.nodes[p].pq, e)
     t.nodes[v].lb = e.x
 end
 
