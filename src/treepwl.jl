@@ -123,7 +123,7 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
 end
 
 
-function upper_event!(t, i)
+function upper_event!(t, v::Int, c::Float64=+t.lam(v))
     p = t.parent[v]
     e = Event(p, v, 0.0, -t.y[v], 1.0)
     e.offset += sum(map(i->t.lam(i), t.children[v]))
