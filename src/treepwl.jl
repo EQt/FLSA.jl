@@ -58,6 +58,57 @@ type PWLTree
 end
 
 
+find_min(n) = front(n.events)
+find_max(n) = back(n.events)
+
+function step_min(t, ek)
+    @debug "step_min($(ek.t)): $ek"
+    n = t.nodes[ek.t]
+    ekk = pop_front!(n)
+    @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
+    @debug "step_min(): Going from $(ek.t) to $(ekk.t)"
+    ek.t = ekk.t
+    ek.slope  += ekk.slope
+    ek.offset += ekk.offset
+    ek.x = ekk.x
+    pq = t.nodes[ek.s].events
+    ekk = pop_front!(pq)
+    if abs(ek.slope) <= 1e-6
+        @debug "step_min(): trying to delete ek = $ek"
+        @assert ek == ekk
+        return
+    else
+        push!(pq, ek)
+    end
+end
+
+
+function lower_event!(t, i)
+end
+
+
+function upper_event!(t, i)
+end
+
+
+function print_min(t)
+end
+
+
+function print_max(t)
+end
+
+
+function print_tree(t)
+end
+
+
 function forward_dp_treepwl(t)
-    warn("Not implemented")
+    for i in t.pre_order[end:-1:1]
+        lower_event!(t, i)
+        upper_event!(t, i)
+        print_tree(t)
+        print_min(t)
+        print_max(t)
+    end
 end
