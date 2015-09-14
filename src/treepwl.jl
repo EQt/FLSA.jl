@@ -118,6 +118,7 @@ function print_tree(t)
         @printf "\n((%d)): [%3.2f, %3.2f]: " i n.lb n.ub
         println(join(map(string, n.pq), "\n" * (" "^7)))
     end
+    info("-"^70)
 end
 
 
