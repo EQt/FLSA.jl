@@ -84,8 +84,10 @@ end
 
 
 function step_min(t, ek)
-    ekk = next_min_event(t, ek.t)
     @debug "step_min($(ek.t)): $ek"
+    ekk = next_min_event(t, ek.t)
+    @assert ek == ekk
+    ekk = next_min_event(t, ek.t)
     @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
     @debug "step_min($(ek.t)): Going from $(ek.t) to $(ekk.t)"
     # "merge" ekk into ek
@@ -98,16 +100,16 @@ function step_min(t, ek)
 
     # update pdeque
     pq = t.nodes[ek.s].pq
-    ekk = pop_front!(pq)
-    @assert ek == ekk "ek=$ek, ekk=$ekk"
     @debug "step_min(): push! to $(ek.s): $ek"
     push!(pq, ek)
 end
 
 
 function step_max(t, ek)
-    ekk = next_max_event(t, ek.s)
     @debug "step_min($(ek.s)): $ek"
+    ekk = next_max_event(t, ek.s)
+    @assert ek == ekk
+    ekk = next_max_event(t, ek.s)
     @debug "step_min($(ek.s)): ekk = $ekk (will be deleted)"
     @debug "step_min($(ek.s)): Going from $(ek.s) to $(ekk.s)"
     # "merge" ekk into ek
@@ -120,8 +122,6 @@ function step_max(t, ek)
 
     # update pdeque
     pq = t.nodes[ek.t].pq
-    ekk = pop_back!(pq)
-    @assert ek == ekk "ek=$ek, ekk=$ekk"
     @debug "step_min(): push! to $(ek.s): $ek"
     push!(pq, ek)
 end
