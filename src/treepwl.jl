@@ -99,36 +99,32 @@ function step_min(t, ek)
     # update pdeque
     pq = t.nodes[ek.s].pq
     ekk = pop_front!(pq)
-    @assert ek == ekk
+    @assert ek == ekk "ek=$ek, ekk=$ekk"
     @debug "step_min(): push! to $(ek.s): $ek"
     push!(pq, ek)
 end
 
 
 function step_max(t, ek)
-    @debug "step_max($(ek.s)): $ek"
-    n = t.nodes[ek.s]
-    ekk = pop_back!(n.pq)
-    @debug "step_max($(ek.s)): ekk = $ekk (will be deleted)"
-    ekk = back(n.pq)
-    @debug "step_min($(ek.s)): ekk = $ekk"
-    @debug "step_max($(ek.s)): Going from $(ek.s) to $(ekk.s)"
+    ekk = next_max_event(t, ek.s)
+    @debug "step_min($(ek.s)): $ek"
+    @debug "step_min($(ek.s)): ekk = $ekk (will be deleted)"
+    @debug "step_min($(ek.s)): Going from $(ek.s) to $(ekk.s)"
+    # "merge" ekk into ek
     ek.s = ekk.s
     ek.slope  += ekk.slope
     ek.offset += ekk.offset
     ek.x = ekk.x
+
+    t.ubp[ek.s] = ek.t     # update bound parent
+
+    # update pdeque
     pq = t.nodes[ek.t].pq
     ekk = pop_back!(pq)
-    if abs(ek.slope - 1.0) <= 1e-6
-        @debug "step_min(): trying to delete ek = $ek"
-        @assert ek == ekk
-        return
-    else
-        @debug "step_max(): push! to $(ek.t): $ek"
-        push!(pq, ek)
-    end
+    @assert ek == ekk "ek=$ek, ekk=$ekk"
+    @debug "step_min(): push! to $(ek.s): $ek"
+    push!(pq, ek)
 end
-
 
 
 function lower_event!(t, v::Int, c::Float64=-t.lam(v))
