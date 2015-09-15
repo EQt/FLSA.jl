@@ -189,8 +189,8 @@ end
 function print_tree(t)
     info("-"^70)
     for (i,n) in enumerate(t.nodes)
-        @printf "\n((%d)): [% 3.1f,% 3.1f]: " i n.lb n.ub
-        println(join(map(string, n.pq), "\n" * (" "^20)))
+        @printf "\n((%d)): [% 3.1f,% 3.1f] {%d,%d}: " i n.lb n.ub t.lbp[i] t.ubp[i]
+        println(join(map(string, n.pq), "\n" * (" "^26)))
     end
     info("-"^70)
 end
