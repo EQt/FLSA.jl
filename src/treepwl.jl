@@ -31,7 +31,7 @@ type PWLTree
     pre_order::Vector{Int}
     parent::Vector{Int}
     lbp::Vector{Int}
-    upb::Vector{Int}
+    ubb::Vector{Int}
     root::Int
     y::Vector{Float64}
     lam::Function
