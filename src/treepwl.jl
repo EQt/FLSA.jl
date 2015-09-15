@@ -96,7 +96,7 @@ function step_min(t, ek)
     ek.offset += ekk.offset
     ek.x = ekk.x
 
-    t.lbp[ek.t] = ek.s     # update bound parent
+    t.lbp[ek.t] = t.lbp[ek.s]  # update bound parent
 
     # update pdeque
     pq = t.nodes[ek.s].pq
@@ -118,7 +118,7 @@ function step_max(t, ek)
     ek.offset += ekk.offset
     ek.x = ekk.x
 
-    t.ubp[ek.s] = ek.t     # update bound parent
+    t.ubp[ek.s] = t.ubp[ek.t] # update bound parent
 
     # update pdeque
     pq = t.nodes[ek.t].pq
