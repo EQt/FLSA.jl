@@ -91,13 +91,15 @@ function step_min(t, ek)
     ekk = next_min_event(t, ek.t)
     @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
     @debug "step_min($(ek.t)): Going from $(ek.t) to $(ekk.t)"
+    t.lbp[ek.t] = t.lbp[ek.s]  # update bound parent
+    @debug "step_min($(ek.t)): setting lbp of $(ek.t) to $(t.lbp[ek.s])"
+
     # "merge" ekk into ek
     ek.t = ekk.t
     ek.slope  += ekk.slope
     ek.offset += ekk.offset
     ek.x = ekk.x
 
-    t.lbp[ek.t] = t.lbp[ek.s]  # update bound parent
 
     # update pdeque
     pq = t.nodes[ek.s].pq
@@ -113,13 +115,15 @@ function step_max(t, ek)
     ekk = next_max_event(t, ek.s)
     @debug "step_min($(ek.s)): ekk = $ekk (will be deleted)"
     @debug "step_min($(ek.s)): Going from $(ek.s) to $(ekk.s)"
+    t.ubp[ek.s] = t.ubp[ek.t] # update bound parent
+    @debug "step_min($(ek.s)): setting ubp of $(ek.s) to $(t.ubp[ek.t])"
+
     # "merge" ekk into ek
     ek.s = ekk.s
     ek.slope  += ekk.slope
     ek.offset += ekk.offset
     ek.x = ekk.x
 
-    t.ubp[ek.s] = t.ubp[ek.t] # update bound parent
 
     # update pdeque
     pq = t.nodes[ek.t].pq
