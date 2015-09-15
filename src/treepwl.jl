@@ -87,7 +87,7 @@ end
 function step_min(t, ek)
     @debug "step_min($(ek.t)): $ek"
     ekk = next_min_event(t, ek.t)
-    @assert ek == ekk
+    @assert ek == ekk "ek=$ek, ekk=$ekk"
     ekk = next_min_event(t, ek.t)
     @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
     @debug "step_min($(ek.t)): Going from $(ek.t) to $(ekk.t)"
@@ -116,7 +116,7 @@ end
 function step_max(t, ek)
     @debug "step_min($(ek.s)): $ek"
     ekk = next_max_event(t, ek.s)
-    @assert ek == ekk
+    @assert ek == ekk "ek=$ek, ekk=$ekk"
     ekk = next_max_event(t, ek.s)
     @debug "step_min($(ek.s)): ekk = $ekk (will be deleted)"
     @debug "step_min($(ek.s)): Going from $(ek.s) to $(ekk.s)"
