@@ -76,11 +76,12 @@ function step_min(t, ek)
     # update ekk
     pq = t.nodes[ek.s].pq
     ekk = pop_front!(pq)
-    if abs(ek.slope) <= 1e-6
+    if abs(ek.slope - 1.0) <= 1e-6
         @debug "step_min(): trying to delete ek = $ek"
         @assert ek == ekk
         return
     else
+        @debug "step_min(): push! to $(ek.s): $ek"
         push!(pq, ek)
     end
 end
@@ -100,11 +101,12 @@ function step_max(t, ek)
     ek.x = ekk.x
     pq = t.nodes[ek.t].pq
     ekk = pop_back!(pq)
-    if abs(ek.slope) <= 1e-6
+    if abs(ek.slope - 1.0) <= 1e-6
         @debug "step_min(): trying to delete ek = $ek"
         @assert ek == ekk
         return
     else
+        @debug "step_max(): push! to $(ek.t): $ek"
         push!(pq, ek)
     end
 end
