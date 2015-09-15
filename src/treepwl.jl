@@ -93,6 +93,11 @@ function step_min(t, ek)
     @debug "step_min($(ek.t)): Going from $(ek.t) to $(ekk.t)"
     t.lbp[ek.t] = t.lbp[ek.s]  # update bound parent
     @debug "step_min($(ek.t)): setting lbp of $(ek.t) to $(t.lbp[ek.s])"
+    if ek.s == ekk.t
+        @debug "Source and target are the same ==> even already there"
+        push!(t.nodes[ek.s].pq, ekk)
+        return
+    end
 
     # "merge" ekk into ek
     ek.t = ekk.t
@@ -117,6 +122,11 @@ function step_max(t, ek)
     @debug "step_min($(ek.s)): Going from $(ek.s) to $(ekk.s)"
     t.ubp[ek.s] = t.ubp[ek.t] # update bound parent
     @debug "step_min($(ek.s)): setting ubp of $(ek.s) to $(t.ubp[ek.t])"
+    if ek.t == ekk.s
+        @debug "Source and target are the same ==> even already there"
+        push!(t.nodes[ek.t].pq, ekk)
+        return
+    end
 
     # "merge" ekk into ek
     ek.s = ekk.s
