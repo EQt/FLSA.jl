@@ -31,7 +31,7 @@ type PWLTree
     pre_order::Vector{Int}
     parent::Vector{Int}
     lbp::Vector{Int}
-    ubb::Vector{Int}
+    ubp::Vector{Int}
     root::Int
     y::Vector{Float64}
     lam::Function
@@ -63,7 +63,7 @@ end
 find_min(t, i) = try front(t.nodes[i].pq) catch Event(i, i, +Inf, 0, 0) end
 find_max(t, i) = try back(t.nodes[i].pq)  catch Event(i, i, -Inf, 0, 0) end
 
-function next_min_event(t, i)
+function next_min_event(t::PWLTree, i::Int)
     try
         pop_front!(t.nodes[i].pq)
     catch
@@ -73,7 +73,7 @@ function next_min_event(t, i)
 end
 
 
-function next_max_event(t, i)
+function next_max_event(t::PWLTree, i::Int)
     try
         pop_back!(t.nodes[i].pq)
     catch
