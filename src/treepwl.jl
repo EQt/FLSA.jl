@@ -136,7 +136,6 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     e.offset = e.offset
     @debug "lower_event!($v): final $e"
     push!(t.nodes[p].pq, e)
-    push!(t.nodes[e.t].pq, deepcopy(e))
     t.nodes[v].lb = e.x
 end
 
@@ -163,7 +162,6 @@ function upper_event!(t, v::Int, c::Float64=+t.lam(v))
     e.offset = -e.offset
     @debug "upper_event!($v): final $e"
     push!(t.nodes[p].pq, e)
-    push!(t.nodes[e.s].pq, deepcopy(e))
     t.nodes[v].ub = e.x
 end
 
