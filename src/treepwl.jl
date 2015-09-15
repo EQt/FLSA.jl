@@ -93,7 +93,7 @@ function step_min(t, ek)
     # now, ekk is the next event
     ekk = next_min_event(t, ek.t)
     if ek.s == ekk.t
-        @debug "Already enqued"
+        @debug "Already enqued: $(t.nodes[ek.s].pq.elements)"
         return
     end
     @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
