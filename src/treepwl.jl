@@ -30,6 +30,8 @@ type PWLTree
     children::Vector{Vector{Int}}
     pre_order::Vector{Int}
     parent::Vector{Int}
+    lbp::Vector{Int}
+    upb::Vector{Int}
     root::Int
     y::Vector{Float64}
     lam::Function
@@ -51,7 +53,7 @@ type PWLTree
             nr += 1
             append!(stack, children[v])
         end
-        return new(nodes, children, pre_order, parents, root, y, lambda)
+        return new(nodes, children, pre_order, parents, copy(parents), copy(parents), root, y, lambda)
     end
     PWLTree(t::ITreeSubGraph, y::Vector{Float64}, lambda=i->1.0) =
         PWLTree(t.parent, t.root, y, lambda)
