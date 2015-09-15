@@ -117,17 +117,17 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     e.offset -= sum(map(i->t.lam(i), t.children[v]))
     set_forecast!(e)
     ek = find_min(t, v)
-    @debug "lower_event!($v): e  = $e"
-    @debug "lower_event!($v): ek = $ek"
+    @debug "lower_event!($v): e   = $e"
+    @debug "lower_event!($v): ek  = $ek"
     while ek.x < e.x
         e.offset += ek.offset
         e.slope  += ek.slope
         e.t       = ek.t
         set_forecast!(e)
-        @debug "lower_event!($v): e  = $e"
+        @debug "lower_event!($v): e   = $e"
         step_min(t, ek)
         ek = find_min(t, v)
-        @debug "lower_event!($v): ek = $ek"
+        @debug "lower_event!($v): ek  = $ek"
     end
     e.offset = e.offset
     @debug "lower_event!($v): final $e"
@@ -143,17 +143,17 @@ function upper_event!(t, v::Int, c::Float64=+t.lam(v))
     e = Event(v, p, 0.0, noffset, 1.0)
     set_forecast!(e)
     ek = find_max(t, v)
-    @debug "upper_event!($v): e  = $e"
-    @debug "upper_event!($v): ek = $ek"
+    @debug "upper_event!($v): e   = $e"
+    @debug "upper_event!($v): ek  = $ek"
     while ek.x > e.x
         e.offset = noffset - ek.offset
         e.slope  = 1 - ek.slope
         e.s      = ek.s
         set_forecast!(e)
-        @debug "upper_event!($v): e  = $e"
+        @debug "upper_event!($v): e   = $e"
         step_max(t, ek)
         ek = find_max(t, v)
-        @debug "upper_event!($v): ek = $ek"
+        @debug "upper_event!($v): ek  = $ek"
     end
     e.slope  = -e.slope
     e.offset = -e.offset
