@@ -193,7 +193,7 @@ end
 function forward_dp_treepwl(t)
     for i in t.pre_order[end:-1:1]
         lower_event!(t, i)
-        print_tree(t)
+        # print_tree(t)
         upper_event!(t, i)
         print_tree(t)
         print_min(t)
