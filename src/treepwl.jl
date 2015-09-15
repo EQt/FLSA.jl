@@ -84,26 +84,24 @@ end
 
 
 function step_min(t, ek)
+    ekk = next_min_event(t, ek.t)
     @debug "step_min($(ek.t)): $ek"
     @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
-    ekk = front(n.pq)
-    @debug "step_min($(ek.t)): ekk = $ekk"
     @debug "step_min($(ek.t)): Going from $(ek.t) to $(ekk.t)"
+    # "merge" ekk into ek
     ek.t = ekk.t
     ek.slope  += ekk.slope
     ek.offset += ekk.offset
     ek.x = ekk.x
-    # update ekk
+
+    t.lbp[ek.t] = ek.s     # update bound parent
+
+    # update pdeque
     pq = t.nodes[ek.s].pq
     ekk = pop_front!(pq)
-    if abs(ek.slope - 1.0) <= 1e-6
-        @debug "step_min(): trying to delete ek = $ek"
-        @assert ek == ekk
-        return
-    else
-        @debug "step_min(): push! to $(ek.s): $ek"
-        push!(pq, ek)
-    end
+    @assert ek == ekk
+    @debug "step_min(): push! to $(ek.s): $ek"
+    push!(pq, ek)
 end
 
 
