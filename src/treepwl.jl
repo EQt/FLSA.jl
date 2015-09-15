@@ -113,16 +113,16 @@ end
 
 function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     p = t.parent[v]
-    e = Event(p, v, 0.0, -t.y[v] - c, 1.0)
-    e.offset -= sum(map(i->t.lam(i), t.children[v]))
+    noffset = -t.y[v] - c - sum(map(i->t.lam(i), t.children[v]))
+    e = Event(p, v, 0.0, noffset, 1.0)
     set_forecast!(e)
     ek = find_min(t, v)
     @debug "lower_event!($v): e   = $e"
     @debug "lower_event!($v): ek  = $ek"
     while ek.x < e.x
-        e.offset += ek.offset
-        e.slope  += ek.slope
-        e.t       = ek.t
+        e.offset = noffset + ek.offset
+        e.slope  = 1.0 + ek.slope
+        e.t      = ek.t
         set_forecast!(e)
         @debug "lower_event!($v): e   = $e"
         step_min(t, ek)
