@@ -84,32 +84,19 @@ function next_max_event(t::PWLTree, i::Int)
 end
 
 
+"""Delete ek and make sure, that the next event is in the queue"""
 function step_min(t, ek)
     @debug "step_min($(ek.t)): $ek"
+    # first extract this event
     ekk = next_min_event(t, ek.t)
     @assert ek == ekk "ek=$ek, ekk=$ekk"
+    # now, ekk is the next event
     ekk = next_min_event(t, ek.t)
     @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
     @debug "step_min($(ek.t)): Going from $(ek.t) to $(ekk.t)"
     t.lbp[ek.t] = t.lbp[ek.s]  # update bound parent
     @debug "step_min($(ek.t)): setting lbp of $(ek.t) to $(t.lbp[ek.s])"
-    if ek.s == ekk.t
-        @debug "Source and target are the same ==> even already there"
-        push!(t.nodes[ek.s].pq, ekk)
-        return
-    end
-
-    # "merge" ekk into ek
-    ek.t = ekk.t
-    ek.slope  += ekk.slope
-    ek.offset += ekk.offset
-    ek.x = ekk.x
-
-
-    # update pdeque
-    pq = t.nodes[ek.s].pq
-    @debug "step_min(): push! to $(ek.s): $ek"
-    push!(pq, ek)
+    push!(t.nodes[ek.s].pq, ekk)
 end
 
 
@@ -214,6 +201,7 @@ end
 function forward_dp_treepwl(t)
     for i in t.pre_order[end:-1:1]
         lower_event!(t, i)
+        print_tree(t)
         upper_event!(t, i)
         print_tree(t)
         print_min(t)
