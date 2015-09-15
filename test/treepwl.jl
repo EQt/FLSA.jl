@@ -15,6 +15,9 @@ facts("A random 4x2 example") do
         n = length(v)
         w = rand(size(g.edges))
         y = round(10*rand(n1*n2), 1)
+        for (i,yi) in enumerate(y)
+            println("$i: $yi")
+        end
         root = 1
 
         mst, wmst = kruskal_minimum_spantree(g, w)
