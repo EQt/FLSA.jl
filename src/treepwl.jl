@@ -151,9 +151,9 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     @debug "lower_event!($v): e   = $e"
     @debug "lower_event!($v): ek  = $ek"
     while ek.x < e.x
-        e.offset = noffset + ek.offset
-        e.slope  = max(1.0 + ek.slope, 1.0)
-        e.t      = ek.t
+        e.offset += ek.offset
+        e.slope  += ek.slope
+        e.t       = ek.t
         set_forecast!(e)
         @debug "lower_event!($v): e   = $e"
         step_min(t, ek)
@@ -176,9 +176,9 @@ function upper_event!(t, v::Int, c::Float64=+t.lam(v))
     @debug "upper_event!($v): e   = $e"
     @debug "upper_event!($v): ek  = $ek"
     while ek.x > e.x
-        e.offset = noffset - ek.offset
-        e.slope  = max(1 - ek.slope, 1.0)
-        e.s      = ek.s
+        e.offset -= ek.offset
+        e.slope  -= ek.slope
+        e.s       = ek.s
         set_forecast!(e)
         @debug "upper_event!($v): e   = $e"
         step_max(t, ek)
