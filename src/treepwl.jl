@@ -63,10 +63,28 @@ end
 find_min(t, i) = try front(t.nodes[i].pq) catch Event(i, i, +Inf, 0, 0) end
 find_max(t, i) = try back(t.nodes[i].pq)  catch Event(i, i, -Inf, 0, 0) end
 
+function next_min_event(t, i)
+    try
+        pop_front!(t.nodes[i].pq)
+    catch
+        i = t.ubp[i]
+        pop_front!(t.nodes[i].pq)
+    end
+end
+
+
+function next_max_event(t, i)
+    try
+        pop_back!(t.nodes[i].pq)
+    catch
+        i = t.lbp[i]
+        pop_back!(t.nodes[i].pq)
+    end
+end
+
+
 function step_min(t, ek)
     @debug "step_min($(ek.t)): $ek"
-    n = t.nodes[ek.t]
-    ekk = pop_front!(n.pq)
     @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
     ekk = front(n.pq)
     @debug "step_min($(ek.t)): ekk = $ekk"
