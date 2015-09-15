@@ -92,6 +92,10 @@ function step_min(t, ek)
     @assert ek == ekk "ek=$ek, ekk=$ekk"
     # now, ekk is the next event
     ekk = next_min_event(t, ek.t)
+    if ek.s == ekk.t
+        @debug "Already enqued"
+        return
+    end
     @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
     @debug "step_min($(ek.t)): Going from $(ek.t) to $(ekk.t)"
     t.lbp[ek.t] = t.lbp[ek.s]  # update bound parent
@@ -99,35 +103,23 @@ function step_min(t, ek)
     push!(t.nodes[ek.s].pq, ekk)
 end
 
-
 function step_max(t, ek)
-    @debug "step_min($(ek.s)): $ek"
+    @debug "step_max($(ek.s)): $ek"
+    # first extract this event
     ekk = next_max_event(t, ek.s)
     @assert ek == ekk "ek=$ek, ekk=$ekk"
+    # now, ekk is the next event
     ekk = next_max_event(t, ek.s)
-    @debug "step_min($(ek.s)): ekk = $ekk (will be deleted)"
-    @debug "step_min($(ek.s)): Going from $(ek.s) to $(ekk.s)"
-    t.ubp[ek.s] = t.ubp[ek.t] # update bound parent
-    @debug "step_min($(ek.s)): setting ubp of $(ek.s) to $(t.ubp[ek.t])"
     if ek.t == ekk.s
-        @debug "Source and target are the same ==> even already there"
-        push!(t.nodes[ek.t].pq, ekk)
+        @debug "Already enqued"
         return
     end
-
-    # "merge" ekk into ek
-    ek.s = ekk.s
-    ek.slope  += ekk.slope
-    ek.offset += ekk.offset
-    ek.x = ekk.x
-
-
-    # update pdeque
-    pq = t.nodes[ek.t].pq
-    @debug "step_min(): push! to $(ek.s): $ek"
-    push!(pq, ek)
+    @debug "step_min($(ek.s)): ekk = $ekk (will be deleted)"
+    @debug "step_min($(ek.s)): Going from $(ek.s) to $(ekk.s)"
+    t.ubp[ek.s] = t.lbp[ek.t]  # update bound parent
+    @debug "step_max($(ek.s)): setting ubp of $(ek.s) to $(t.lbp[ek.t])"
+    push!(t.nodes[ek.t].pq, ekk)
 end
-
 
 function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     p = t.parent[v]
