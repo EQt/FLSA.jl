@@ -23,6 +23,7 @@ function push!{E}(q::PDeQue{E}, e::E)
 end
 
 length{E}(q::PDeQue) = length(q.elements)
+isempty{E}(q::PDeQue) = length(q) == 0
 
 # for convinience (map, enumerate, …)
 start{E}(q::PDeQue{E}) = start(q.elements)
