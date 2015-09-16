@@ -25,7 +25,7 @@ facts("A random 4x2 example") do
 
         tf = FLSA.PWLTree(tn.parent, root, y, i->lambda)
         for (i,yi) in enumerate(y)
-            println("$i: $yi --> $(tf.parent[i])")
+            println("$i: $yi --> $(tf.parent[i]) [$(round(vis.lb[i], 6)), $(round(vis.ub[i], 6))]")
         end
         FLSA.forward_dp_treepwl(tf)
         for i=1:n
