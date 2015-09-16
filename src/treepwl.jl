@@ -64,14 +64,6 @@ end
 find_min(t, i) = try front(t.nodes[i].pq) catch Event(i, i, +Inf, 0, 0) end
 find_max(t, i) = try back(t.nodes[i].pq)  catch Event(i, i, -Inf, 0, 0) end
 
-"""
-Ok. Wie mache ich das jetzt?
-Es geht doch nur darum, wie ich das jeweils nächste Event finde.
-Bei step_min ist das normalerweise das nächste in der queue von e.t.
-Wenn die leer ist, heißt das, dieser Knoten hat keine Kind-Ereignisse mehr;
-also schau bei dem ubp nach.
-"""
-
 
 """Delete one front event of v and replace it by next, if not already enqueued"""
 function step_min(t, v)
@@ -106,6 +98,23 @@ function step_min(t, v)
         t.ubp[e.s] = v
     end
     @debug "step_min($v): moving    $e"
+    push!(pq, e)
+end
+
+function step_min2(t, v)
+    pq = t.nodes[v].pq
+    e = pop_front!(pq)
+    u = e.t # always the node where we go to
+    pq_u = t.nodes[u].pq
+    if isempty(pq_u)
+        # next event moved...
+        u = t.ubp[u]
+        pq_u = t.nodes[u].pq
+        e = pop_front(pq_u)       
+    else
+        e = pop_front(pq_u)
+        t.lbp[u] = v
+    end
     push!(pq, e)
 end
 
