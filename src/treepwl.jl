@@ -359,21 +359,21 @@ function forward_dp_treepwl(t)
     for i in t.pre_order[end:-1:1]
         prepare_node(t2, i)
         lower_event2!(t2, i)
-        info("TTTT 22222")
+        @debug "TTTT 22222"
         print_tree(t2)
 
         lower_event!(t, i)
-        info("TTTT 11111")
+        @debug "TTTT 11111"
         print_tree(t)
 
         countevents(t) == countevents(t2) || begin print_tree(t); print_tree(t2); error("STOP_LB($i)") end
 
         upper_event2!(t2, i)
-        info("TTTT 22222")
+        @debug "TTTT 22222"
         print_tree(t2)
 
         upper_event!(t, i)
-        info("TTTT 11111")
+        @debug "TTTT 11111"
         print_tree(t)
 
         countevents(t) == countevents(t2) || begin print_tree(t); print_tree(t2); error("STOP_UB($i)") end
