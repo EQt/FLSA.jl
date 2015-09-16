@@ -5,11 +5,11 @@ using FactCheck
 using FLSA
 
 
-facts("A random 4x2 example") do
+facts("A random example") do
     begin
-        srand(13)
+        srand(42)
         lambda = 1.0
-        n1, n2 = 20, 13
+        n1, n2 = 4, 3
         g = FLSA.igraph(FLSA.grid_graph(n1, n2))
         v = FLSA.vertices(g)
         n = length(v)
