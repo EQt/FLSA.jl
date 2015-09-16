@@ -24,8 +24,8 @@ function push!{E}(q::PDeQue{E}, e::E)
     sort!(q.elements, by=q.by)
 end
 
-length{E}(q::PDeQue) = length(q.elements)
-isempty{E}(q::PDeQue) = length(q) == 0
+length{E}(q::PDeQue{E}) = length(q.elements)
+isempty{E}(q::PDeQue{E}) = length(q) == 0
 
 # for convinience (map, enumerate, …)
 start{E}(q::PDeQue{E}) = start(q.elements)
