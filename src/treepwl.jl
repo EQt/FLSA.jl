@@ -70,6 +70,13 @@ function step_min(t, v)
     pq = t.nodes[v].pq
     e = pop_front!(pq)
     @debug "step_min($v):" * " "^11 * "$e (will be deleted)"
+    if e.slope > 0 # lower bound event
+        t.lbp[e.t] = t.parent[v]
+        @debug "bounds($v): lbp[$(e.t)] --> $(t.parent[v])"
+    else
+        t.ubp[e.s] = t.parent[v]
+        @debug "bounds($v): ubp[$(e.s)] --> $(t.parent[v])"
+    end
     u = e.t
     @debug "step_min($v): u=$u"
     pq_u = t.nodes[u].pq
@@ -99,6 +106,13 @@ function step_max(t, v)
     pq = t.nodes[v].pq
     e = pop_back!(pq)
     @debug "step_max($v):" * " "^11 * "$e (will be deleted)"
+    if e.slope > 0 # lower bound event
+        t.lbp[e.t] = t.parent[v]
+        @debug "bounds($v): lbp[$(e.t)] --> $(t.parent[v])"
+    else
+        t.ubp[e.s] = t.parent[v]
+        @debug "bounds($v): ubp[$(e.s)] --> $(t.parent[v])"
+    end
     u = e.s
     @debug "step_max($v): u=$u"
     pq_u = t.nodes[u].pq
