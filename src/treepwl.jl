@@ -150,7 +150,7 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
         @debug "lower_event!($v): ek  = $ek"
     end
     e.offset = e.offset
-    @debug "lower_event!($v): final $e"
+    @debug "lower_event!($v): final $e (pushed to $p)"
     push!(t.nodes[p].pq, e)
     t.nodes[v].lb = e.x
 end
@@ -176,7 +176,7 @@ function upper_event!(t, v::Int, c::Float64=+t.lam(v))
     end
     e.slope  = -e.slope
     e.offset = -e.offset
-    @debug "upper_event!($v): final $e"
+    @debug "upper_event!($v): final $e (pushed to $p)"
     push!(t.nodes[p].pq, e)
     t.nodes[v].ub = e.x
 end
