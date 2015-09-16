@@ -7,9 +7,9 @@ using FLSA
 
 facts("A random example") do
     begin
-        # srand(12)
+        srand(3)
         lambda = 1.0
-        n1, n2 = 13, 3
+        n1, n2 = 5, 3
         g = FLSA.igraph(FLSA.grid_graph(n1, n2))
         v = FLSA.vertices(g)
         n = length(v)
