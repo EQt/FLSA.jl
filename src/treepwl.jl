@@ -84,42 +84,38 @@ function next_max_event(t::PWLTree, i::Int)
 end
 
 
-"""Delete ek and make sure, that the next event is in the queue"""
-function step_min(t, ek)
-    @debug "step_min($(ek.t)): $ek"
-    # first extract this event
-    ekk = next_min_event(t, ek.t)
-    @assert ek == ekk "ek=$ek, ekk=$ekk"
-    # now, ekk is the next event
-    ekk = next_min_event(t, ek.t)
-    if ek.s == ekk.t
-        @debug "Already enqued: $(t.nodes[ek.s].pq.elements)"
+"""Delete one front event of v and replace it by next, if not already enqueued"""
+function step_min(t, v)
+    pq = t.nodes[v].pq
+    e = pop_front!(pq)
+    @debug "step_min($v):" * " "^11 * "$e (will be deleted)"
+    e = next_min_event(t, v)
+    @debug "step_min($v): next      $e"
+    if e.t == t.ubp[v]
+        @debug "Already enqued: $(t.nodes[t.ubp[v]].pq.elements)"
         return
     end
-    @debug "step_min($(ek.t)): ekk = $ekk (will be deleted)"
-    @debug "step_min($(ek.t)): Going from $(ek.t) to $(ekk.t)"
-    t.lbp[ek.t] = t.lbp[ek.s]  # update bound parent
-    @debug "step_min($(ek.t)): setting lbp of $(ek.t) to $(t.lbp[ek.s])"
-    push!(t.nodes[ek.s].pq, ekk)
+    t.lbp[e.t] = t.lbp[v]  # update bound parent
+    @debug "step_min($v): setting lbp of $(e.t) to $(t.lbp[v])"
+    push!(pq, e)
 end
 
-function step_max(t, ek)
-    @debug "step_max($(ek.s)): $ek"
-    # first extract this event
-    ekk = next_max_event(t, ek.s)
-    @assert ek == ekk "ek=$ek, ekk=$ekk"
-    # now, ekk is the next event
-    ekk = next_max_event(t, ek.s)
-    if ek.t == ekk.s
-        @debug "Already enqued"
+"""Delete one back event of v and replace it by next, if not already enqueued"""
+function step_max(t, v)
+    pq = t.nodes[v].pq
+    e = pop_back!(pq)
+    @debug "step_max($v):" * " "^11 * "$e (will be deleted)"
+    e = next_max_event(t, v)
+    @debug "step_max($v): next      $e"
+    if e.s == t.lbp[v]
+        @debug "Already enqued: $(t.nodes[t.lbp[v]].pq.elements)"
         return
     end
-    @debug "step_min($(ek.s)): ekk = $ekk (will be deleted)"
-    @debug "step_min($(ek.s)): Going from $(ek.s) to $(ekk.s)"
-    t.ubp[ek.s] = t.lbp[ek.t]  # update bound parent
-    @debug "step_max($(ek.s)): setting ubp of $(ek.s) to $(t.lbp[ek.t])"
-    push!(t.nodes[ek.t].pq, ekk)
+    t.lbp[e.s] = t.lbp[v]  # update bound parent
+    @debug "step_max($v): setting lbp of $(e.s) to $(t.lbp[v])"
+    push!(pq, e)
 end
+
 
 function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     p = t.parent[v]
@@ -135,7 +131,7 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
         e.t       = ek.t
         set_forecast!(e)
         @debug "lower_event!($v): e   = $e"
-        step_min(t, ek)
+        step_min(t, v)
         ek = find_min(t, v)
         @debug "lower_event!($v): ek  = $ek"
     end
@@ -160,7 +156,7 @@ function upper_event!(t, v::Int, c::Float64=+t.lam(v))
         e.s       = ek.s
         set_forecast!(e)
         @debug "upper_event!($v): e   = $e"
-        step_max(t, ek)
+        step_max(t, v)
         ek = find_max(t, v)
         @debug "upper_event!($v): ek  = $ek"
     end
