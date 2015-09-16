@@ -70,32 +70,21 @@ function step_min(t, v)
     pq = t.nodes[v].pq
     e = pop_front!(pq)
     @debug "step_min($v):" * " "^11 * "$e (will be deleted)"
-    # u := node, where to go on, after v is processed
     u = e.t
-    # does u have any more nodes?
+    @debug "step_min($v): u=$u"
     pq_u = t.nodes[u].pq
     if isempty(pq_u)
-        t.lbp[u] = t.parent[v]  # update bound parent
-        @debug "step_min($v): setting lbp of $u to $(t.lbp[u])"
-        @debug "step_min($v): Going from $u to ubp ==> $(t.ubp[u])"
-        u = t.ubp[u]
-        if u == t.parent[v]
-            @debug "step_min($v): finished"
+        if u == v
+            @debug "step_min($v): u == v"
             return
         end
+        u = t.ubp[u]
         pq_u = t.nodes[u].pq
-    end
-    # put the event from u.pq to v.pq
-    print_tree(t)
-    if isempty(pq_u)
-        return
-    end
-    e = pop_front!(pq_u)
-    if isempty(t.nodes[e.t].pq)
-        t.lbp[e.t] = v
-    end
-    if isempty(t.nodes[e.s].pq)
-        t.ubp[e.s] = v
+        @debug "step_min($v): u=$u"
+        e = pop_front!(pq_u)
+    else
+        @debug "step_min($v): u=$u"
+        e = pop_front!(pq_u)
     end
     @debug "step_min($v): moving    $e"
     push!(pq, e)
@@ -248,7 +237,6 @@ end
 
 
 function print_tree(t)
-    return
     info("-"^70)
     for (i,n) in enumerate(t.nodes)
         @printf "\n((%d)): [% 3.1f,% 3.1f] {%d,%d}: " i n.lb n.ub t.lbp[i] t.ubp[i]
