@@ -182,9 +182,11 @@ function prepare_node(t, v::Int)
     n = t.nodes[v]
     for c in t.children[v]
         nc = t.nodes[c]
-        for e in nc.pq.elements
+        elem = nc.pq.elements
+        for e in elem
             push!(n.pq, e)
         end
+        resize!(elem, 0)
     end
     sort!(n.pq.elements, by=k->k.x)
 end
