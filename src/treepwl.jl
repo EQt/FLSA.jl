@@ -83,6 +83,14 @@ function next_max_event(t::PWLTree, i::Int)
     end
 end
 
+"""
+Ok. Wie mache ich das jetzt?
+Es geht doch nur darum, wie ich das jeweils nächste Event finde.
+Bei step_min ist das normalerweise das nächste in der queue von e.t.
+Wenn die leer ist, heißt das, dieser Knoten hat keine Kind-Ereignisse mehr;
+also schau bei dem ubp nach.
+"""
+
 
 """Delete one front event of v and replace it by next, if not already enqueued"""
 function step_min(t, v)
@@ -90,33 +98,35 @@ function step_min(t, v)
     e = pop_front!(pq)
     @debug "step_min($v):" * " "^11 * "$e (will be deleted)"
     u = e.t
-    @debug "step_max($v): First looking at $u"
-    e = next_min_event(t, u)
-    @debug "step_min($v): next      $e"
-    if e.t == t.ubp[v]
-        @debug "Already enqued: $(t.nodes[t.ubp[v]].pq.elements)"
-        return
+    pq_u = t.nodes[u].pq
+    if isempty(pq_u)
+        t.lbp[u] = t.parent[v]  # update bound parent
+        @debug "step_min($v): setting lbp of $u to $(t.lbp[u])"
+        @debug "step_min($v): Going from $u to ubp ==> $(t.ubp[u])"
+        u = t.ubp[u]
+        pq_u = t.nodes[u].pq
     end
-    t.lbp[e.t] = t.lbp[v]  # update bound parent
-    @debug "step_min($v): setting lbp of $(e.t) to $(t.lbp[v])"
+    e = pop_front!(pq_u)
+    @debug "step_min($v): next      $e"
     push!(pq, e)
 end
 
-"""Delete one back event of v and replace it by next, if not already enqueued"""
+
 function step_max(t, v)
     pq = t.nodes[v].pq
     e = pop_back!(pq)
     @debug "step_max($v):" * " "^11 * "$e (will be deleted)"
     u = e.s
-    @debug "step_max($v): First looking at $u"
-    e = next_max_event(t, u)
-    @debug "step_max($v): next      $e"
-    if e.s == t.lbp[v]
-        @debug "Already enqued: $(t.nodes[t.lbp[v]].pq.elements)"
-        return
+    pq_u = t.nodes[u].pq
+    if isempty(pq_u)
+        t.ubp[u] = t.parent[v]  # update bound parent
+        @debug "step_max($v): setting lbp of $u to $(t.ubp[u])"
+        @debug "step_max($v): Going from $u to lbp ==> $(t.lbp[u])"
+        u = t.lbp[u]
+        pq_u = t.nodes[u].pq
     end
-    t.lbp[e.s] = t.lbp[v]  # update bound parent
-    @debug "step_max($v): setting lbp of $(e.s) to $(t.lbp[v])"
+    e = pop_front!(pq_u)
+    @debug "step_min($v): next      $e"
     push!(pq, e)
 end
 
