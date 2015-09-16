@@ -94,7 +94,14 @@ function step_min(t, v)
         pq_u = t.nodes[u].pq
     end
     # put the event from u.pq to v.pq
+    print_tree(t)
     e = pop_front!(pq_u)
+    if isempty(t.nodes[e.t].pq)
+        t.lbp[e.t] = v
+    end
+    if isempty(t.nodes[e.s].pq)
+        t.ubp[e.s] = v
+    end
     @debug "step_min($v): moving    $e"
     push!(pq, e)
 end
@@ -122,8 +129,15 @@ function step_max(t, v)
         pq_u = t.nodes[u].pq
     end
     try
+        print_tree(t)
         e = pop_back!(pq_u)
-        @debug "step_min($v): moving    $e"
+        @debug "step_max($v): moving    $e"
+        if isempty(t.nodes[e.t].pq)
+            t.lbp[e.t] = v
+        end
+        if isempty(t.nodes[e.s].pq)
+            t.ubp[e.s] = v
+        end
         push!(pq, e)
     catch
         error("u = $u, $(t.nodes[u].pq.elements)")
