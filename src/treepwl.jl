@@ -79,8 +79,12 @@ function step_min(t, v)
             return
         end
         u = t.ubp[u]
-        pq_u = t.nodes[u].pq
         @debug "step_min($v): u=$u"
+        pq_u = t.nodes[u].pq
+        if isempty(pq_u)
+            @debug "step_min($v): was last"
+            return
+        end
         e = pop_front!(pq_u)
     else
         @debug "step_min($v): u=$u"
@@ -106,6 +110,10 @@ function step_max(t, v)
         u = t.lbp[u]
         pq_u = t.nodes[u].pq
         @debug "step_max($v): u=$u"
+        if isempty(pq_u)
+            @debug "step_max($v): was last"
+            return
+        end
         e = pop_back!(pq_u)
     else
         @debug "step_max($v): u=$u"
