@@ -7,7 +7,7 @@ using FLSA
 
 facts("A random 4x2 example") do
     begin
-        srand(42)
+        srand(1)
         lambda = 1.0
         n1, n2 = 4, 2
         g = FLSA.igraph(FLSA.grid_graph(n1, n2))
@@ -15,9 +15,6 @@ facts("A random 4x2 example") do
         n = length(v)
         w = rand(size(g.edges))
         y = round(10*rand(n1*n2), 1)
-        for (i,yi) in enumerate(y)
-            println("$i: $yi")
-        end
         root = 1
 
         mst, wmst = kruskal_minimum_spantree(g, w)
@@ -27,6 +24,9 @@ facts("A random 4x2 example") do
         x = FLSA.dp_tree_naive(y, lambda, t, vis)
 
         tf = FLSA.PWLTree(tn.parent, root, y, i->lambda)
+        for (i,yi) in enumerate(y)
+            println("$i: $yi --> $(tf.parent[i])")
+        end
         FLSA.forward_dp_treepwl(tf)
         for i=1:n
             @fact tf.nodes[i].lb --> roughly(round(vis.lb[i], 6)) "lb i = $i"
