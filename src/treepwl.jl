@@ -86,6 +86,10 @@ function step_min(t, v)
             return
         end
         u = t.ubp[u]
+        if u == t.parent[v] # don't want to steel parent's event
+            @debug "step_min($v): finished"
+            return
+        end
         @debug "step_min($v): u=$u"
         pq_u = t.nodes[u].pq
         if isempty(pq_u)
@@ -122,6 +126,10 @@ function step_max(t, v)
             return
         end
         u = t.lbp[u]
+        if u == t.parent[v] # don't want to steel parent's event
+            @debug "step_max($v): finished"
+            return
+        end
         pq_u = t.nodes[u].pq
         @debug "step_max($v): u=$u"
         if isempty(pq_u)
