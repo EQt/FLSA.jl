@@ -72,7 +72,7 @@ Wenn die leer ist, heißt das, dieser Knoten hat keine Kind-Ereignisse mehr;
 also schau bei dem ubp nach.
 """
 
-#=
+
 """Delete one front event of v and replace it by next, if not already enqueued"""
 function step_min(t, v)
     pq = t.nodes[v].pq
@@ -149,8 +149,8 @@ function step_max(t, v)
         error("u = $u, $(t.nodes[u].pq.elements)")
     end
 end
-=#
 
+#=
 step_min(t, i) = pop_front!(t.nodes[i].pq)
 step_max(t, i) = pop_back!(t.nodes[i].pq)
     
@@ -164,6 +164,10 @@ function prepare_node(t, v::Int)
         end
     end
     sort!(n.pq.elements, by=k->k.x)
+end
+=#
+
+function prepare_node(t, v)
 end
 
 function lower_event!(t, v::Int, c::Float64=-t.lam(v))
