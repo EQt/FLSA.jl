@@ -344,6 +344,7 @@ function print_tree(t)
     info("-"^70)
 end
 
+countevents(t) = sum(map(i->length(t.nodes[i].pq.elements), 1:length(t.nodes)))
 
 function forward_dp_treepwl(t)
     t2 = deepcopy(t)
@@ -357,6 +358,8 @@ function forward_dp_treepwl(t)
         info("TTTT 11111")
         print_tree(t)
 
+        countevents(t) == countevents(t2) || begin print_tree(t); print_tree(t2); error("STOP_LB($i)") end
+
         upper_event2!(t2, i)
         info("TTTT 22222")
         print_tree(t2)
@@ -364,5 +367,7 @@ function forward_dp_treepwl(t)
         upper_event!(t, i)
         info("TTTT 11111")
         print_tree(t)
+
+        countevents(t) == countevents(t2) || begin print_tree(t); print_tree(t2); error("STOP_UB($i)") end
     end
 end

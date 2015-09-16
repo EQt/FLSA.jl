@@ -7,7 +7,7 @@ using FLSA
 
 facts("A random example") do
     begin
-        srand(42)
+        srand(3)
         lambda = 1.0
         n1, n2 = 4, 2
         g = FLSA.igraph(FLSA.grid_graph(n1, n2))
