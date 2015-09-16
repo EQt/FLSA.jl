@@ -114,8 +114,8 @@ function step_max(t, v)
         end
         pq_u = t.nodes[u].pq
     end
-    e = pop_front!(pq_u)
-    @debug "step_min($v): next      $e"
+    e = pop_back!(pq_u)
+    @debug "step_max($v): next      $e"
     push!(pq, e)
 end
 
