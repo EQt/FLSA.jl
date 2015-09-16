@@ -64,25 +64,6 @@ end
 find_min(t, i) = try front(t.nodes[i].pq) catch Event(i, i, +Inf, 0, 0) end
 find_max(t, i) = try back(t.nodes[i].pq)  catch Event(i, i, -Inf, 0, 0) end
 
-function next_min_event(t::PWLTree, i::Int)
-    try
-        pop_front!(t.nodes[i].pq)
-    catch
-        i = t.ubp[i]
-        pop_front!(t.nodes[i].pq)
-    end
-end
-
-
-function next_max_event(t::PWLTree, i::Int)
-    try
-        pop_back!(t.nodes[i].pq)
-    catch
-        i = t.lbp[i]
-        pop_back!(t.nodes[i].pq)
-    end
-end
-
 """
 Ok. Wie mache ich das jetzt?
 Es geht doch nur darum, wie ich das jeweils nächste Event finde.
