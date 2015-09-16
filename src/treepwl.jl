@@ -89,7 +89,9 @@ function step_min(t, v)
     pq = t.nodes[v].pq
     e = pop_front!(pq)
     @debug "step_min($v):" * " "^11 * "$e (will be deleted)"
-    e = next_min_event(t, v)
+    u = e.t
+    @debug "step_max($v): First looking at $u"
+    e = next_min_event(t, u)
     @debug "step_min($v): next      $e"
     if e.t == t.ubp[v]
         @debug "Already enqued: $(t.nodes[t.ubp[v]].pq.elements)"
@@ -105,7 +107,9 @@ function step_max(t, v)
     pq = t.nodes[v].pq
     e = pop_back!(pq)
     @debug "step_max($v):" * " "^11 * "$e (will be deleted)"
-    e = next_max_event(t, v)
+    u = e.s
+    @debug "step_max($v): First looking at $u"
+    e = next_max_event(t, u)
     @debug "step_max($v): next      $e"
     if e.s == t.lbp[v]
         @debug "Already enqued: $(t.nodes[t.lbp[v]].pq.elements)"
