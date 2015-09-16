@@ -78,7 +78,9 @@ function step_min(t, v)
     pq = t.nodes[v].pq
     e = pop_front!(pq)
     @debug "step_min($v):" * " "^11 * "$e (will be deleted)"
+    # u := node, where to go on, after v is processed
     u = e.t
+    # does u have any more nodes?
     pq_u = t.nodes[u].pq
     if isempty(pq_u)
         t.lbp[u] = t.parent[v]  # update bound parent
@@ -91,13 +93,18 @@ function step_min(t, v)
         end
         pq_u = t.nodes[u].pq
     end
+    # put the event from u.pq to v.pq
     e = pop_front!(pq_u)
-    @debug "step_min($v): next      $e"
+    @debug "step_min($v): moving    $e"
     push!(pq, e)
 end
 
 
 function step_max(t, v)
+    u = 6
+    info("u = $u, $(t.nodes[u].pq.elements)")
+    u = 5
+    info("u = $u, $(t.nodes[u].pq.elements)")
     pq = t.nodes[v].pq
     e = pop_back!(pq)
     @debug "step_max($v):" * " "^11 * "$e (will be deleted)"
@@ -114,9 +121,13 @@ function step_max(t, v)
         end
         pq_u = t.nodes[u].pq
     end
-    e = pop_back!(pq_u)
-    @debug "step_max($v): next      $e"
-    push!(pq, e)
+    try
+        e = pop_back!(pq_u)
+        @debug "step_min($v): moving    $e"
+        push!(pq, e)
+    catch
+        error("u = $u, $(t.nodes[u].pq.elements)")
+    end
 end
 
 
@@ -201,7 +212,7 @@ end
 function forward_dp_treepwl(t)
     for i in t.pre_order[end:-1:1]
         lower_event!(t, i)
-        # print_tree(t)
+        print_tree(t)
         # print_min(t, i)
         upper_event!(t, i)
         print_tree(t)
