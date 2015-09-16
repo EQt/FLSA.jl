@@ -22,6 +22,7 @@ function push!{E}(q::PDeQue{E}, e::E)
     sort!(q.elements, by=q.by)
 end
 
+length{E}(q::PDeQue) = length(q.elements)
 
 # for convinience (map, enumerate, …)
 start{E}(q::PDeQue{E}) = start(q.elements)
