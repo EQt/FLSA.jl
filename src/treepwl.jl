@@ -72,7 +72,7 @@ Wenn die leer ist, heißt das, dieser Knoten hat keine Kind-Ereignisse mehr;
 also schau bei dem ubp nach.
 """
 
-
+#=
 """Delete one front event of v and replace it by next, if not already enqueued"""
 function step_min(t, v)
     pq = t.nodes[v].pq
@@ -149,7 +149,22 @@ function step_max(t, v)
         error("u = $u, $(t.nodes[u].pq.elements)")
     end
 end
+=#
 
+step_min(t, i) = pop_front!(t.nodes[i].pq)
+step_max(t, i) = pop_back!(t.nodes[i].pq)
+    
+
+function prepare_node(t, v::Int)
+    n = t.nodes[v]
+    for c in t.children[v]
+        nc = t.nodes[c]
+        for e in nc.pq.elements
+            push!(n.pq, e)
+        end
+    end
+    sort!(n.pq.elements, by=k->k.x)
+end
 
 function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     p = t.parent[v]
@@ -220,6 +235,7 @@ end
 
 
 function print_tree(t)
+    return
     info("-"^70)
     for (i,n) in enumerate(t.nodes)
         @printf "\n((%d)): [% 3.1f,% 3.1f] {%d,%d}: " i n.lb n.ub t.lbp[i] t.ubp[i]
@@ -231,6 +247,7 @@ end
 
 function forward_dp_treepwl(t)
     for i in t.pre_order[end:-1:1]
+        prepare_node(t, i)
         lower_event!(t, i)
         print_tree(t)
         # print_min(t, i)
