@@ -3,6 +3,8 @@ import Base.push!
 import Base.start
 import Base.next
 import Base.done
+import Base.length
+import Base.isempty
 
 type PDeQue{E}
     elements::Vector{E}
