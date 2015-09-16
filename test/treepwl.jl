@@ -9,7 +9,7 @@ facts("A random example") do
     begin
         srand(12)
         lambda = 1.0
-        n1, n2 = 4, 3
+        n1, n2 = 3, 3
         g = FLSA.igraph(FLSA.grid_graph(n1, n2))
         v = FLSA.vertices(g)
         n = length(v)
