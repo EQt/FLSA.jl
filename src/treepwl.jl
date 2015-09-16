@@ -85,6 +85,10 @@ function step_min(t, v)
         @debug "step_min($v): setting lbp of $u to $(t.lbp[u])"
         @debug "step_min($v): Going from $u to ubp ==> $(t.ubp[u])"
         u = t.ubp[u]
+        if u == t.parent[v]
+            @debug "step_min($v): finished"
+            return
+        end
         pq_u = t.nodes[u].pq
     end
     e = pop_front!(pq_u)
@@ -104,6 +108,10 @@ function step_max(t, v)
         @debug "step_max($v): setting lbp of $u to $(t.ubp[u])"
         @debug "step_max($v): Going from $u to lbp ==> $(t.lbp[u])"
         u = t.lbp[u]
+        if u == t.parent[v]
+            @debug "step_max($v): finished"
+            return
+        end
         pq_u = t.nodes[u].pq
     end
     e = pop_front!(pq_u)
