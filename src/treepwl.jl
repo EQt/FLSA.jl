@@ -172,11 +172,20 @@ function upper_event!(t, v::Int, c::Float64=+t.lam(v))
 end
 
 
-function print_min(t)
+function print_min(t, v)
+    t = deepcopy(t)
+    warn("BEGIN($v)")
+    while true
+        n = t.nodes[v]
+        e = find_min(t, v)
+        warn("AT($(e.x)):  $(e.s) ----[ $(e.offset) / $(e.slope) ] ------>  $(e.t)")
+        if !isfinite(e.x) break end
+        step_min(t, v)
+    end
 end
 
 
-function print_max(t)
+function print_max(t, v)
 end
 
 
@@ -194,9 +203,9 @@ function forward_dp_treepwl(t)
     for i in t.pre_order[end:-1:1]
         lower_event!(t, i)
         # print_tree(t)
+        # print_min(t, i)
         upper_event!(t, i)
         print_tree(t)
-        print_min(t)
-        print_max(t)
+        print_max(t, i)
     end
 end
