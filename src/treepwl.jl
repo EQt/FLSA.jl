@@ -85,16 +85,25 @@ function step_min(t, v)
             @debug "step_min($v): u == v"
             return
         end
-        u = t.ubp[u]
-        if u == t.parent[v] # don't want to steel parent's event
-            @debug "step_min($v): finished"
-            return
-        end
-        @debug "step_min($v): u=$u"
+        # test parent
+        uold = u
+        u = t.parent[u]
         pq_u = t.nodes[u].pq
-        if isempty(pq_u)
-            @debug "step_min($v): was last"
-            return
+        if !isempty(pq_u)
+            @debug "step_min($v): u=$u (parent)"
+        else
+            # test bound parent
+            u = t.ubp[uold]
+            if u == t.parent[v] # don't want to steel parent's event
+                @debug "step_min($v): finished"
+                return
+            end
+            @debug "step_min($v): u=$u"
+            pq_u = t.nodes[u].pq
+            if isempty(pq_u)
+                @debug "step_min($v): was last"
+                return
+            end
         end
         e = pop_front!(pq_u)
     else
@@ -125,16 +134,25 @@ function step_max(t, v)
             @debug "step_max($v): u == v"
             return
         end
-        u = t.lbp[u]
-        if u == t.parent[v] # don't want to steel parent's event
-            @debug "step_max($v): finished"
-            return
-        end
+        # test parent
+        uold = u
+        u = t.parent[u]
         pq_u = t.nodes[u].pq
-        @debug "step_max($v): u=$u"
-        if isempty(pq_u)
-            @debug "step_max($v): was last"
-            return
+        if !isempty(pq_u)
+            @debug "step_min($v): u=$u (parent)"
+        else
+            # test bound parent
+            u = t.lbp[uold]
+            if u == t.parent[v] # don't want to steel parent's event
+                @debug "step_min($v): finished"
+                return
+            end
+            @debug "step_min($v): u=$u"
+            pq_u = t.nodes[u].pq
+            if isempty(pq_u)
+                @debug "step_min($v): was last"
+                return
+            end
         end
         e = pop_back!(pq_u)
     else
