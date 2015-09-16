@@ -90,6 +90,32 @@ function step_min(t, v)
     push!(pq, e)
 end
 
+
+function step_max(t, v)
+    pq = t.nodes[v].pq
+    e = pop_back!(pq)
+    @debug "step_max($v):" * " "^11 * "$e (will be deleted)"
+    u = e.s
+    @debug "step_max($v): u=$u"
+    pq_u = t.nodes[u].pq
+    if isempty(pq_u)
+        if u == v
+            @debug "step_max($v): u == v"
+            return
+        end
+        u = t.lbp[u]
+        pq_u = t.nodes[u].pq
+        @debug "step_max($v): u=$u"
+        e = pop_back!(pq_u)
+    else
+        @debug "step_max($v): u=$u"
+        e = pop_back!(pq_u)
+    end
+    @debug "step_max($v): moving    $e"
+    push!(pq, e)
+end
+
+
 function step_min2(t, v)
     pq = t.nodes[v].pq
     e = pop_front!(pq)
@@ -108,7 +134,7 @@ function step_min2(t, v)
 end
 
 
-function step_max(t, v)
+function step_max_old(t, v)
     u = 6
     info("u = $u, $(t.nodes[u].pq.elements)")
     u = 5
@@ -148,9 +174,8 @@ function step_max(t, v)
     end
 end
 
-#=
-step_min(t, i) = pop_front!(t.nodes[i].pq)
-step_max(t, i) = pop_back!(t.nodes[i].pq)
+step_min2(t, i) = pop_front!(t.nodes[i].pq)
+step_max2(t, i) = pop_back!(t.nodes[i].pq)
     
 
 function prepare_node(t, v::Int)
@@ -163,10 +188,7 @@ function prepare_node(t, v::Int)
     end
     sort!(n.pq.elements, by=k->k.x)
 end
-=#
 
-function prepare_node(t, v)
-end
 
 function lower_event!(t, v::Int, c::Float64=-t.lam(v))
     p = t.parent[v]
@@ -193,6 +215,32 @@ function lower_event!(t, v::Int, c::Float64=-t.lam(v))
 end
 
 
+function lower_event2!(t, v::Int, c::Float64=-t.lam(v))
+    p = t.parent[v]
+    noffset = -t.y[v] - c - sum(map(i->t.lam(i), t.children[v]))
+    e = Event(p, v, 0.0, noffset, 1.0)
+    set_forecast!(e)
+    ek = find_min(t, v)
+    @debug "lower_event!($v): e   = $e"
+    @debug "lower_event!($v): ek  = $ek"
+    while ek.x < e.x
+        e.offset += ek.offset
+        e.slope  += ek.slope
+        e.t       = ek.t
+        set_forecast!(e)
+        @debug "lower_event!($v): e   = $e"
+        step_min2(t, v)
+        ek = find_min(t, v)
+        @debug "lower_event!($v): ek  = $ek"
+    end
+    e.offset = e.offset
+    @debug "lower_event!($v): final $e (pushed to $p)"
+    push!(t.nodes[p].pq, e)
+    t.nodes[v].lb = e.x
+end
+
+
+
 function upper_event!(t, v::Int, c::Float64=+t.lam(v))
     p = t.parent[v]
     noffset = - t.y[v] - c + sum(map(i->t.lam(i), t.children[v]))
@@ -217,6 +265,33 @@ function upper_event!(t, v::Int, c::Float64=+t.lam(v))
     push!(t.nodes[p].pq, e)
     t.nodes[v].ub = e.x
 end
+
+
+function upper_event2!(t, v::Int, c::Float64=+t.lam(v))
+    p = t.parent[v]
+    noffset = - t.y[v] - c + sum(map(i->t.lam(i), t.children[v]))
+    e = Event(v, p, 0.0, noffset, 1.0)
+    set_forecast!(e)
+    ek = find_max(t, v)
+    @debug "upper_event!($v): e   = $e"
+    @debug "upper_event!($v): ek  = $ek"
+    while ek.x > e.x
+        e.offset -= ek.offset
+        e.slope  -= ek.slope
+        e.s       = ek.s
+        set_forecast!(e)
+        @debug "upper_event!($v): e   = $e"
+        step_max2(t, v)
+        ek = find_max(t, v)
+        @debug "upper_event!($v): ek  = $ek"
+    end
+    e.slope  = -e.slope
+    e.offset = -e.offset
+    @debug "upper_event!($v): final $e (pushed to $p)"
+    push!(t.nodes[p].pq, e)
+    t.nodes[v].ub = e.x
+end
+
 
 
 function print_min(t, v)
@@ -247,13 +322,17 @@ end
 
 
 function forward_dp_treepwl(t)
+    t2 = deepcopy(t)
     for i in t.pre_order[end:-1:1]
-        prepare_node(t, i)
+        prepare_node(t2, i)
         lower_event!(t, i)
+        lower_event2!(t, i)
         print_tree(t)
+        print_tree(t2)
         # print_min(t, i)
         upper_event!(t, i)
+        upper_event2!(t2, i)
         print_tree(t)
-        print_max(t, i)
+        print_tree(t2)
     end
 end
