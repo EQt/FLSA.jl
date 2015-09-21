@@ -1,5 +1,5 @@
 """L2 norm squared"""
-norm2(x) = (x' * x)[1]
+norm2(x) = dot(x, x)
 
 """The objective function value"""
 flsa(x, y, D, λ) = 0.5 * norm2(y-x) + λ*norm(D*x, 1)
