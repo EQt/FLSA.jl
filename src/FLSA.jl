@@ -34,7 +34,7 @@ include("admm.jl")
 include("fista.jl")
 include("pwl.jl")
 include("tree.jl")
-include("pdeque.jl")
+include("depq.jl")
 include("treepwl.jl")
 include("dynamic.jl")
 
