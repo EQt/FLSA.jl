@@ -95,3 +95,11 @@ function dfs_dual_tree(v, alpha, t, x, y)
         y[v] += sign(c-v)*alpha[ie]
     end
 end
+
+
+"""Record what is happening, when a knot of the PWL is hit"""
+immutable Event
+    x::Float64      # position
+    offset::Float64 # delta offset
+    slope::Float64  # delta slope
+end
