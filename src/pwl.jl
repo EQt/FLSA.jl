@@ -1,5 +1,3 @@
-using Compat
-
 INF = 100
 EPS = 1e-9
 

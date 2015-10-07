@@ -1,5 +1,7 @@
 module FLSA
+
 using Graphs
+using Compat.findlast
 
 export num_vertices,
        igraph,
