@@ -1,6 +1,7 @@
 """Naive implementation of the dynamic programming algorithm on trees."""
 
 
+"""Contains all information for the calculation"""
 type DPVisitor <: AbstractGraphVisitor
     y::Vector{Float64}
     lb::Vector{Float64}
@@ -15,7 +16,7 @@ type DPVisitor <: AbstractGraphVisitor
     end
 end
 
-
+"""For testing the graph traversal mechanism"""
 function Graphs.close_vertex!(vis::DPVisitor, v)
     println("processing $v")
 end
