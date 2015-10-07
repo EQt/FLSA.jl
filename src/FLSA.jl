@@ -33,11 +33,11 @@ include("incidence_matrix.jl")
 include("admm.jl")
 include("fista.jl")
 include("pwl.jl")
+include("dynamic.jl")
+include("line.jl")
 include("tree.jl")
 include("deque.jl")
 include("depq.jl")
-include("treepwl.jl")
-include("dynamic.jl")
 
 
 end # module
