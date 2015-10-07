@@ -1,5 +1,4 @@
 using Base.Test
-using FactCheck
 using FLSA
 using Graphs
 
