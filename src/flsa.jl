@@ -1,6 +1,6 @@
 """More commonly used name"""
 clip(x::Float64, lo::Float64, hi::Float64) = Base.clamp(x, lo, hi)
-clip(x::Vector{Float64}, lo:Float64, hi::Float64) = Base.clamp(x, lo, hi)
+clip(x::Vector{Float64}, lo::Float64, hi::Float64) = Base.clamp(x, lo, hi)
 
 
 """L2 norm squared"""
