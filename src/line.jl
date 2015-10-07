@@ -1,13 +1,13 @@
 """Line algorithms"""
 
-function dp_line_naive(y::Vector{Float64}, lambda::Float64)
+function dp_line_naive(y::Vector{Float64}, λ::Float64)
     n = length(y)
     lb, ub, x = fill(Inf, n), fill(-Inf, n), zeros(n)
     q(i) = PWL(0.0, -y[1]; slope=1.0)
     df = q(1)
     for i = 2:n
-        lb[i-1] = find_x(df, -lambda)
-        ub[i-1] = find_x(df, +lambda)
+        lb[i-1] = find_x(df, -λ)
+        ub[i-1] = find_x(df, +λ)
         df = q(i) + clip(df, lb[i-1], ub[i-1])
     end
 
