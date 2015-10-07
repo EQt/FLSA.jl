@@ -8,8 +8,13 @@ num_rows(g::GridGraph) = max(findfirst(x -> x == (1,2), g.vertices)-1, 1)
 """Number of columns of the grid"""
 num_columns(g::GridGraph) = div(num_vertices(g), num_rows(g))
 
-"""Specialized method for GridGraphs"""
-Graphs.vertex_index(v::GridNode, g::GridGraph) = num_rows(g) * (v[2]-1) + v[1]
+if !isdefined(current_module(), :vertex_index)
+    # avoid warning; see answer
+    # https://github.com/JuliaLang/julia/issues/7860#issuecomment-51340412
+
+    """Specialized method for GridGraphs"""
+    Graphs.vertex_index(v::GridNode, g::GridGraph) = num_rows(g) * (v[2]-1) + v[1]
+end
 
 """Vector of nodes of an n1×n2 grid graph"""
 function grid_nodes(n1::Integer, n2::Integer)

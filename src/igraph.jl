@@ -16,5 +16,10 @@ function igraph{V,E}(g::AbstractGraph{V,E},
     edgelist(collect(1:num_vertices(g)), ed; is_directed=false)
 end
 
-"""Fast implementation of vertex_index"""
-Graphs.vertex_index(v::Int, g::IGraph) = v
+if !isdefined(current_module(), :vertex_index)
+    # avoid warning; see answer
+    # https://github.com/JuliaLang/julia/issues/7860#issuecomment-51340412
+
+    """Fast implementation of vertex_index"""
+    Graphs.vertex_index(v::Int, g::IGraph) = v
+end
