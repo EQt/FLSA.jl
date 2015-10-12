@@ -17,6 +17,7 @@ function dp_line_naive(y::Vector{Float64}, λ::Float64)
     return db_line_backtrace(xn, lb, ub)
 end
 
+
 function dp_line_backtrace(xn, lb, ub)
     n = length(lb)
     x = zeros(n)
@@ -26,3 +27,13 @@ function dp_line_backtrace(xn, lb, ub)
     end
     return x
 end
+
+
+
+
+function dp_line(y::Vector{Float64}, λ::Float64)
+    n = length(y)
+    lb, ub = fill(Inf, n), fill(-Inf, n)
+    
+    return db_line_backtrace(xn, lb, ub)
+end 
