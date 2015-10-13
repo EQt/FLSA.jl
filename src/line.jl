@@ -29,11 +29,23 @@ function dp_line_backtrace(xn, lb, ub)
 end
 
 
-
+immutable Event
+    x::Float64      # position
+    offset::Float64 # delta offset
+    slope::Float64  # delta slope
+end
 
 function dp_line(y::Vector{Float64}, λ::Float64)
     n = length(y)
     lb, ub = fill(Inf, n), fill(-Inf, n)
-    
+    pq = Deque{Event}()
+    push_front!(pq, Event(y[1]-λ, o1, +1.0))
+    push_back!(pq,  Event(y[1]+λ, o2, -1.0))
+    for i = 2:n
+        lb[i-1] = find_min(pq, -λ)
+        ub[i-1] = find_max(pq, +λ)
+    end
+
+    xn = find_min(pq, 0)
     return db_line_backtrace(xn, lb, ub)
-end 
+end

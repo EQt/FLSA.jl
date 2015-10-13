@@ -9,4 +9,10 @@ facts("3 line knot") do
     @fact x --> roughly([2.0, 2.0, 2.5])
 end
 
+facts("line: 3 knots, fast") do
+    y = [1.0, 2.0, 3.5]
+    x = FLSA.dp_line(y, 1.0)
+    @fact x --> roughly([2.0, 2.0, 2.5])
+end    
+
 end
