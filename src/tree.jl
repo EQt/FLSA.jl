@@ -57,3 +57,6 @@ function init_tree(t::TreeSubGraph)
     end
     t
 end
+
+
+pre_order{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[end:-1:1]
