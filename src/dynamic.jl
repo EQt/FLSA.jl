@@ -24,34 +24,31 @@ end
 
 """After computing the bounds [lb, ub] for each node, compute solution x
    by clipping each edge, i.e. backtracing from root to children"""
-function backtrace_dp_tree(vis, iroot, t, y)
-    x_root = find_x(vis.df[iroot], 0)
-    x = zeros(y)
+function backtrace_dp_tree(x_root, iroot, t, n, ub, lb)
+    x = zeros(n)
     x[iroot] = x_root
-    for v in t.dfs_order[2:end]
-        x[v] = clamp(x[t.parent[v]], vis.lb[v], vis.ub[v])
+    for v in post_order(t)
+        x[v] = clamp(x[t.parent[v]], lb[v], ub[v])
     end
     return x
 end
 
 """Compute x=FLSA(y, lambda) on a a (sub)tree t, naive PWL implementation"""
-function dp_tree_naive{V,E}(y::Vector{Float64},
-                            lambda::Float64,
-                            t::TreeSubGraph{V,E},
-                            vis::DPVisitor = DPVisitor(y))
-    for i in 1:num_vertices(t.graph)
-        vis.df[i] = PWL(0, -vis.y[i]; slope=1.0)
-    end
-    for c in t.dfs_order[end:-1:1]
+function dp_tree_naive{V,E}(y::Vector{Float64}, λ::Float64, t::TreeSubGraph{V,E})
+    n = length(y)
+    df = [PWL(0, -y[i]; slope=1.0) for i=1:n]
+    lb, ub = zeros(n), zeros(n)
+    for c in pre_order(t)
         v = t.parent[c]
-        vis.lb[c] = find_x(vis.df[c], -lambda)
-        vis.ub[c] = find_x(vis.df[c], +lambda)
-        vis.df[c] = clip(vis.df[c], vis.lb[c], vis.ub[c])
-        vis.df[v] += vis.df[c]
+        lb[c] = find_x(df[c], -λ)
+        ub[c] = find_x(df[c], +λ)
+        df[c] = clip(df[c], lb[c], ub[c])
+        df[v] += df[c]
     end
 
     local iroot = vertex_index(t.root, t.graph)
-    backtrace_dp_tree(vis, iroot, t, y)
+    x_root = find_x(vis.df[iroot], 0)
+    backtrace_dp_tree(x_root, iroot, t, n, lb, ub)
 end
 
 
