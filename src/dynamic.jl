@@ -40,8 +40,7 @@ function dp_tree_naive{V,E}(y::Vector{Float64},
                             t::TreeSubGraph{V,E},
                             vis::DPVisitor = DPVisitor(y))
     for i in 1:num_vertices(t.graph)
-        vis.df[i] = PWL([Knot(-INF, -INF - vis.y[i]),
-                         Knot(+INF, +INF - vis.y[i])])
+        vis.df[i] = PWL(0, -vis.y[i]; slope=1.0)
     end
     for c in t.dfs_order[end:-1:1]
         v = t.parent[c]
