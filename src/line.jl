@@ -28,13 +28,6 @@ function dp_line_backtrace(xn, lb, ub)
 end
 
 
-immutable Event
-    x::Float64      # position
-    offset::Float64 # delta offset
-    slope::Float64  # delta slope
-end
-
-
 function dp_line(y::Vector{Float64}, λ::Float64)
     n = length(y)
     lb, ub = fill(Inf, n), fill(-Inf, n)
