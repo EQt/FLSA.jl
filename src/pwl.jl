@@ -46,7 +46,7 @@ function call(f::PWL, x::Number)
 end
 
 function +(f::PWL, g::PWL)
-    knots = deepcopy([f.knots, g.knots])
+    knots = deepcopy([f.knots; g.knots])
     sort!(knots, by=k -> k.x)
     x_old = -Inf
     off = 0
@@ -71,10 +71,10 @@ end
 function clip(f::PWL, x_lower::Number, x_upper::Number)
     i0 = findfirst(k -> k.x >= x_lower, f.knots)
     i1 = findlast( k -> k.x <= x_upper, f.knots)
-    knots = [Knot(x_lower, call(f, x_lower)),
-             f.knots[i0:i1],
+    knots = [Knot(x_lower, call(f, x_lower));
+             f.knots[i0:i1];
              Knot(x_upper, call(f, x_upper))]
-    PWL([Knot(-INF, call(f,x_lower)), knots, Knot(+INF, call(f,x_upper))])
+    PWL([Knot(-INF, call(f,x_lower)); knots; Knot(+INF, call(f,x_upper))])
 end
 
 
