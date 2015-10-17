@@ -40,7 +40,7 @@ function incidence_matrix{T<:Number}(g::AbstractGraph, ::Type{T} = Int)
                 idx += 1
             end
         end
-        assert (m == idx)
+        assert(m == idx)
     else
         error("g does not implement proper interface.")
     end
