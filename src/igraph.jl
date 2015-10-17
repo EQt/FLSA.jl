@@ -1,4 +1,4 @@
-"""Integer Graphs to avoid slow vertex_index calls"""
+### Integer Graphs to avoid slow vertex_index calls
 
 import Graphs.IEdge
 
