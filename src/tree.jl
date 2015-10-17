@@ -9,7 +9,7 @@ type TreeSubGraph{V,E}
     parent::Vector{Int}
     children::Vector{Vector{Int}}
     dfs_order::Vector{Int}
-    edge_index::Dict{@compat Tuple{Int,Int},Int}
+    edge_index::Dict{@compat(Tuple{Int,Int}),Int}
 end
 
 typealias ITreeSubGraph TreeSubGraph{Int,IEdge}
