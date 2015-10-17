@@ -1,4 +1,4 @@
-"""Some algorithms for tree (sub)graphs"""
+### Some algorithms for tree (sub)graphs
 
 using Graphs
 
