@@ -1,5 +1,3 @@
-"""Double-ended priority queue: Implementation based on sorted arrays"""
-
 import Base.push!
 import Base.start
 import Base.next
@@ -7,6 +5,7 @@ import Base.done
 import Base.length
 import Base.isempty
 
+"""Double-ended priority queue: Implementation based on sorted arrays"""
 type DePQ{E}
     elements::Vector{E}
     by::Function
