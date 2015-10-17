@@ -4,9 +4,9 @@ macro logitfista()
     return quote
         if verbose
             if !haskey(logger, "flsa")
-                logger["flsa"] = {}
-                logger["time"] = {}
-                logger["gap"] = {}
+                logger["flsa"] = []
+                logger["time"] = []
+                logger["gap"]  = []
             end
             x = y - D'*α
             push!(logger["flsa"], flsa(x, y, D, λ))

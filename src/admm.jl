@@ -36,9 +36,9 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
         total += time
         if verbose
             if !haskey(logger, "flsa")
-                logger["time"] = {}
-                logger["flsa"] = {}
-                logger["ɛ_CG"] = {}
+                logger["time"] = []
+                logger["flsa"] = []
+                logger["ɛ_CG"] = []
             end
             push!(logger["flsa"], flsa(x, y, D, λ))
             push!(logger["time"], time)
