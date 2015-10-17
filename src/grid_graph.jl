@@ -1,4 +1,4 @@
-typealias GridNode (Int, Int)
+typealias GridNode Tuple{Int, Int}
 typealias GridEdge Graphs.Edge{GridNode}
 typealias GridGraph EdgeList{GridNode, GridEdge}
 
