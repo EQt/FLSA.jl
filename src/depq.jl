@@ -1,9 +1,4 @@
-import Base.push!
-import Base.start
-import Base.next
-import Base.done
-import Base.length
-import Base.isempty
+import Base: push!, start, next, done, length, isempty
 
 """Double-ended priority queue: Implementation based on sorted arrays"""
 type DePQ{E}
