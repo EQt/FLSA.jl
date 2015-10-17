@@ -1,4 +1,4 @@
-typealias GridNode Tuple{Int, Int}
+typealias GridNode @compat Tuple{Int, Int}
 typealias GridEdge Graphs.Edge{GridNode}
 typealias GridGraph EdgeList{GridNode, GridEdge}
 
