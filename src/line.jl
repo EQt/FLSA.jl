@@ -27,7 +27,7 @@ function dp_line_backtrace(xn, lb, ub)
     return x
 end
 
-
+"""FLSA on a line, computed by Johnson's fast *dynamic programming* algorithm"""
 function dp_line(y::Vector{Float64}, λ::Float64)
     n = length(y)
     lb, ub = fill(Inf, n), fill(-Inf, n)
@@ -38,10 +38,34 @@ function dp_line(y::Vector{Float64}, λ::Float64)
     find_min(pq, x) = x # TODO
     find_max(pq, x) = x # TODO
     for i = 2:n
-        lb[i-1] = find_min(pq, -λ)
-        ub[i-1] = find_max(pq, +λ)
+        lb[i-1] = min_event(pq, -λ)
+        ub[i-1] = max_event(pq, +λ)
     end
 
     xn = find_min(pq, 0)
     return dp_line_backtrace(xn, lb, ub)
+end
+
+
+"""Position where the line with given `offset` and `slope` will have value `c`"""
+@inline find_x(offset, slope, c) = (c - offset)/slope
+
+"""Extract position of minimal `x` or `∞` if none exists"""
+@inline min_x{Q}(pq::Q) = try front(pq).x catch throw(∞) end
+
+"""Compute a new lower bound event for node `v`"""
+function min_event(pq, v::Int, c::Float64, y)
+    local slope = 1.0
+    local offset = y[v] - c
+    local x = find_x(offset, slope, c)
+    xk = min_x(pq)
+    while x > xk
+        e = pop_front!(pq)
+        offset += e.offset
+        slope  += e.slope
+        xk = min_x(pq)
+        x = forecast(offset, slope, c)
+    end
+    push_front!(pq, Event(x, offset, slope))
+    return x
 end
