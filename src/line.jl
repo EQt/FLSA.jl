@@ -1,4 +1,4 @@
-"""Line algorithms"""
+# Line algorithms
 
 function dp_line_naive(y::Vector{Float64}, λ::Float64)
     n = length(y)
