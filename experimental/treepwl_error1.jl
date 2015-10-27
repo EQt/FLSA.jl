@@ -1,4 +1,5 @@
-"""Piecewise linear function over a tree"""
+# Piecewise linear function over a tree
+# As far as I know, this implementation works, but has not the optimal runtime.
 
 type Event
     slope::Float64  # change of the slope, for lb, slope > 0, for ub, slope < 0
