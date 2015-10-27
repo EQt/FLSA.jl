@@ -1,7 +1,7 @@
-"""
-Faster implementation
-~~~~~~~~~~~~~~~~~~~~~
-"""
+#
+# Faster implementation
+# ~~~~~~~~~~~~~~~~~~~~~
+#
 
 """Record what is happening, when a knot of the PWL is hit"""
 type Event
