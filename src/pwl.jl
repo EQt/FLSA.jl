@@ -67,7 +67,7 @@ end
 -(f::PWL) = PWL([Knot(k.x, -k.y) for k in f.knots])
 -(f::PWL, g::PWL) = f + (-g)
 
-"Return clipped f to [x_lower, x_upper]"
+"""Return clipped f to x-range [x_lower, x_upper] (unlike clip in text)"""
 function clip(f::PWL, x_lower::Number, x_upper::Number)
     i0 = findfirst(k -> k.x >= x_lower, f.knots)
     i1 = findlast( k -> k.x <= x_upper, f.knots)
