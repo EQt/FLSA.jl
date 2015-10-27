@@ -2,6 +2,8 @@
 # Faster implementation
 # ~~~~~~~~~~~~~~~~~~~~~
 #
+# • Does not work (wrong idea about merging tree).
+#
 
 """Record what is happening, when a knot of the PWL is hit"""
 type Event
