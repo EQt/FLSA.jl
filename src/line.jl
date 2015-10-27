@@ -1,5 +1,6 @@
 # Line algorithms
 
+"""Naive implementation (based on PWLs) for path graphs, i.e. 1d fused LASSO"""
 function dp_line_naive(y::Vector{Float64}, λ::Float64)
     n = length(y)
     lb, ub = fill(Inf, n), fill(-Inf, n)
@@ -29,6 +30,7 @@ end
 
 """FLSA on a line, computed by Johnson's fast *dynamic programming* algorithm"""
 function dp_line(y::Vector{Float64}, λ::Float64)
+    # TODO: compare to file ../experimental/treepwl_error1.jl
     n = length(y)
     lb, ub = fill(Inf, n), fill(-Inf, n)
     pq = Deque{Event}()
