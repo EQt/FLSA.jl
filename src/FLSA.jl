@@ -25,7 +25,8 @@ export num_vertices,
        max_knot!,
        PWLNode,
        PWLTree,
-       PDeQue
+       PDeQue,
+       inplace
 
 include("debug.jl")
 include("flsa.jl")
@@ -40,6 +41,6 @@ include("dynamic.jl")
 include("line.jl")
 include("deque.jl")
 include("depq.jl")
-
+include("inplace.jl")
 
 end # module
