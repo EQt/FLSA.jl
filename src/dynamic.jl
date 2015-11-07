@@ -91,6 +91,7 @@ function dual_tree(y::Vector{Float64}, tree)
         alpha[ie] = sign(v-c)*(x[c] - y[c])
         y[v] += sign(c-v)*alpha[ie]
     end
+    return alpha
 end
 
 
