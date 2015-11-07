@@ -74,12 +74,23 @@ end
 
 
 """Compute the dual solution to x on a tree (sub)graph"""
-function dual_tree(y::Vector{Float64}, x::Vector{Float64}, t::ITreeSubGraph)
+function dual_tree_rec(y::Vector{Float64}, x::Vector{Float64}, t::ITreeSubGraph)
     local m = length(t.edges)
     alpha = zeros(length(t.edges))
     local iroot = vertex_index(t.root, t.graph)
     dfs_dual_tree(iroot, alpha, t, x,  deepcopy(y))
     return alpha
+end
+
+
+function dual_tree(y::Vector{Float64}, tree)
+    alpha = zeros(length(tree.edges))
+    for c in postorder(tree)
+        v = tree.parent[v]
+        ie = t.edge_index[(min(c,v), max(c,v))]
+        alpha[ie] = sign(v-c)*(x[c] - y[c])
+        y[v] += sign(c-v)*alpha[ie]
+    end
 end
 
 
