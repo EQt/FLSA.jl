@@ -84,14 +84,14 @@ end
 
 
 function dual_tree(y::Vector{Float64}, tree)
-    alpha = zeros(length(tree.edges))
+    α = zeros(length(tree.edges))
     for c in postorder(tree)
-        v = tree.parent[v]
-        ie = t.edge_index[(min(c,v), max(c,v))]
-        alpha[ie] = sign(v-c)*(x[c] - y[c])
-        y[v] += sign(c-v)*alpha[ie]
+        v = tree.parent[c]
+        e = t.edge_index[(min(c,v), max(c,v))]
+        α[e] = sign(v-c)*(x[c] - y[c])
+        y[v] += sign(c-v)*α[e]
     end
-    return alpha
+    return α
 end
 
 
