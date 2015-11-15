@@ -90,8 +90,8 @@ function dual_tree(y::Vector{Float64}, tree)
     for c in postorder(tree)
         v = tree.parent[c]
         e = tree.edge_index[E(c,v)]
-        α[e] = sign(v-c)*y[c]
-        y[v] += sign(c-v)*α[e]
+        α[e]  = sign(v-c) * y[c]
+        y[v] += sign(c-v) * α[e]
     end
     return α
 end
