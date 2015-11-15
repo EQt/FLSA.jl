@@ -83,12 +83,14 @@ function dual_tree_rec(y::Vector{Float64}, x::Vector{Float64}, t::ITreeSubGraph)
 end
 
 
+E(c,v) = (min(c,v), max(c,v))
+
 function dual_tree(y::Vector{Float64}, tree)
     α = zeros(length(tree.edges))
     for c in postorder(tree)
         v = tree.parent[c]
-        e = t.edge_index[(min(c,v), max(c,v))]
-        α[e] = sign(v-c)*(x[c] - y[c])
+        e = tree.edge_index[E(c,v)]
+        α[e] = sign(v-c)*y[c]
         y[v] += sign(c-v)*α[e]
     end
     return α
