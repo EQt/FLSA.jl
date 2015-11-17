@@ -19,6 +19,7 @@ TODO: consider storing it as a list of (x_i, slope_i).
 type PWL
     knots::Vector{Knot}
     PWL(x::Float64, y::Float64; slope::Float64 = 1.0) = new([Knot(x-INF,y-INF), Knot(x+INF, y+INF)])
+    PWL(y::Float64; slope::Float64 = 1.0) = PWL(0.0, y; slope=slope)
     PWL(ks::Vector{Knot}) = new(ks)
 end
 
