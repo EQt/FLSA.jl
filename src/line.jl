@@ -27,11 +27,11 @@ function dp_line_backtrace(xn, lb, ub)
 end
 
 """FLSA on a line, computed by Johnson's fast *dynamic programming* algorithm"""
-function dp_line(y::Vector{Float64}, λ::Float64)
+function dp_line(y, λ, μ)
     # TODO: compare to file ../experimental/treepwl_error1.jl
     n = length(y)
     lb, ub = fill(Inf, n), fill(-Inf, n)
-    pq = Deque{Event}()
+    pq = DeQue{Event}()
     o1, o2 = 0.0, 0.0 # TODO
     push_front!(pq, Event(y[1]-λ, o1, +1.0))
     push_back!(pq,  Event(y[1]+λ, o2, -1.0))
