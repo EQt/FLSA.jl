@@ -31,7 +31,7 @@ p4 = p3 + constid
 @test find_x(p4,   20) ==   20
 @test find_x(p4, -1.0) == -0.5
 
-con = clip(constid, -1, 1)
+con = clip_x(constid, -1, 1)
 @test call(con, -2) == -1
 @test call(con, 0.5) == 0.5
 @test call(con, 13) == 1
