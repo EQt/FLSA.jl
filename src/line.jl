@@ -5,13 +5,13 @@ function dp_line_naive(y, λ, μ)
     n = length(y)
     lb, ub = fill(∞, n), fill(-∞, n)
     q(i) = PWL(0.0, -y[i]; slope=μ(i))
-    df = q(1)
+    ∂f = q(1)
     for i = 2:n
-        lb[i-1] = find_x(df, -λ(i))
-        ub[i-1] = find_x(df, +λ(i))
-        df = q(i) + clip(df, -λ(i), +λ(i))
+        lb[i-1] = find_x(∂f, -λ(i))
+        ub[i-1] = find_x(∂f, +λ(i))
+        ∂f = q(i) + clip(∂f, -λ(i), +λ(i))
     end
-    xn = find_x(df, 0)
+    xn = find_x(∂f, 0)
     return dp_line_backtrace(xn, lb, ub)
 end
 
