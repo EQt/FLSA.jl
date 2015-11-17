@@ -57,7 +57,7 @@ end
 @inline min_x{Q}(pq::Q) = try front(pq).x catch throw(∞) end
 
 """Compute a new lower bound event for node `v`"""
-function min_event(pq, v::Int, c::Float64, y)
+function min_event{Q}(pq::Q, v::Node, c::ℝ, y::Vector{ℝ})
     local slope = 1.0
     local offset = y[v] - c
     local x = find_x(offset, slope, c)
