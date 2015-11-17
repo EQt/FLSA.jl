@@ -68,7 +68,7 @@ end
 -(f::PWL, g::PWL) = f + (-g)
 
 """Return clipped f to x-range [x_lower, x_upper] (unlike clip in text)"""
-function clip(f::PWL, x_lower::Number, x_upper::Number)
+function clip_x(f::PWL, x_lower::Number, x_upper::Number)
     i0 = findfirst(k -> k.x >= x_lower, f.knots)
     i1 = findlast( k -> k.x <= x_upper, f.knots)
     knots = [Knot(x_lower, call(f, x_lower));
@@ -76,6 +76,10 @@ function clip(f::PWL, x_lower::Number, x_upper::Number)
              Knot(x_upper, call(f, x_upper))]
     PWL([Knot(-INF, call(f,x_lower)); knots; Knot(+INF, call(f,x_upper))])
 end
+
+
+"""Return clipped f to range [lower, upper]"""
+clip(f::PWL, lower::Number, upper::Number) = clip(f, find_x(f, lower), find_x(f, upper))
 
 
 """find x s.t. PWL(x)=y (assumes that f is strictly increasing)"""
