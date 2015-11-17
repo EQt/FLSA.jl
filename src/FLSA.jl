@@ -3,6 +3,8 @@ module FLSA
 using Graphs
 using Compat: findlast, @compat
 
+const ∞ = Inf
+
 export num_vertices,
        igraph,
        grid_graph,
