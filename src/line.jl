@@ -16,6 +16,10 @@ function dp_line_naive(y, λ, μ)
 end
 
 
+"""For convinience"""
+dp_line_naive(y::Vector{Float64}, λ::Float64) = dp_line_naive(y, i->λ, i->1.0)
+
+
 function dp_line_backtrace(xn, lb, ub)
     n = length(lb)
     x = zeros(n)
