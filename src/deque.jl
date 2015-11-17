@@ -1,6 +1,6 @@
 using DataStructures.Deque
 
-typealias DeQue DataStructures.Deque
+typealias DeQue Deque
 
 """More convinient way of denoting the functions"""
 pop_front!{T}(q::DeQue{T}) = shift!(q)
