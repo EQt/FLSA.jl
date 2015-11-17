@@ -4,6 +4,8 @@ using Graphs
 using Compat: findlast, @compat
 
 const ∞ = Inf
+typealias ℝ Float64
+typealias Node Int
 
 export num_vertices,
        igraph,
