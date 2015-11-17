@@ -38,10 +38,9 @@ function dp_line(y, λ, μ)
     find_min(pq, x) = x # TODO
     find_max(pq, x) = x # TODO
     for i = 2:n
-        lb[i-1] = min_event(pq, -λ)
-        ub[i-1] = max_event(pq, +λ)
+        lb[i-1] = min_event(pq, -λ(i))
+        ub[i-1] = max_event(pq, +λ(i))
     end
-
     xn = find_min(pq, 0)
     return dp_line_backtrace(xn, lb, ub)
 end
