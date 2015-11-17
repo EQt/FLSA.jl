@@ -28,12 +28,12 @@ function backtrace_dp_tree(x_root, iroot, t, n, ub, lb)
     x = zeros(n)
     x[iroot] = x_root
     for v in post_order(t)
-        x[v] = clamp(x[t.parent[v]], lb[v], ub[v])
+        x[v] = clip(x[t.parent[v]], lb[v], ub[v])
     end
     return x
 end
 
-"""Compute x=FLSA(y, lambda) on a a (sub)tree t, naive PWL implementation"""
+"""Compute x=FLSA(y, λ) on a a (sub)tree t, naive PWL implementation"""
 function dp_tree_naive{V,E}(y::Vector{Float64}, λ::Float64, t::TreeSubGraph{V,E})
     n = length(y)
     df = [PWL(0, -y[i]; slope=1.0) for i=1:n]
