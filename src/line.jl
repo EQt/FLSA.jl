@@ -34,11 +34,11 @@ end
 function dp_line(y, λ, μ)
     # TODO: compare to file ../experimental/treepwl_error1.jl
     n = length(y)
-    lb, ub = fill(Inf, n), fill(-Inf, n)
+    lb, ub = fill(∞, n), fill(-∞, n)
     pq = DeQue{Event}()
     o1, o2 = 0.0, 0.0 # TODO
-    push_front!(pq, Event(y[1]-λ, o1, +1.0))
-    push_back!(pq,  Event(y[1]+λ, o2, -1.0))
+    push_front!(pq, Event(y[1]-λ(1), o1, +μ(1)))
+    push_back!(pq,  Event(y[1]+λ(1), o2, -μ(1)))
     find_min(pq, x) = x # TODO
     find_max(pq, x) = x # TODO
     for i = 2:n
@@ -72,3 +72,7 @@ function min_event(pq, v::Int, c::Float64, y)
     push_front!(pq, Event(x, offset, slope))
     return x
 end
+
+
+"""For convinience..."""
+dp_line(y::Vector{Float64}, λ::Float64) = dp_line(y, i->λ, i->1.0)
