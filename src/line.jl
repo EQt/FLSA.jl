@@ -9,7 +9,7 @@ function dp_line_naive(y, λ, μ)
     for i = 2:n
         lb[i-1] = find_x(df, -λ(i))
         ub[i-1] = find_x(df, +λ(i))
-        df = q(i) + clip(df, lb[i-1], ub[i-1])
+        df = q(i) + clip(df, -λ(i), +λ(i))
     end
     xn = find_x(df, 0)
     return dp_line_backtrace(xn, lb, ub)
