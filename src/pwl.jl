@@ -79,7 +79,7 @@ end
 
 
 """Return clipped f to range [lower, upper]"""
-clip(f::PWL, lower::Number, upper::Number) = clip(f, find_x(f, lower), find_x(f, upper))
+clip(f::PWL, lower::Number, upper::Number) = clip_x(f, find_x(f, lower), find_x(f, upper))
 
 
 """find x s.t. PWL(x)=y (assumes that f is strictly increasing)"""
