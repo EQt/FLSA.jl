@@ -1,18 +1,16 @@
 # Line algorithms
 
 """Naive implementation (based on PWLs) for path graphs, i.e. 1d fused LASSO"""
-function dp_line_naive(y::Vector{Float64}, λ::Float64)
+function dp_line_naive(y, λ, μ)
     n = length(y)
-    lb, ub = fill(Inf, n), fill(-Inf, n)
-
-    q(i) = PWL(0.0, -y[i]; slope=1.0)
+    lb, ub = fill(∞, n), fill(-∞, n)
+    q(i) = PWL(0.0, -y[i]; slope=μ(i))
     df = q(1)
     for i = 2:n
-        lb[i-1] = find_x(df, -λ)
-        ub[i-1] = find_x(df, +λ)
+        lb[i-1] = find_x(df, -λ(i))
+        ub[i-1] = find_x(df, +λ(i))
         df = q(i) + clip(df, lb[i-1], ub[i-1])
     end
-
     xn = find_x(df, 0)
     return dp_line_backtrace(xn, lb, ub)
 end
