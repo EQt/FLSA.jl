@@ -1,10 +1,12 @@
 using DataStructures.Deque
 
+typealias DeQue DataStructures.Deque
+
 """More convinient way of denoting the functions"""
-pop_front!{T}(q::Deque{T}) = shift!(q)
+pop_front!{T}(q::DeQue{T}) = shift!(q)
 
-pop_back!{T}(q::Deque{T}) = pop!(q)
+pop_back!{T}(q::DeQue{T}) = pop!(q)
 
-push_front!{T}(q::Deque{T}, x::T) = unshift!(q, x)
+push_front!{T}(q::DeQue{T}, x::T) = unshift!(q, x)
 
-push_back!{T}(q::Deque{T}, x::T) = push!(q, x)
+push_back!{T}(q::DeQue{T}, x::T) = push!(q, x)
