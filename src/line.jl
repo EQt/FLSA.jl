@@ -36,11 +36,13 @@ function dp_line(y, λ, µ)
     n = length(y)
     lb, ub = fill(∞, n), fill(-∞, n)
     pq = DeQue{Event}()
+    init_up(i)   = LineSegment(µ(i), -µ(i)*y[i] -λ(i))
+    init_down(i) = LineSegment(µ(i), -µ(i)*y[i] +λ(i))
     for i = 1:n
-        lb[i] = clip_up(pq,   LineSegment(µ(i), -µ(i)*y[i] -λ(i)), -λ(i))
-        ub[i] = clip_down(pq, LineSegment(µ(i), -µ(i)*y[i] +λ(i)), +λ(i))
+        lb[i] = clip_up(pq,   init_up(i),   -λ(i))
+        ub[i] = clip_down(pq, init_down(i), +λ(i))
     end
-    xn = clip_up(pq, LineSegment(1.0, 0.0), 0.0) # TODO check
+    xn = clip_up(pq, init_up(n), 0.0)
     return dp_line_backtrace(xn, lb, ub)
 end
 
@@ -59,8 +61,23 @@ function clip_up{Q}(pq::Q, l::LineSegment, t::ℝ)
 end
 
 
+"""Same as `clip_up` just everything reversed"""
+function clip_up{Q}(pq::Q, l::LineSegment, t::ℝ)
+    x = find_x(t, l)
+    while x ≤ max_x(pq)
+        e = pop_back!(pq)
+        l.offset -= e.offset
+        l.slope  -= e.slope
+        x = find_x(t, l)
+    end
+    push_back!(pq, Event(x, l))
+    return x
+end
+
+
 """Extract position of minimal `x` or `∞` if none exists"""
-@inline min_x{Q}(pq::Q) = try front(pq).x catch throw(∞) end
+@inline min_x{Q}(pq::Q) = try front(pq).x catch throw(+∞) end
+@inline max_x{Q}(pq::Q) = try back(pq).x  catch throw(-∞) end
 
 """Compute a new lower bound event for node `v`"""
 function min_event{Q}(pq::Q, v::Node, c::ℝ, y::Vector{ℝ})
