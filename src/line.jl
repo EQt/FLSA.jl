@@ -30,24 +30,34 @@ function dp_line_backtrace(xn, lb, ub)
     return x
 end
 
+
 """FLSA on a line, computed by Johnson's fast *dynamic programming* algorithm"""
-function dp_line(y, λ, μ)
+function dp_line(y, λ, µ)
     n = length(y)
     lb, ub = fill(∞, n), fill(-∞, n)
     pq = DeQue{Event}()
-    push_front!(pq, Event(y[1]-λ(1), λ(1) - μ(1)*y[1], +μ(1)))
-    push_back! (pq, Event(y[1]+λ(1), λ(1) + μ(1)*y[1], -μ(1)))
-    for i = 2:n
-        lb[i-1] = min_event(pq, -λ(i))
-        ub[i-1] = max_event(pq, +λ(i))
+    for i = 1:n
+        lb[i] = clip_up(pq,   LineSegment(µ(i), -µ(i)*y[i] -λ(i)), -λ(i))
+        ub[i] = clip_down(pq, LineSegment(µ(i), -µ(i)*y[i] +λ(i)), +λ(i))
     end
-    xn = find_min(pq, 0)
+    xn = clip_up(pq, LineSegment(1.0, 0.0), 0.0) # TODO check
     return dp_line_backtrace(xn, lb, ub)
 end
 
 
-"""Position where the line with given `offset` and `slope` will have value `c`"""
-@inline find_x(offset, slope, c) = (c - offset)/slope
+"""Clip PWL represented by `pq` from negative until `t`, starting with `l`"""
+function clip_up{Q}(pq::Q, l::LineSegment, t::ℝ)
+    x = find_x(t, l)
+    while min_x(pq) ≤ x
+        e = pop_front!(pq)
+        l.offset += e.offset
+        l.slope  += e.slope
+        x = find_x(t, l)
+    end
+    push_front!(pq, Event(x, l))
+    return x
+end
+
 
 """Extract position of minimal `x` or `∞` if none exists"""
 @inline min_x{Q}(pq::Q) = try front(pq).x catch throw(∞) end
