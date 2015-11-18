@@ -35,42 +35,43 @@ end
 function dp_line(y, λ, µ)
     n = length(y)
     lb, ub = fill(∞, n), fill(-∞, n)
-    init_up(i)   = LineSegment(µ(i), - µ(i)*y[i] + (i > 1 ? -λ(i-1) : 0 ))
-    init_down(i) = LineSegment(µ(i), - µ(i)*y[i] + (i > 1 ? +λ(i-1) : 0 ))
+    init_front(i) = LineSegment(µ(i), - µ(i)*y[i] + (i > 1 ? -λ(i-1) : 0 ))
+    init_back(i)  = LineSegment(µ(i), - µ(i)*y[i] + (i > 1 ? +λ(i-1) : 0 ))
     pq = DeQue{Event}()
     for i = 1:(n-1)
-        lb[i] = clip_up(pq,   init_up(i),   -λ(i))
-        ub[i] = clip_down(pq, init_down(i), +λ(i))
+        lb[i] = clip_front(pq, init_front(i),   -λ(i))
+        ub[i] = clip_back(pq,  init_back(i), +λ(i))
     end
     @debug "lb = $lb"
     @debug "ub = $ub"
     @debug "pq = $pq"
-    xn = clip_up(pq, init_up(n), 0.0)
+    xn = clip_front(pq, init_front(n), 0.0)
     return dp_line_backtrace(xn, lb, ub)
 end
 
 
 """Clip PWL represented by `pq` from negative until `t`, starting with `l`"""
-function clip_up{Q}(pq::Q, l::LineSegment, t::ℝ)
+function clip_front{Q}(pq::Q, l::LineSegment, t::ℝ)
     @debug "Starting with l=$l"
     x = find_x(t, l)
-    while min_x(pq) ≤ x
+    while x > min_x(pq)
         e = pop_front!(pq)
-        @debug "pop  pq = $pq"
+        @debug "pop  pq = $pq, e=$e"
         l.offset += e.offset
         l.slope  += e.slope
         x = find_x(t, l)
     end
-    push_front!(pq, Event(x, l))
-    @debug "push pq = $pq"
+    e=Event(x, l)
+    push_front!(pq, e)
+    @debug "push pq = $pq, e=$e"
     return x
 end
 
 
-"""Same as `clip_up` just everything reversed"""
-function clip_down{Q}(pq::Q, l::LineSegment, t::ℝ)
+"""Same as `clip_front` just everything reversed"""
+function clip_back{Q}(pq::Q, l::LineSegment, t::ℝ)
     x = find_x(t, l)
-    while x ≤ max_x(pq)
+    while max_x(pq) > x
         e = pop_back!(pq)
         l.offset -= e.offset
         l.slope  -= e.slope
@@ -81,8 +82,10 @@ function clip_down{Q}(pq::Q, l::LineSegment, t::ℝ)
 end
 
 
-"""Extract position of minimal `x` or `∞` if none exists"""
+"""Extract minimal position `x` of queue `pq` or `+∞` if none exists"""
 @inline min_x{Q}(pq::Q) = try front(pq).x catch +∞ end
+
+"""Extract maximal position `x` of queue `pq` or `-∞` if none exists"""
 @inline max_x{Q}(pq::Q) = try back(pq).x  catch -∞ end
 
 
