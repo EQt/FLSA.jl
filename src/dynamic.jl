@@ -11,6 +11,7 @@ function backtrace_dp_tree(x_root, iroot, t, n, ub, lb)
     return x
 end
 
+
 """Compute x=FLSA(y, λ) on a a (sub)tree t, naive PWL implementation"""
 function dp_tree_naive{V,E}(y::Vector{Float64}, λ::Float64, t::TreeSubGraph{V,E})
     n = length(y)
