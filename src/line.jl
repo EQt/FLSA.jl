@@ -62,7 +62,7 @@ end
 
 
 """Same as `clip_up` just everything reversed"""
-function clip_up{Q}(pq::Q, l::LineSegment, t::ℝ)
+function clip_down{Q}(pq::Q, l::LineSegment, t::ℝ)
     x = find_x(t, l)
     while x ≤ max_x(pq)
         e = pop_back!(pq)
@@ -76,25 +76,8 @@ end
 
 
 """Extract position of minimal `x` or `∞` if none exists"""
-@inline min_x{Q}(pq::Q) = try front(pq).x catch throw(+∞) end
-@inline max_x{Q}(pq::Q) = try back(pq).x  catch throw(-∞) end
-
-"""Compute a new lower bound event for node `v`"""
-function min_event{Q}(pq::Q, v::Node, c::ℝ, y::Vector{ℝ})
-    local slope = 1.0
-    local offset = y[v] - c
-    local x = find_x(offset, slope, c)
-    xk = min_x(pq)
-    while x > xk
-        e = pop_front!(pq)
-        offset += e.offset
-        slope  += e.slope
-        xk = min_x(pq)
-        x = forecast(offset, slope, c)
-    end
-    push_front!(pq, Event(x, offset, slope))
-    return x
-end
+@inline min_x{Q}(pq::Q) = try front(pq).x catch +∞ end
+@inline max_x{Q}(pq::Q) = try back(pq).x  catch -∞ end
 
 
 """For convinience..."""

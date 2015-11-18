@@ -47,13 +47,23 @@ function dual_tree(y::Vector{ℝ}, tree)
 end
 
 
+"""Represent a line segment"""
+type LineSegment
+    slope::Float64
+    offset::Float64
+end
+
+
 """Record what is happening, when a knot of the PWL is hit"""
 immutable Event
     x::Float64      # position
-    offset::Float64 # delta offset
     slope::Float64  # delta slope
+    offset::Float64 # delta offset
+    Event(x, l::LineSegment) = new(x, l.slope, l.offset)
 end
 
 
 """Find x, such that t = slope*x + offset"""
 @inline find_x(t::ℝ, slope::ℝ, offset::ℝ) = (t - offset)/slope
+
+@inline find_x(t::ℝ, ls::LineSegment) = find_x(t, ls.slope, ls.offset)
