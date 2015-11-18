@@ -4,7 +4,7 @@
 function dp_line_naive(y, λ, μ)
     n = length(y)
     lb, ub = fill(∞, n), fill(-∞, n)
-    q(i) = PWL(0.0, -y[i]; slope=μ(i))
+    q(i) = PWL(0.0, -μ(i)*y[i]; slope=μ(i))
     ∂f = q(1)
     for i = 1:(n-1)
         lb[i] = find_x(∂f, -λ(i))
