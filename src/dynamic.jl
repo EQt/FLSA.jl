@@ -50,16 +50,6 @@ function dfs_dp_tree(v, vis, lambda, t)
 end
 
 
-"""Compute the dual solution to x on a tree (sub)graph"""
-function dual_tree_rec(y::Vector{Float64}, x::Vector{Float64}, t::ITreeSubGraph)
-    local m = length(t.edges)
-    alpha = zeros(length(t.edges))
-    local iroot = vertex_index(t.root, t.graph)
-    dfs_dual_tree(iroot, alpha, t, x,  deepcopy(y))
-    return alpha
-end
-
-
 """Return edge tuple (i,j) with i < j"""
 @inline E(c,v) = (min(c,v), max(c,v))
 
