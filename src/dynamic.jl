@@ -29,16 +29,6 @@ function dp_tree_naive{V,E}(y::Vector{Float64}, λ::Float64, t::TreeSubGraph{V,E
 end
 
 
-"""Compute x=FLSA(y, lambda) on a a (sub)tree t, recursively"""
-function dp_tree_rec(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph)
-    vis = DPVisitor(y)
-    local iroot = vertex_index(t.root, t.graph)
-    dfs_dp_tree(iroot, vis, lambda, t)
-    backtrace_dp_tree(vis, iroot, t, y)
-end
-
-
-
 """Return edge tuple (i,j) with i < j"""
 @inline E(c,v) = (min(c,v), max(c,v))
 
