@@ -61,7 +61,7 @@ immutable Event
     x::Float64      # position
     slope::Float64  # delta slope
     offset::Float64 # delta offset
-    Event(x, l::LineSegment) = new(x, l.slope, l.offset)
+    # Event(x, l::LineSegment) = new(x, l.slope, l.offset)
 end
 
 """Print them more readable"""
