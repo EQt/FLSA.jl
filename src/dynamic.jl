@@ -63,7 +63,9 @@ end
 """Return edge tuple (i,j) with i < j"""
 @inline E(c,v) = (min(c,v), max(c,v))
 
-function dual_tree(y::Vector{Float64}, tree)
+
+"""Compute dual solution α on a tree, such that y = D' α"""
+function dual_tree(y::Vector{ℝ}, tree)
     α = zeros(length(tree.edges))
     for c in postorder(tree)
         v = tree.parent[c]
@@ -73,7 +75,6 @@ function dual_tree(y::Vector{Float64}, tree)
     end
     return α
 end
-
 
 
 """Record what is happening, when a knot of the PWL is hit"""
