@@ -52,17 +52,20 @@ end
 
 """Clip PWL represented by `pq` from negative until `t`, starting with `l`"""
 function clip_front{Q}(pq::Q, l::LineSegment, t::ℝ)
-    @debug "Starting with l=$l"
     x = find_x(t, l)
+    @debug "Starting with l=$l, x=$x, min_x = $(min_x(pq))"
+    if length(pq) > 0
+        print("front(pq) = $(front(pq))")
+    end
     while x > min_x(pq)
         e = pop_front!(pq)
-        @debug "pop  pq = $pq, e=$e"
+        @debug "pop_front  pq = $pq, e=$e"
         l.offset += e.offset
         l.slope  += e.slope
         x = find_x(t, l)
     end
     push_front!(pq, Event(x, l))
-    @debug "push pq = $pq"
+    @debug "push_front pq = $pq"
     return x
 end
 
@@ -77,6 +80,7 @@ function clip_back{Q}(pq::Q, l::LineSegment, t::ℝ)
         x = find_x(t, l)
     end
     push_back!(pq, Event(x, l))
+    @debug "push_back pq = $pq"
     return x
 end
 
