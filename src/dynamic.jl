@@ -53,3 +53,7 @@ immutable Event
     offset::Float64 # delta offset
     slope::Float64  # delta slope
 end
+
+
+"""Find x, such that t = slope*x + offset"""
+@inline find_x(t::ℝ, slope::ℝ, offset::ℝ) = (t - offset)/slope
