@@ -1,4 +1,4 @@
-"""Naive implementation of the dynamic programming algorithm on trees."""
+## Naive implementation of the dynamic programming algorithm on trees.
 
 
 """Contains all information for the calculation"""
