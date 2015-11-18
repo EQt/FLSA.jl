@@ -64,7 +64,7 @@ function clip_front{Q}(pq::Q, l::LineSegment, t::ℝ)
         l.slope  += e.slope
         x = find_x(t, l)
     end
-    push_front!(pq, Event(x, l))
+    push_front!(pq, Event(x, l.slope, l.offset - t))
     @debug "push_front pq = $pq"
     return x
 end
@@ -79,7 +79,7 @@ function clip_back{Q}(pq::Q, l::LineSegment, t::ℝ)
         l.slope  -= e.slope
         x = find_x(t, l)
     end
-    push_back!(pq, Event(x, l))
+    push_back!(pq, Event(x, -l.slope, -l.offset + t))
     @debug "push_back pq = $pq"
     return x
 end
