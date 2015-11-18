@@ -35,8 +35,8 @@ end
 function dp_line(y, λ, µ)
     n = length(y)
     lb, ub = fill(∞, n), fill(-∞, n)
-    init_up(i)   = LineSegment(µ(i), i > 0 ? -λ(i-1) : 0 - µ(i)*y[i])
-    init_down(i) = LineSegment(µ(i), i > 0 ? +λ(i-1) : 0 - µ(i)*y[i])
+    init_up(i)   = LineSegment(µ(i), - µ(i)*y[i] + (i > 1 ? -λ(i-1) : 0 ))
+    init_down(i) = LineSegment(µ(i), - µ(i)*y[i] + (i > 1 ? +λ(i-1) : 0 ))
     pq = DeQue{Event}()
     for i = 1:(n-1)
         lb[i] = clip_up(pq,   init_up(i),   -λ(i))
@@ -44,6 +44,7 @@ function dp_line(y, λ, µ)
     end
     @debug "lb = $lb"
     @debug "ub = $ub"
+    @debug "pq = $pq"
     xn = clip_up(pq, init_up(n), 0.0)
     return dp_line_backtrace(xn, lb, ub)
 end
@@ -55,11 +56,13 @@ function clip_up{Q}(pq::Q, l::LineSegment, t::ℝ)
     x = find_x(t, l)
     while min_x(pq) ≤ x
         e = pop_front!(pq)
+        @debug "pop  pq = $pq"
         l.offset += e.offset
         l.slope  += e.slope
         x = find_x(t, l)
     end
     push_front!(pq, Event(x, l))
+    @debug "push pq = $pq"
     return x
 end
 
