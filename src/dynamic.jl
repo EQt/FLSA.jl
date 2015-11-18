@@ -37,17 +37,6 @@ function dp_tree_rec(y::Vector{Float64}, lambda::Float64, t::TreeSubGraph)
     backtrace_dp_tree(vis, iroot, t, y)
 end
 
-function dfs_dp_tree(v, vis, lambda, t)
-    vis.df[v] = PWL([Knot(-INF, -INF - vis.y[v]),
-                     Knot(+INF, +INF - vis.y[v])])
-    for c in t.children[v]
-        dfs_dp_tree(c, vis, lambda, t)
-        vis.lb[c] = find_x(vis.df[c], -lambda)
-        vis.ub[c] = find_x(vis.df[c], +lambda)
-        vis.df[c] = clip(vis.df[c], vis.lb[c], vis.ub[c])
-        vis.df[v] += vis.df[c]
-    end
-end
 
 
 """Return edge tuple (i,j) with i < j"""
