@@ -42,6 +42,8 @@ function dp_line(y, λ, µ)
         lb[i] = clip_up(pq,   init_up(i),   -λ(i))
         ub[i] = clip_down(pq, init_down(i), +λ(i))
     end
+    @debug "lb = $lb"
+    @debug "ub = $ub"
     xn = clip_up(pq, init_up(n), 0.0)
     return dp_line_backtrace(xn, lb, ub)
 end
