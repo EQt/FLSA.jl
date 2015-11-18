@@ -35,10 +35,10 @@ end
 function dp_line(y, λ, µ)
     n = length(y)
     lb, ub = fill(∞, n), fill(-∞, n)
+    init_up(i)   = LineSegment(µ(i), λ(i) - µ(i)*y[i])
+    init_down(i) = LineSegment(µ(i), λ(i) - µ(i)*y[i])
     pq = DeQue{Event}()
-    init_up(i)   = LineSegment(µ(i), -µ(i)*y[i] -λ(i))
-    init_down(i) = LineSegment(µ(i), -µ(i)*y[i] +λ(i))
-    for i = 1:n
+    for i = 1:(n-1)
         lb[i] = clip_up(pq,   init_up(i),   -λ(i))
         ub[i] = clip_down(pq, init_down(i), +λ(i))
     end
@@ -49,6 +49,7 @@ end
 
 """Clip PWL represented by `pq` from negative until `t`, starting with `l`"""
 function clip_up{Q}(pq::Q, l::LineSegment, t::ℝ)
+    @debug "Starting with l=$l"
     x = find_x(t, l)
     while min_x(pq) ≤ x
         e = pop_front!(pq)
