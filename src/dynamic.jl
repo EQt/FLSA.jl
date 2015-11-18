@@ -1,3 +1,5 @@
+import Base.string
+
 """
 After computing the bounds [lb, ub] for each node, compute optimal solution `x`
 by clipping each edge, i.e. backtracing from root to children
@@ -61,6 +63,9 @@ immutable Event
     offset::Float64 # delta offset
     Event(x, l::LineSegment) = new(x, l.slope, l.offset)
 end
+
+"""Print them more readable"""
+string(e::Event) = "$(e.x) @ $(e.slope)x + $(e.slope))"
 
 
 """Find x, such that t = slope*x + offset"""
