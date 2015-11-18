@@ -1,4 +1,5 @@
 using DataStructures.Deque
+import DataStructures: front, back
 
 typealias DeQue Deque
 
@@ -10,3 +11,4 @@ pop_back!{T}(q::DeQue{T}) = pop!(q)
 push_front!{T}(q::DeQue{T}, x::T) = unshift!(q, x)
 
 push_back!{T}(q::DeQue{T}, x::T) = push!(q, x)
+
