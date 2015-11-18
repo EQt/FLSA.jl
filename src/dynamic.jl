@@ -1,8 +1,7 @@
-## Naive implementation of the dynamic programming algorithm on trees.
-
-
-"""After computing the bounds [lb, ub] for each node, compute solution x
-   by clipping each edge, i.e. backtracing from root to children"""
+"""
+After computing the bounds [lb, ub] for each node, compute optimal solution `x`
+by clipping each edge, i.e. backtracing from root to children
+"""
 function backtrace_dp_tree(x_root, iroot, t, n, ub, lb)
     x = zeros(n)
     x[iroot] = x_root
@@ -24,7 +23,6 @@ function dp_tree_naive{V,E}(y::Vector{Float64}, λ::Float64, t::TreeSubGraph{V,E
         df[c] = clip(df[c], lb[c], ub[c])
         df[v] += df[c]
     end
-
     local iroot = vertex_index(t.root, t.graph)
     x_root = find_x(vis.df[iroot], 0)
     backtrace_dp_tree(x_root, iroot, t, n, lb, ub)
