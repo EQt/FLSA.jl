@@ -60,7 +60,8 @@ function dual_tree_rec(y::Vector{Float64}, x::Vector{Float64}, t::ITreeSubGraph)
 end
 
 
-E(c,v) = (min(c,v), max(c,v))
+"""Return edge tuple (i,j) with i < j"""
+@inline E(c,v) = (min(c,v), max(c,v))
 
 function dual_tree(y::Vector{Float64}, tree)
     α = zeros(length(tree.edges))
