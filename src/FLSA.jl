@@ -30,7 +30,8 @@ export num_vertices,
        PWLNode,
        PWLTree,
        PDeQue,
-       inplace
+       inplace,
+       string
 
 include("debug.jl")
 include("flsa.jl")
