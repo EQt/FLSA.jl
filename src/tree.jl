@@ -69,6 +69,10 @@ end
 @inline postorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order
 
 
+"""Number of nodes in the graph"""
+@inline num_nodes{V,E}(t::TreeSubGraph{V,E}) = length(t.children)
+
+
 """Return edge tuple (i,j) with i < j"""
 @inline E(c,v) = (min(c,v), max(c,v))
 
