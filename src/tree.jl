@@ -13,6 +13,7 @@ type TreeSubGraph{V,E}
 end
 
 typealias ITreeSubGraph TreeSubGraph{Int,IEdge}
+typealias Tree ITreeSubGraph
 
 
 """Compute a subtree with given `root` node by extracting `edges` of `graph`"""
@@ -68,3 +69,7 @@ pre_order{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[end:-1:1]
 """Return edge tuple (i,j) with i < j"""
 @inline E(c,v) = (min(c,v), max(c,v))
 
+
+"""Index of the edge `e` in `tree`"""
+@inline edge_index(tree::Tree, e::@compat(Tuple{Int,Int})) =
+    tree.edge_index[E(e[1],e[2])]
