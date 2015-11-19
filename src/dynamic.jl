@@ -15,7 +15,7 @@ end
 
 
 """Compute x=FLSA(y, λ) on a a (sub)tree t, naive PWL implementation"""
-function dp_tree_naive{V,E}(y::Vector{Float64}, λ::Float64, t::TreeSubGraph{V,E})
+function dp_tree_naive{V,E}(y::Vector{ℝ}, λ::ℝ, t::TreeSubGraph{V,E})
     n = length(y)
     df = [PWL(0, -y[i]; slope=1.0) for i=1:n]
     lb, ub = zeros(n), zeros(n)
@@ -47,8 +47,8 @@ end
 
 """Represent a line segment"""
 type LineSegment
-    slope::Float64
-    offset::Float64
+    slope::ℝ
+    offset::ℝ
 end
 
 
