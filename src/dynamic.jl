@@ -15,20 +15,18 @@ end
 
 
 """Compute x=FLSA(y, λ) on a a (sub)tree t, naive PWL implementation"""
-function dp_tree_naive{V,E}(y::Vector{ℝ}, λ::ℝ, t::TreeSubGraph{V,E})
+function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
     n = length(y)
-    df = [PWL(0, -y[i]; slope=1.0) for i=1:n]
+    df = [ PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n ]
     lb, ub = zeros(n), zeros(n)
-    for c in pre_order(t)
+    for c in preorder(t)
         v = t.parent[c]
-        lb[c] = find_x(df[c], -λ)
-        ub[c] = find_x(df[c], +λ)
-        df[c] = clip(df[c], lb[c], ub[c])
-        df[v] += df[c]
+        lb[c] = find_x(df[c], -λ[c])
+        ub[c] = find_x(df[c], +λ[c])
+        df[v] += clip(df[c], lb[c], ub[c])
     end
-    local iroot = vertex_index(t.root, t.graph)
-    x_root = find_x(vis.df[iroot], 0)
-    backtrace_dp_tree(x_root, iroot, t, n, lb, ub)
+    xr = find_x(df[t.root], 0.0)
+    backtrace_dp_tree(xr, t, lb, ub)
 end
 
 
