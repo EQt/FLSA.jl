@@ -113,16 +113,16 @@ dp_tree(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_line(y, i->λ, i->1.0, t)
 function dp_tree(y, λ, µ, t::Tree)
     n = length(y)
     lb, ub = fill(∞, n), fill(-∞, n)
-    child(i) = sum([-λ(c) for c in t.children[i]])
+    σ(i) = sum([-λ(c) for c in t.children[i]])
     line(i, r) = LineSegment(µ(i), -µ(i)*y[i] + r)
-    pq = [DeQue{Event}() for i = 1:n]
+    pq = [MDEPQ{Event}() for i = 1:n]
     for i in preorder(t)
-        lb[i] = clip_front(pq, line(i, -child(i)), -λ(i))
-        ub[i] = clip_back(pq,  line(i, +child(i)), +λ(i))
+        lb[i] = clip_front(pq[i], line(i, -σ(i)), -λ(i))
+        ub[i] = clip_back( pq[i], line(i, +σ(i)), +λ(i))
     end
     @debug "lb = $lb"
     @debug "ub = $ub"
     @debug "pq = $pq"
-    xn = clip_front(pq, init_front(n), 0.0)
+    xn = clip_front(pq, line(n, -σ(i)), 0.0)
     return dp_line_backtrace(xn, lb, ub)
 end
