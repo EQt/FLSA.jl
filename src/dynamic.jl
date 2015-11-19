@@ -32,10 +32,6 @@ function dp_tree_naive{V,E}(y::Vector{Float64}, λ::Float64, t::TreeSubGraph{V,E
 end
 
 
-"""Return edge tuple (i,j) with i < j"""
-@inline E(c,v) = (min(c,v), max(c,v))
-
-
 """Compute dual solution α on a tree, such that y = D' α"""
 function dual_tree(y::Vector{ℝ}, tree)
     α = zeros(tree.edges)

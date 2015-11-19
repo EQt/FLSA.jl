@@ -60,3 +60,7 @@ end
 
 
 pre_order{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[end:-1:1]
+
+
+"""Return edge tuple (i,j) with i < j"""
+@inline E(c,v) = (min(c,v), max(c,v))
