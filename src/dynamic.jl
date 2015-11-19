@@ -17,15 +17,15 @@ end
 """Compute x=FLSA(y, λ) on a a (sub)tree t, naive PWL implementation"""
 function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
     n = length(y)
-    df = [ PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n ]
+    ∂f = [ PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n ]
     lb, ub = zeros(n), zeros(n)
     for i in preorder(t)
         v = t.parent[i]
-        lb[i] = find_x(df[i], -λ(i))
-        ub[i] = find_x(df[i], +λ(i))
-        df[v] += clip(df[i], -λ(i), +λ(i))
+        lb[i] = find_x(∂f[i], -λ(i))
+        ub[i] = find_x(∂f[i], +λ(i))
+        ∂f[v] += clip(∂f[i], -λ(i), +λ(i))
     end
-    xr = find_x(df[t.root], 0.0)
+    xr = find_x(∂f[t.root], 0.0)
     backtrace_dp_tree(xr, t, lb, ub)
 end
 
@@ -106,14 +106,17 @@ end
 @inline max_x{Q}(pq::Q) = try back(pq).x  catch -∞ end
 
 
+"""For convinience..."""
+dp_tree(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_line(y, i->λ, i->1.0, t)
+
 """FLSA on a line, computed by Johnson's fast *dynamic programming* algorithm"""
-function dp_tree(y, λ, µ)
+function dp_tree(y, λ, µ, t::Tree)
     n = length(y)
     lb, ub = fill(∞, n), fill(-∞, n)
-    child(i) = if i > 1;  -λ(i-1) else 0.0 end
+    child(i) = sum([-λ(c) for c in t.children[i]])
     line(i, r) = LineSegment(µ(i), -µ(i)*y[i] + r)
-    pq = DeQue{Event}()
-    for i = 1:(n-1)
+    pq = [DeQue{Event}() for i = 1:n]
+    for i in preorder(t)
         lb[i] = clip_front(pq, line(i, -child(i)), -λ(i))
         ub[i] = clip_back(pq,  line(i, +child(i)), +λ(i))
     end
