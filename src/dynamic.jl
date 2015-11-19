@@ -38,7 +38,7 @@ end
 
 """Compute dual solution α on a tree, such that y = D' α"""
 function dual_tree(y::Vector{ℝ}, tree)
-    α = zeros(length(tree.edges))
+    α = zeros(tree.edges)
     for c in postorder(tree)
         v = tree.parent[c]
         e = tree.edge_index[E(c,v)]
