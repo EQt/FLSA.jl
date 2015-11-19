@@ -2,7 +2,7 @@ import Base.string
 
 """
 After computing the bounds [lb, ub] for each node, compute optimal solution `x`
-by clipping each edge, i.e. backtracing from root to children
+by clipping each edge, i.e. backtracing from root value `xr` down to children
 """
 function backtrace_dp_tree(xr::ℝ, t::Tree, ub, lb)
     x = zeros(num_nodes(t))
@@ -19,11 +19,11 @@ function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
     n = length(y)
     df = [ PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n ]
     lb, ub = zeros(n), zeros(n)
-    for c in preorder(t)
-        v = t.parent[c]
-        lb[c] = find_x(df[c], -λ[c])
-        ub[c] = find_x(df[c], +λ[c])
-        df[v] += clip(df[c], lb[c], ub[c])
+    for i in preorder(t)
+        v = t.parent[i]
+        lb[i] = find_x(df[i], -λ(i))
+        ub[i] = find_x(df[i], +λ(i))
+        df[v] += clip(df[i], -λ(i), +λ(i))
     end
     xr = find_x(df[t.root], 0.0)
     backtrace_dp_tree(xr, t, lb, ub)
