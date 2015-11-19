@@ -65,6 +65,9 @@ end
 """Give the indices of an pre-order run through the nodes of `t`"""
 preorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[end:-1:1]
 
+"""Give the indices of an post-order run through the nodes of `t`"""
+postorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order
+
 
 """Return edge tuple (i,j) with i < j"""
 @inline E(c,v) = (min(c,v), max(c,v))
