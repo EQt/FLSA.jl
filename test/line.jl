@@ -1,7 +1,9 @@
 module TestLine
 using FactCheck
 
-debug = true; include("../src/FLSA.jl")
+debug = true
+reload("FLSA")
+using FLSA
 
 facts("3 line knot") do
     y = [1.0; 2.0; 3.5]
