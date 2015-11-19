@@ -39,12 +39,11 @@ function dp_line(y, λ, µ)
     n = length(y)
     lb, ub = fill(∞, n), fill(-∞, n)
     child(i) = if i > 1;  -λ(i-1) else 0.0 end
-    line_f(i) = LineSegment(µ(i), -µ(i)*y[i] - child(i))
-    line_b(i) = LineSegment(µ(i), -µ(i)*y[i] + child(i))
+    line(i, r) = LineSegment(µ(i), -µ(i)*y[i] + r)
     pq = DeQue{Event}()
     for i = 1:(n-1)
-        lb[i] = clip_front(pq, init_front(i), -λ(i))
-        ub[i] = clip_back(pq,  init_back(i),  +λ(i))
+        lb[i] = clip_front(pq, line(i, -child(i)), -λ(i))
+        ub[i] = clip_back(pq,  line(i, +child(i)), +λ(i))
     end
     @debug "lb = $lb"
     @debug "ub = $ub"
