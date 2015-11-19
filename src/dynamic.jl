@@ -37,7 +37,7 @@ function dual_tree(y::Vector{ℝ}, tree)
     α = zeros(tree.edges)
     for c in postorder(tree)
         v = tree.parent[c]
-        e = tree.edge_index[E(c,v)]
+        e = edge_index(tree, (c,v))
         α[e]  = sign(v-c) * y[c]
         y[v] += sign(c-v) * α[e]
     end
