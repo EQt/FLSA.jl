@@ -63,7 +63,7 @@ end
 
 
 """Give the indices of an pre-order run through the nodes of `t`"""
-pre_order{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[end:-1:1]
+preorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[end:-1:1]
 
 
 """Return edge tuple (i,j) with i < j"""
