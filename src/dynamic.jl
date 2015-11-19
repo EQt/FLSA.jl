@@ -4,9 +4,9 @@ import Base.string
 After computing the bounds [lb, ub] for each node, compute optimal solution `x`
 by clipping each edge, i.e. backtracing from root to children
 """
-function backtrace_dp_tree(x_root, iroot, t, n, ub, lb)
-    x = zeros(n)
-    x[iroot] = x_root
+function backtrace_dp_tree(xr::ℝ, t::Tree, ub, lb)
+    x = zeros(num_nodes(t))
+    x[t.root] = xr
     for v in postorder(t)
         x[v] = clip(x[t.parent[v]], lb[v], ub[v])
     end
