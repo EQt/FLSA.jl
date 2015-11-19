@@ -1,5 +1,12 @@
 # Line algorithms
 
+"""For convinience"""
+dp_line_naive(y::Vector{ℝ}, λ::ℝ) = dp_line_naive(y, i->λ, i->1.0)
+
+"""For convinience..."""
+dp_line(y::Vector{ℝ}, λ::ℝ) = dp_line(y, i->λ, i->1.0)
+
+
 """Naive implementation (based on PWLs) for path graphs, i.e. 1d fused LASSO"""
 function dp_line_naive(y, λ, μ)
     n = length(y)
@@ -14,10 +21,6 @@ function dp_line_naive(y, λ, μ)
     xn = find_x(∂f, 0)
     return dp_line_backtrace(xn, lb, ub)
 end
-
-
-"""For convinience"""
-dp_line_naive(y::Vector{Float64}, λ::Float64) = dp_line_naive(y, i->λ, i->1.0)
 
 
 function dp_line_backtrace(xn, lb, ub)
@@ -88,7 +91,3 @@ end
 
 """Extract maximal position `x` of queue `pq` or `-∞` if none exists"""
 @inline max_x{Q}(pq::Q) = try back(pq).x  catch -∞ end
-
-
-"""For convinience..."""
-dp_line(y::Vector{Float64}, λ::Float64) = dp_line(y, i->λ, i->1.0)
