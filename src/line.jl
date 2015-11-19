@@ -54,9 +54,6 @@ end
 function clip_front{Q}(pq::Q, l::LineSegment, t::ℝ)
     x = find_x(t, l)
     @debug "Starting with l=$l, x=$x, min_x = $(min_x(pq))"
-    if length(pq) > 0
-        print("front(pq) = $(front(pq))")
-    end
     while x > min_x(pq)
         e = pop_front!(pq)
         @debug "pop_front  pq = $pq, e=$e"
