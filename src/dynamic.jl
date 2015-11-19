@@ -19,7 +19,7 @@ dp_tree_naive(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_tree_naive(y, i->λ, i->1.0
 """Compute x=FLSA(y, λ) on a a (sub)tree t, naive PWL implementation"""
 function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
     n = length(y)
-    ∂f = [ PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n ]
+    ∂f = [PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n]
     lb, ub = zeros(n), zeros(n)
     for i in postorder(t)
         lb[i] = find_x(∂f[i], -λ(i))
