@@ -7,7 +7,7 @@ by clipping each edge, i.e. backtracing from root value `xr` down to children
 function backtrace_dp_tree(xr::ℝ, t::Tree, ub, lb)
     x = zeros(num_nodes(t))
     x[t.root] = xr
-    for v in postorder(t)
+    for v in preorder(t)
         x[v] = clip(x[t.parent[v]], lb[v], ub[v])
     end
     return x
@@ -19,10 +19,10 @@ function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
     n = length(y)
     ∂f = [ PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n ]
     lb, ub = zeros(n), zeros(n)
-    for i in preorder(t)
-        v = t.parent[i]
+    for i in postorder(t)
         lb[i] = find_x(∂f[i], -λ(i))
         ub[i] = find_x(∂f[i], +λ(i))
+        v = t.parent[i]
         ∂f[v] += clip(∂f[i], -λ(i), +λ(i))
     end
     xr = find_x(∂f[t.root], 0.0)
