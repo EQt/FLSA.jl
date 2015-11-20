@@ -15,6 +15,36 @@ end
 typealias ITreeSubGraph TreeSubGraph{Int,IEdge}
 typealias Tree ITreeSubGraph
 
+"""Create a tree out of a parent array"""
+function create_tree(parent::Vector{Int})
+    n = length(parent)
+    root = 0
+    for (i,p) in enumerate(parent)
+        if i == p
+            root = i
+            break
+        end
+    end
+    E = collect(filter(e -> e[1] != e[2], enumerate(parent)))
+    children = [Int[] for i=1:n]
+    for (i,p) in E
+        push!(children[p], i)
+    end
+    dfs_order = zeros(Int, n)
+    stack = [root]
+    dfs_num = 1
+    while !isempty(stack)
+        v = pop!(stack)
+        dfs_order[dfs_num] = v
+        dfs_num += 1
+        append!(stack, children[v])
+    end
+    edges = [Edge{Int}(i,s,t) for (i,(s,t)) in enumerate(E)]
+    graph = EdgeList{Int,Edge{Int}}(false, collect(1:n), edges)
+    edge_index = Dict([(e,i) for (i,e) in enumerate(E)])
+    return Tree(graph, edges, root, parent, children, dfs_order, edge_index)
+end
+    
 
 """Compute a subtree with given `root` node by extracting `edges` of `graph`"""
 function subtree(graph, edges, root)
