@@ -1,7 +1,7 @@
 module FLSA
 
 using Graphs
-using Compat: findlast, @compat
+using Compat: findlast, @compat, @inline
 
 const ∞ = Inf
 typealias ℝ Float64
