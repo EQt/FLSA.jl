@@ -19,11 +19,11 @@ facts("3 line knots") do
     @fact x --> roughly(sol)
 end
 
-#= 
+
 facts("A random example") do
     srand(13)
     lambda = 1.0
-    n1, n2 = 5, 3
+    n1, n2 = 1, 3
     g = FLSA.igraph(FLSA.grid_graph(n1, n2))
     v = FLSA.vertices(g)
     n = length(v)
@@ -38,5 +38,5 @@ facts("A random example") do
     x2 = FLSA.dp_tree(y, lambda, t)
     @fact round(x, digits) --> roughly(round(x2, digits))
 end
-=#
+
 end # module
