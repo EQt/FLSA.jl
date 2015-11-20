@@ -10,7 +10,7 @@ dp_line(y::Vector{ℝ}, λ::ℝ) = dp_line(y, i->λ, i->1.0)
 """Naive implementation (based on PWLs) for path graphs, i.e. 1d fused LASSO"""
 function dp_line_naive(y, λ, μ)
     n = length(y)
-    lb, ub = fill(∞, n), fill(-∞, n)
+    lb, ub = fill(-∞, n), fill(+∞, n)
     q(i) = PWL(0.0, -μ(i)*y[i]; slope=μ(i))
     ∂f = q(1)
     for i = 1:(n-1)
@@ -19,6 +19,7 @@ function dp_line_naive(y, λ, μ)
         ∂f = q(i+1) + clip(∂f, -λ(i), +λ(i))
     end
     xn = find_x(∂f, 0)
+    @debug "\nlb = $lb\nub = $ub"
     return dp_line_backtrace(xn, lb, ub)
 end
 
