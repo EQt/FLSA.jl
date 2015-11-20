@@ -80,3 +80,4 @@ end
 """Index of the edge `e` in `tree`"""
 @inline edge_index(tree::Tree, e::@compat(Tuple{Int,Int})) =
     tree.edge_index[E(e[1],e[2])]
+
