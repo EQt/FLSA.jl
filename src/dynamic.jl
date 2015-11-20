@@ -4,11 +4,14 @@ import Base.string
 After computing the bounds [lb, ub] for each node, compute optimal solution `x`
 by clipping each edge, i.e. backtracing from root value `xr` down to children
 """
-function backtrace_dp_tree(xr::ℝ, t::Tree, ub, lb)
+function backtrace_dp_tree(xr::ℝ, t::Tree, lb, ub)
+    @debug @val lb
+    @debug @val ub
     x = zeros(num_nodes(t))
     x[t.root] = xr
     for v in preorder(t)
         x[v] = clip(x[t.parent[v]], lb[v], ub[v])
+        @debug "x[$v] = $(x[v]), x[parent] = $(x[t.parent[v]])"
     end
     return x
 end
