@@ -126,6 +126,6 @@ function dp_tree(y, λ, µ, t::Tree)
     @debug "lb = $lb"
     @debug "ub = $ub"
     @debug "pq = $pq"
-    xn = clip_front(pq, line(n, -σ(i)), 0.0)
+    xn = clip_front(pq[n], line(n, -σ(n)), 0.0)
     return dp_line_backtrace(xn, lb, ub)
 end
