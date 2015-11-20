@@ -22,12 +22,12 @@ function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
     ∂f = [PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n]
     lb, ub = zeros(n), zeros(n)
     for i in postorder(t)
+        if i == t.root; break end
         @debug "processing node $i: (n=$n)"
         lb[i] = find_x(∂f[i], -λ(i))
         ub[i] = find_x(∂f[i], +λ(i))
         @debug "lb[$i] = $(lb[i]), ub[$i] = $(ub[i])"
-        v = t.parent[i]
-        if v != i; ∂f[v] += clip(∂f[i], -λ(i), +λ(i)) end
+        ∂f[t.parent[i]] += clip(∂f[i], -λ(i), +λ(i))
     end
     xr = find_x(∂f[t.root], 0.0)
     backtrace_dp_tree(xr, t, lb, ub)
@@ -121,6 +121,7 @@ function dp_tree(y, λ, µ, t::Tree)
     line(i, r) = LineSegment(µ(i), -µ(i)*y[i] + r)
     pq = [EventQueue() for i = 1:n]
     for i in postorder(t)
+        if i == t.root; break end
         lb[i] = clip_front(pq[i], line(i, -σ(i)), -λ(i))
         ub[i] = clip_back( pq[i], line(i, +σ(i)), +λ(i))
         pq[t.parent[i]] += pq[i]
