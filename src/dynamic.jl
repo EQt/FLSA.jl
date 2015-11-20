@@ -115,7 +115,7 @@ dp_tree(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_tree(y, i->λ, i->1.0, t)
 function dp_tree(y, λ, µ, t::Tree)
     n = length(y)
     lb, ub = fill(∞, n), fill(-∞, n)
-    σ(i) = sum([λ(c) for c in t.children[i]])
+    σ(i) = sum(ℝ[λ(c) for c in t.children[i]])
     line(i, r) = LineSegment(µ(i), -µ(i)*y[i] + r)
     pq = [EventQueue() for i = 1:n]
     for i in preorder(t)
