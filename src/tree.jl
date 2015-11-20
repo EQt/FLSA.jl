@@ -92,11 +92,11 @@ function init_tree(t::TreeSubGraph)
 end
 
 
-"""Give the indices of an pre-order run through the nodes of `t`"""
-@inline preorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order
+"""Give the indices of an pre-order run through the nodes of `t`, exluding root"""
+@inline preorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[2:end]
 
-"""Give the indices of an post-order run through the nodes of `t`"""
-@inline postorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[end:-1:1]
+"""Give the indices of an post-order run through the nodes of `t`, excluding root"""
+@inline postorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[end:-1:2]
 
 
 """Number of nodes in the graph"""
