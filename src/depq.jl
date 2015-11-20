@@ -1,5 +1,7 @@
 import Base: push!, start, next, done, length, isempty
 
+typealias MDEPQ DePQ
+
 """Double-ended priority queue: Implementation based on sorted arrays"""
 type DePQ{E}
     elements::Vector{E}
