@@ -1,6 +1,6 @@
 module TestDynamic
 
-debug(msg) = println("DEBUG: $msg")
+# debug(msg) = println("DEBUG: $msg")
 
 using Graphs
 using FactCheck
@@ -9,7 +9,6 @@ import FLSA.@debug
 
 digits = 3
 
-#=
 facts("3 line knots") do
     sol = [2.0; 2.0; 2.5]
     y = [1.0; 2.0; 3.5]
@@ -23,12 +22,11 @@ facts("3 line knots") do
     x = FLSA.dp_tree(y, 1.0, t)
     @fact x --> roughly(sol)
 end
-=#
 
 facts("A random example") do
     srand(13)
     lambda = 1.0
-    n1, n2 = 1, 3
+    n1, n2 = 43, 31
     g = FLSA.igraph(FLSA.grid_graph(n1, n2))
     v = FLSA.vertices(g)
     n = length(v)
