@@ -13,6 +13,8 @@ function backtrace_dp_tree(xr::ℝ, t::Tree, ub, lb)
     return x
 end
 
+"""For convinience..."""
+dp_tree_naive(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_line_naive(y, i->λ, i->1.0, t)
 
 """Compute x=FLSA(y, λ) on a a (sub)tree t, naive PWL implementation"""
 function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
