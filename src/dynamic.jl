@@ -14,27 +14,6 @@ function backtrace_dp_tree(xr::ℝ, t::Tree, lb, ub)
     return x
 end
 
-"""For convinience..."""
-dp_tree_naive(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_tree_naive(y, i->λ, i->1.0, t)
-
-"""Compute x=FLSA(y, λ) on a a (sub)tree t, naive PWL implementation"""
-function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
-    n = length(y)
-    ∂f = [PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n]
-    lb, ub = fill(-∞, n), fill(∞, n)
-    for i in postorder(t)
-        @debug "processing node $i: (n=$n)"
-        lb[i] = find_x(∂f[i], -λ(i))
-        ub[i] = find_x(∂f[i], +λ(i))
-        ∂f[t.parent[i]] += clip(∂f[i], -λ(i), +λ(i))
-    end
-    @debug @val lb
-    @debug @val ub
-    @debug @val ∂f[t.root]
-    xr = find_x(∂f[t.root], 0.0)
-    backtrace_dp_tree(xr, t, lb, ub)
-end
-
 
 """Compute dual solution α on a tree, such that y = D' α"""
 function dual_tree(y::Vector{ℝ}, tree)
@@ -113,6 +92,28 @@ end
 
 
 """For convinience..."""
+dp_tree_naive(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_tree_naive(y, i->λ, i->1.0, t)
+
+"""Compute x=FLSA(y, λ) on a a (sub)tree t, naive PWL implementation"""
+function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
+    n = length(y)
+    ∂f = [PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n]
+    lb, ub = fill(-∞, n), fill(∞, n)
+    for i in postorder(t)
+        @debug "processing node $i: (n=$n)"
+        lb[i] = find_x(∂f[i], -λ(i))
+        ub[i] = find_x(∂f[i], +λ(i))
+        ∂f[t.parent[i]] += clip(∂f[i], -λ(i), +λ(i))
+    end
+    @debug @val lb
+    @debug @val ub
+    @debug @val ∂f[t.root]
+    xr = find_x(∂f[t.root], 0.0)
+    backtrace_dp_tree(xr, t, lb, ub)
+end
+
+
+"""For convinience..."""
 dp_tree(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_tree(y, i->λ, i->1.0, t)
 
 """FLSA on a line, computed by Johnson's fast *dynamic programming* algorithm"""
@@ -129,7 +130,7 @@ function dp_tree(y, λ, µ, t::Tree)
     end
     @debug @val lb
     @debug @val ub
-    @debug "$([e.x for e in pq[t.root].elements])"
+    @debug "$([round(e.x,3) for e in pq[t.root].elements])"
     xn = clip_front(pq[t.root], line(t.root, -σ(t.root)), 0.0)
     return dp_line_backtrace(xn, lb, ub)
 end
