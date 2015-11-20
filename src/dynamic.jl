@@ -20,9 +20,8 @@ dp_tree_naive(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_tree_naive(y, i->λ, i->1.0
 function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
     n = length(y)
     ∂f = [PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n]
-    lb, ub = zeros(n), zeros(n)
+    lb, ub = fill(-∞, n), fill(∞, n)
     for i in postorder(t)
-        if i == t.root; break end
         @debug "processing node $i: (n=$n)"
         lb[i] = find_x(∂f[i], -λ(i))
         ub[i] = find_x(∂f[i], +λ(i))
@@ -117,12 +116,11 @@ dp_tree(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_tree(y, i->λ, i->1.0, t)
 """FLSA on a line, computed by Johnson's fast *dynamic programming* algorithm"""
 function dp_tree(y, λ, µ, t::Tree)
     n = length(y)
-    lb, ub = fill(∞, n), fill(-∞, n)
+    lb, ub = fill(-∞, n), fill(∞, n)
     σ(i) = sum(ℝ[λ(c) for c in t.children[i]])
     line(i, r) = LineSegment(µ(i), -µ(i)*y[i] + r)
     pq = [EventQueue() for i = 1:n]
     for i in postorder(t)
-        if i == t.root; break end
         lb[i] = clip_front(pq[i], line(i, -σ(i)), -λ(i))
         ub[i] = clip_back( pq[i], line(i, +σ(i)), +λ(i))
         pq[t.parent[i]] += pq[i]
