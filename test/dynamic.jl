@@ -12,7 +12,10 @@ facts("3 line knots") do
     sol = [2.0; 2.0; 2.5]
     y = [1.0; 2.0; 3.5]
     t = FLSA.create_tree([2,3,3])
+    xl = FLSA.dp_line_naive(y, 1.0)
     x = FLSA.dp_tree_naive(y, 1.0, t)
+    @fact x --> roughly(sol)
+    x = FLSA.dp_tree(y, 1.0, t)
     @fact x --> roughly(sol)
 end
 
