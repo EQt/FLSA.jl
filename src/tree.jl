@@ -93,10 +93,10 @@ end
 
 
 """Give the indices of an pre-order run through the nodes of `t`"""
-@inline preorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[end:-1:1]
+@inline preorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order
 
 """Give the indices of an post-order run through the nodes of `t`"""
-@inline postorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order
+@inline postorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[end:-1:1]
 
 
 """Number of nodes in the graph"""
