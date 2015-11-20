@@ -29,6 +29,7 @@ function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
         @debug "lb[$i] = $(lb[i]), ub[$i] = $(ub[i])"
         ∂f[t.parent[i]] += clip(∂f[i], -λ(i), +λ(i))
     end
+    @debug @val ∂f[t.root]
     xr = find_x(∂f[t.root], 0.0)
     backtrace_dp_tree(xr, t, lb, ub)
 end
