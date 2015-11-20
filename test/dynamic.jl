@@ -9,6 +9,7 @@ import FLSA.@debug
 
 digits = 3
 
+#=
 facts("3 line knots") do
     sol = [2.0; 2.0; 2.5]
     y = [1.0; 2.0; 3.5]
@@ -22,7 +23,7 @@ facts("3 line knots") do
     x = FLSA.dp_tree(y, 1.0, t)
     @fact x --> roughly(sol)
 end
-
+=#
 
 facts("A random example") do
     srand(13)
@@ -38,7 +39,6 @@ facts("A random example") do
     mst, wmst = kruskal_minimum_spantree(g, w)
     t = FLSA.subtree(g, mst, root)
     x = FLSA.dp_tree_naive(y, lambda, t)
-
     x2 = FLSA.dp_tree(y, lambda, t)
     @fact round(x, digits) --> roughly(round(x2, digits))
 end
