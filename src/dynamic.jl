@@ -22,8 +22,10 @@ function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
     ∂f = [PWL(0.0, -µ(i)*y[i]; slope=µ(i)) for i=1:n]
     lb, ub = zeros(n), zeros(n)
     for i in postorder(t)
+        @debug "processing node $i: (n=$n)"
         lb[i] = find_x(∂f[i], -λ(i))
         ub[i] = find_x(∂f[i], +λ(i))
+        @debug "lb[$i] = $(lb[i]), ub[$i] = $(ub[i])"
         v = t.parent[i]
         ∂f[v] += clip(∂f[i], -λ(i), +λ(i))
     end
