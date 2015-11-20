@@ -17,3 +17,9 @@ else
         # do nothing
     end
 end
+
+
+macro val(v)
+    s = "$v="
+     :($s * string($v))
+end
