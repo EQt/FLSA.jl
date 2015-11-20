@@ -39,6 +39,7 @@ facts("A random example") do
     mst, wmst = kruskal_minimum_spantree(g, w)
     t = FLSA.subtree(g, mst, root)
     x = FLSA.dp_tree_naive(y, lambda, t)
+    @debug "*"^80
     x2 = FLSA.dp_tree(y, lambda, t)
     @fact round(x, digits) --> roughly(round(x2, digits))
 end

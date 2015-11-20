@@ -4,7 +4,8 @@ import Base.string
 After computing the bounds [lb, ub] for each node, compute optimal solution `x`
 by clipping each edge, i.e. backtracing from root value `xr` down to children
 """
-function backtrace_dp_tree(xr::ℝ, t::Tree, lb, ub)
+function dp_tree_backtrace(xr::ℝ, t::Tree, lb, ub)
+    @debug "backtrace: xr=$xr"
     x = zeros(num_nodes(t))
     x[t.root] = xr
     for v in preorder(t)
@@ -109,7 +110,7 @@ function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
     @debug @val ub
     @debug @val ∂f[t.root]
     xr = find_x(∂f[t.root], 0.0)
-    backtrace_dp_tree(xr, t, lb, ub)
+    dp_tree_backtrace(xr, t, lb, ub)
 end
 
 
@@ -132,5 +133,5 @@ function dp_tree(y, λ, µ, t::Tree)
     @debug @val ub
     @debug "$([round(e.x,3) for e in pq[t.root].elements])"
     xn = clip_front(pq[t.root], line(t.root, -σ(t.root)), 0.0)
-    return dp_line_backtrace(xn, lb, ub)
+    return dp_tree_backtrace(xn, t, lb, ub)
 end
