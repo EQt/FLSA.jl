@@ -12,12 +12,11 @@ typealias MDEPQ{E} DePQ{E}
 EventQueue() = MDEPQ{Event}([], e->e.x)
 
 front{E}(q::DePQ{E}) = q.elements[1]
-
 back{E}(q::DePQ{E})  = q.elements[end]
-
 pop_front!{E}(q::DePQ{E}) = shift!(q.elements)
-
 pop_back!{E}(q::DePQ{E})  = pop!(q.elements)
+push_front!{E}(q::DePQ{E}, e::E) = unshift!(q.elements, e)
+push_back!{E}(q::DePQ{E}, e::E) = push!(q.elements, e)
 
 function push!{E}(q::DePQ{E}, e::E)
     push!(q.elements, e)
