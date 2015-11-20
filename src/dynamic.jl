@@ -117,7 +117,7 @@ function dp_tree(y, λ, µ, t::Tree)
     lb, ub = fill(∞, n), fill(-∞, n)
     σ(i) = sum([λ(c) for c in t.children[i]])
     line(i, r) = LineSegment(µ(i), -µ(i)*y[i] + r)
-    pq = [MDEPQ{Event}() for i = 1:n]
+    pq = [EventQueue() for i = 1:n]
     for i in preorder(t)
         lb[i] = clip_front(pq[i], line(i, -σ(i)), -λ(i))
         ub[i] = clip_back( pq[i], line(i, +σ(i)), +λ(i))

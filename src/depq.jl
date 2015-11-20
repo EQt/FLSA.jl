@@ -1,12 +1,15 @@
 import Base: push!, start, next, done, length, isempty
 
-typealias MDEPQ DePQ
 
 """Double-ended priority queue: Implementation based on sorted arrays"""
 type DePQ{E}
     elements::Vector{E}
     by::Function
 end
+
+typealias MDEPQ{E} DePQ{E}
+
+EventQueue() = MDEPQ{Event}([], e->e.x)
 
 front{E}(q::DePQ{E}) = q.elements[1]
 
