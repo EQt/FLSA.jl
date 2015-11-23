@@ -119,7 +119,7 @@ dp_tree(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_tree(y, i->λ, i->1.0, t)
 
 """FLSA on a line, computed by Johnson's fast *dynamic programming* algorithm"""
 function dp_tree(y, λ, µ, t::Tree)
-    n = length(y)
+    n, r = length(y), t.root
     lb, ub = fill(-∞, n), fill(∞, n)
     σ(i) = sum(ℝ[λ(c) for c in t.children[i]])
     line(i, r) = LineSegment(µ(i), -µ(i)*y[i] + r)
@@ -132,6 +132,6 @@ function dp_tree(y, λ, µ, t::Tree)
     @debug @val lb
     @debug @val ub
     @debug "$([round(e.x,3) for e in pq[t.root].elements])"
-    xn = clip_front(pq[t.root], line(t.root, -σ(t.root)), 0.0)
+    xn = clip_front(pq[r], line(r, -σ(r)), 0.0)
     return dp_tree_backtrace(xn, t, lb, ub)
 end
