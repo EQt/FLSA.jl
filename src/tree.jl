@@ -52,7 +52,7 @@ function subtree(graph, edges, root)
     parent = fill(-1, n)
     children = fill(Int[], n)
     dfs_order = fill(-1, n)
-    ei = Dict{(Int,Int), Int}()
+    ei = Dict{@compat(Tuple{Int,Int}),Int}()
     tree = TreeSubGraph(graph, edges, root, parent, children, dfs_order, ei)
     init_tree(tree)
     tree
