@@ -1,3 +1,7 @@
+import Graphs: edge_index
+
+edge_index(e::Graphs.Edge{Tuple{Int64,Int64}}) = e.index
+
 """Compute the oriented incidence matrix of g and store in a sparse matrix of type T"""
 function incidence_matrix{T<:Number}(g::AbstractGraph, ::Type{T} = Int)
     @graph_requires g vertex_list
@@ -15,8 +19,9 @@ function incidence_matrix{T<:Number}(g::AbstractGraph, ::Type{T} = Int)
             local n1 = num_rows(g)
             vertex_index(v, g) = n1 * (v[2]-1) + v[1]
         end
-        @inbounds @sync @parallel for e=edges(g)
-            u, v, i = source(e), target(e), edge_index(e)
+        # @inbounds @sync @parallel for e=edges(g)
+        @inbounds for e=edges(g)
+            u, v, i = source(e), target(e), e.index
             ui = vertex_index(u, g)
             vi = vertex_index(v, g)
             I[2i-1] =  i
