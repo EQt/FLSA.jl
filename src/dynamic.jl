@@ -18,7 +18,7 @@ end
 
 """Compute dual solution α on a tree, such that y = D' α"""
 function dual_tree(y::Vector{ℝ}, tree)
-    α = zeros(tree.edges)
+    α = zeros(length(tree.edges))
     for c in postorder(tree)
         v = tree.parent[c]
         e = edge_index(tree, (c,v))
@@ -27,6 +27,9 @@ function dual_tree(y::Vector{ℝ}, tree)
     end
     return α
 end
+
+"""For convinience..."""
+dual_tree(y::Vector{Float64}, x::Vector{Float64}, tree) = dual_tree(x-y, tree)
 
 
 """Represent a line segment"""
