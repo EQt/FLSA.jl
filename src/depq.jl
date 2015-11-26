@@ -1,13 +1,10 @@
 import Base: push!, start, next, done, length, isempty
 
-
 """Double-ended priority queue: Implementation based on sorted arrays"""
 type DePQ{E}
     elements::Vector{E}
     by::Function
 end
-
-typealias MDEPQ{E} DePQ{E}
 
 EventQueue() = MDEPQ{Event}([], e->e.x)
 
@@ -37,3 +34,4 @@ isempty{E}(q::DePQ{E}) = length(q) == 0
 start{E}(q::DePQ{E}) = start(q.elements)
 next{E}(q::DePQ{E}, s) = next(q.elements, s)
 done{E}(q::DePQ{E}, s) = done(q.elements, s)
+

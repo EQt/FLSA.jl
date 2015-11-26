@@ -1,5 +1,8 @@
 import Base.string
 
+typealias MDEPQ{E} DePQ{E}
+
+
 """
 After computing the bounds [lb, ub] for each node, compute optimal solution `x`
 by clipping each edge, i.e. backtracing from root value `xr` down to children
