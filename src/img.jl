@@ -20,7 +20,6 @@ end
 
 function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,1), 1.0)])
     n = n1 * n2
-    E = [IEdge(1,n1,n2)]
     m = 0
     for d in dir
         e = d[1]
@@ -72,7 +71,6 @@ function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,1)
         end
         m += (n1-e[2])*(n2-e[1])
     end
-    println(I)
     D = sparse(I, J, W)
     G = simple_edgelist(n1*n2, E; is_directed=false)
     Lip = 1.0
