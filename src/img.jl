@@ -34,7 +34,7 @@ function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,0)
     m = 0
     for d in dir
         e = d[1]
-        for j = 1:n2-e[2]
+        @inbounds @sync @parallel for j = 1:n2-e[2]
             for i = 1:n1-e[1]
                 l = m + i + (j-1)*(n1-e[1])
                 k = 2l - 1
@@ -42,17 +42,17 @@ function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,0)
                 v2 = pix2ind(i+e[1], j+e[2], n1)
                 E[l] = IEdge(l, v1, v2)
                 lam[l] = d[2]
-                I[k] = k
+                I[k] = l
                 J[k] = v1
                 W[k] = +d[2]
                 k += 1
-                I[k] = k-1 # same edge
+                I[k] = l # same edge
                 J[k] = v2
                 W[k] = -d[2]
             end
         end
         m += (n1-e[1])*(n2-e[2])
-        for j = 1:n2-e[1]
+        @inbounds @sync @parallel for j = 1:n2-e[1]
             for i = 1+e[2]:n1
                 l = m + i - e[2] + (j-1)*(n1-e[2])
                 k = 2l -1
