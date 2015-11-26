@@ -6,5 +6,4 @@ using DataStructures
 @inline pop_back!{E,O}(q::SortedSet{E,O})  = pop!(q, last(q))
 @inline push_front!{E,O}(q::SortedSet{E,O}, e::E) = push!(q, e)
 @inline push_back!{E,O}(q::SortedSet{E,O}, e::E) = push!(q, e)
-
 @inline +{E,O}(q::SortedSet{E,O}, p::SortedSet{E,O}) = union!(p, q)
