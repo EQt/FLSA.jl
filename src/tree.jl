@@ -46,6 +46,7 @@ end
 
 """Compute a subtree with given `root` node by extracting `edges` of `graph`"""
 function subtree(graph, edges, root)
+    @assert length(edges) > 0
     local n = num_vertices(graph)
     parent = fill(-1, n)
     children = fill(Int[], n)
