@@ -13,11 +13,16 @@ EventQueue2() = Q2([], event_time)
 if isdefined(p, :debug) && typeof(p.debug) == Bool && p.debug
     EventQueue() = (EventQueue1(), EventQueue2())
 
-    pri(v::Vector{Event}) = [@sprintf("%3.2f@%3.2f,%3.2f", e.x, e.slope, e.offset) for e in v]
+    pri(v::Vector{Event}) = join([@sprintf("%3.2f@%3.2f,%3.2f", e.x, e.slope, e.offset) for e in v], "|")
+
+    splitq(q) =  collect(keys(q[1])), [e for e in q[2]]
+    function print_queues(q)
+        q1, q2 = splitq(q)
+        "q1=$(pri(q1)), q2=$(pri(q2))"
+    end
 
     function assert_equal(q::Tuple{Q1,Q2})
-        q1 = collect(keys(q[1]))
-        q2 = [e for e in q[2]]
+        q1, q2 = splitq(q)
         @assert length(q1) == length(q2) "q1=$(pri(q1)), q2=$(pri(q2))"
         for i = 1:length(q1)
             @assert q1[i] == q2[i] "q1=$(pri(q1)), q2=$(pri(q2))"
@@ -57,8 +62,11 @@ if isdefined(p, :debug) && typeof(p.debug) == Bool && p.debug
     end
 
     function push_front!(q::Tuple{Q1,Q2}, e::Event)
+        @debug print_queues(q)
+        assert_equal(q)
         push_front!(q[1], e)
         push_front!(q[2], e)
+        @debug "push_front!($e)"
         assert_equal(q)
         q
     end
