@@ -60,18 +60,20 @@ function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,0)
                 v2 = pix2ind(i-e[2], j+e[1], n1)
                 E[l] = IEdge(l, v1, v2)
                 lam[l] = d[2]
-                I[k] = k
+                I[k] = l
                 J[k] = v1
                 W[k] = +d[2]
                 k += 1
-                I[k] = k-1 # same edge
+                I[k] = l # same edge
                 J[k] = v2
                 W[k] = -d[2]
             end
         end
         m += (n1-e[2])*(n2-e[1])
     end
-    D = sparse(I, J, W)
+    @debug @val I
+    @debug @val J
+    D = sparse(I, J, W, m, n)
     G = simple_edgelist(n1*n2, E; is_directed=false)
     Lip = 1.0
     ImgGraph(n1, n2, Lip, lam, G, D)
