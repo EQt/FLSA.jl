@@ -46,7 +46,6 @@ include("img.jl")
 include("dynamic.jl")
 include("line.jl")
 include("deque.jl")
-include("depq.jl")
 include("inplace.jl")
 
 end # module
