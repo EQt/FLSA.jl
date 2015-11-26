@@ -6,8 +6,6 @@ type DePQ{E}
     by::Function
 end
 
-EventQueue() = MDEPQ{Event}([], e->e.x)
-
 front{E}(q::DePQ{E}) = q.elements[1]
 back{E}(q::DePQ{E})  = q.elements[end]
 pop_front!{E}(q::DePQ{E}) = shift!(q.elements)

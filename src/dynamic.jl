@@ -37,6 +37,10 @@ dual_tree(y::Vector{Float64}, x::Vector{Float64}, tree) = dual_tree(x-y, tree)
 type LineSegment
     slope::ℝ
     offset::ℝ
+    function LineSegment(s, o)
+        @assert abs(s) > 1e-15
+        new(s,o)
+    end
 end
 
 
@@ -75,7 +79,12 @@ string(e::Event) = "$(e.x) @ $(e.slope)x + $(e.slope))"
 """Find x, such that t = slope*x + offset"""
 @inline find_x(t::ℝ, slope::ℝ, offset::ℝ) = (t - offset)/slope
 
-@inline find_x(t::ℝ, ls::LineSegment) = find_x(t, ls.slope, ls.offset)
+@inline function find_x(t::ℝ, ls::LineSegment)
+    x = find_x(t, ls.slope, ls.offset)
+    @assert isfinite(x) "t=$t, ls=$ls"
+    x
+end
+
 
 """Clip PWL represented by `pq` from negative until `t`, starting with `l`"""
 function clip_front{Q}(pq::Q, l::LineSegment, t::ℝ)
