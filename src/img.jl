@@ -18,7 +18,6 @@ end
 
 
 function img_graph(n1::Int, n2::Int, dir = [((1,1), 1.0)])
-    print(dir)
     n = n1 * n2
     E = [IEdge(1,n1,n2)]
     m = 0
@@ -29,38 +28,45 @@ function img_graph(n1::Int, n2::Int, dir = [((1,1), 1.0)])
     I = zeros(Int, 2m)
     J = zeros(Int, 2m)
     W = zeros(Float64, 2m)
+    E = [IEdge(0,0,0) for e=1:m]
     m = 0
     for d in dir
         e = d[1]
         c = (n1 + n2)*sum(d[1])
         for j = 1:n2-e[2]
             for i = 1:n1-e[1]
-                k = m + 2*(i + (j-1)*(n1-e[1])) - 1
+                l = m + (i + (j-1)*(n1-e[1]))
+                k = 2l - 1
+                v1 = pix2ind(i,j, n1)
+                v2 = pix2ind(i+e[1], j+e[2], n1)
+                E[l] = IEdge(l, v1, v2)
                 I[k] = k
-                J[k] = pix2ind(i,j, n1)
+                J[k] = v1
                 W[k] = +d[2]
                 k += 1
                 I[k] = k-1 # same edge
-                J[k] = pix2ind(i+e[1], j+e[2], n1)
+                J[k] = v2
                 W[k] = -d[2]
-                @debug @val k
-                @debug @val pix2ind(i+e[1], j+e[2], n1)
             end
         end
-        m += 2*(n1-e[1])*(n2-e[2])
+        m += (n1-e[1])*(n2-e[2])
         for j = 1:n2-e[1]
             for i = 1+e[2]:n1
-                k = m + 2*(i - e[2] + (j-1)*(n1-e[2])) - 1
+                l = m + (i - e[2] + (j-1)*(n1-e[2]))
+                k = 2l -1
+                v1 = pix2ind(i,j, n1)
+                v2 = pix2ind(i-e[2], j+e[1], n1)
+                E[l] = IEdge(l, v1, v2)
                 I[k] = k
-                J[k] = pix2ind(i,j, n2)
+                J[k] = v1
                 W[k] = +d[2]
                 k += 1
                 I[k] = k-1 # same edge
-                J[k] = pix2ind(i-e[2], j+e[1], n2)
+                J[k] = v2
                 W[k] = -d[2]
             end
         end
-        m += 2*(n1-e[2])*(n2-e[1])
+        m += (n1-e[2])*(n2-e[1])
     end
     println(I)
     D = sparse(I, J, W)
