@@ -18,13 +18,14 @@ end
 @inline ind2pix(i::Int, g::ImgGraph) = nothing
 
 
-function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,1), 1.0)])
+function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,0), 1.0)])
     n = n1 * n2
     m = 0
     for d in dir
         e = d[1]
         m += (n1-e[1])*(n2-e[2]) + (n1-e[2])*(n2-e[1])
     end
+    @assert m > 0
     I = zeros(Int, 2m)
     J = zeros(Int, 2m)
     W = zeros(Float64, 2m)
