@@ -7,6 +7,7 @@ type ImgGraph
     n1::Int
     n2::Int
     Lip::Float64
+    lambda::Vector{Float64}
     graph::AbstractGraph{Int,IEdge}
     D::AbstractSparseArray{Float64, Int, 2}
 end
@@ -29,6 +30,7 @@ function img_graph(n1::Int, n2::Int, dir = [((1,1), 1.0)])
     J = zeros(Int, 2m)
     W = zeros(Float64, 2m)
     E = [IEdge(0,0,0) for e=1:m]
+    lam = zeros(Float64, m)
     m = 0
     for d in dir
         e = d[1]
@@ -40,6 +42,7 @@ function img_graph(n1::Int, n2::Int, dir = [((1,1), 1.0)])
                 v1 = pix2ind(i,j, n1)
                 v2 = pix2ind(i+e[1], j+e[2], n1)
                 E[l] = IEdge(l, v1, v2)
+                lam[l] = d[2]
                 I[k] = k
                 J[k] = v1
                 W[k] = +d[2]
@@ -57,6 +60,7 @@ function img_graph(n1::Int, n2::Int, dir = [((1,1), 1.0)])
                 v1 = pix2ind(i,j, n1)
                 v2 = pix2ind(i-e[2], j+e[1], n1)
                 E[l] = IEdge(l, v1, v2)
+                lam[l] = d[2]
                 I[k] = k
                 J[k] = v1
                 W[k] = +d[2]
@@ -71,5 +75,6 @@ function img_graph(n1::Int, n2::Int, dir = [((1,1), 1.0)])
     println(I)
     D = sparse(I, J, W)
     G = simple_edgelist(n1*n2, E; is_directed=false)
-    ImgGraph(n1, n2, 1.0, G, D)
+    Lip = 1.0
+    ImgGraph(n1, n2, Lip, lam, G, D)
 end
