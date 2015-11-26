@@ -1,9 +1,9 @@
-include("heap.jl")
+include("heap2.jl")
 
 p = module_parent(current_module())
 event_order = Base.Order.By(event_time)
 OType = typeof(event_time)
-typealias Q1 SortedSet{Event, typeof(event_order)}
+typealias Q1 SortedMultiDict{Event, Void, typeof(event_order)}
 EventQueue1() = Q1(event_order)
 
 include("depq.jl")
@@ -13,15 +13,14 @@ EventQueue2() = Q2([], event_time)
 if isdefined(p, :debug) && typeof(p.debug) == Bool && p.debug
     EventQueue() = (EventQueue1(), EventQueue2())
 
-    qri(v::Vector{Event}) = [@sprintf("%3.2f@%3.2f,%3.2f", e.x, e.slope, e.offset) for e in v]
-    pri(v) = "$(qri(v))"
+    pri(v::Vector{Event}) = [@sprintf("%3.2f@%3.2f,%3.2f", e.x, e.slope, e.offset) for e in v]
 
     function assert_equal(q::Tuple{Q1,Q2})
-        q1 = [e for e in q[1]]
+        q1 = collect(keys(q[1]))
         q2 = [e for e in q[2]]
         @assert length(q1) == length(q2) "q1=$(pri(q1)), q2=$(pri(q2))"
         for i = 1:length(q1)
-            @assert q1[i] == q2[i]
+            @assert q1[i] == q2[i] "q1=$(pri(q1)), q2=$(pri(q2))"
         end
     end
     
