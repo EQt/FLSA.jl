@@ -34,7 +34,6 @@ function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,0)
     m = 0
     for d in dir
         e = d[1]
-        c = (n1 + n2)*sum(d[1])
         for j = 1:n2-e[2]
             for i = 1:n1-e[1]
                 l = m + (i + (j-1)*(n1-e[1]))
