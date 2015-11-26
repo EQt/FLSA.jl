@@ -18,7 +18,7 @@ end
 @inline ind2pix(i::Int, g::ImgGraph) = nothing
 
 
-function img_graph(n1::Int, n2::Int, dir = [((1,1), 1.0)])
+function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,1), 1.0)])
     n = n1 * n2
     E = [IEdge(1,n1,n2)]
     m = 0
