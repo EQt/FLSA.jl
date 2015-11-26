@@ -45,14 +45,27 @@ immutable Event
     x::Float64      # position
     slope::Float64  # delta slope
     offset::Float64 # delta offset
-    # Event(x, l::LineSegment) = new(x, l.slope, l.offset)
+    function Event(x, s, o)
+        @assert isfinite(x)
+        @assert abs(s) > 1e-16
+        new(x, s, o)
+    end
 end
 
-include("heap.jl")
 @inline event_time(e::Event) = e.x
-event_order = Base.Order.By(event_time)
-OType = typeof(event_time)
-EventQueue() = SortedSet{Event, typeof(event_order)}(event_order)
+
+p = module_parent(current_module())
+if isdefined(p, :sortedset) && typeof(p.sortedset) == Bool && p.sortedset
+    info("Activating SortedSet")
+    include("heap.jl")
+    event_order = Base.Order.By(event_time)
+    OType = typeof(event_time)
+    EventQueue() = SortedSet{Event, typeof(event_order)}(event_order)
+else
+    info("Activating MergedArrays")
+    include("depq.jl")
+    EventQueue() = DePQ{Event}([], event_time)
+end
 
 
 """Print them more readable"""
