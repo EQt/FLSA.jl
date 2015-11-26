@@ -1,7 +1,5 @@
 import Base.string
 
-typealias MDEPQ{E} DePQ{E}
-
 
 """
 After computing the bounds [lb, ub] for each node, compute optimal solution `x`
@@ -49,6 +47,13 @@ immutable Event
     offset::Float64 # delta offset
     # Event(x, l::LineSegment) = new(x, l.slope, l.offset)
 end
+
+include("heap.jl")
+@inline event_time(e::Event) = e.x
+event_order = Base.Order.By(event_time)
+OType = typeof(event_time)
+EventQueue() = SortedSet{Event, typeof(event_order)}(event_order)
+
 
 """Print them more readable"""
 string(e::Event) = "$(e.x) @ $(e.slope)x + $(e.slope))"
@@ -137,7 +142,7 @@ function dp_tree(y, λ, µ, t::Tree)
     end
     @debug @val lb
     @debug @val ub
-    @debug "$([round(e.x,3) for e in pq[t.root].elements])"
+    @debug "$([round(e.x,3) for e in pq[t.root]])"
     xn = clip_front(pq[r], line(r, -σ(r)), 0.0)
     return dp_tree_backtrace(xn, t, lb, ub)
 end
