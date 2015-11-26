@@ -1,6 +1,7 @@
 typealias GridNode @compat Tuple{Int, Int}
 typealias GridEdge Graphs.Edge{GridNode}
 typealias GridGraph EdgeList{GridNode, GridEdge}
+import Graphs: vertex_index
 
 """Number of rows of the grid"""
 num_rows(g::GridGraph) = max(findfirst(x -> x == (1,2), g.vertices)-1, 1)
@@ -8,13 +9,8 @@ num_rows(g::GridGraph) = max(findfirst(x -> x == (1,2), g.vertices)-1, 1)
 """Number of columns of the grid"""
 num_columns(g::GridGraph) = div(num_vertices(g), num_rows(g))
 
-if !isdefined(current_module(), :vertex_index)
-    # avoid warning; see answer
-    # https://github.com/JuliaLang/julia/issues/7860#issuecomment-51340412
-
-    """Specialized method for GridGraphs"""
-    Graphs.vertex_index(v::GridNode, g::GridGraph) = num_rows(g) * (v[2]-1) + v[1]
-end
+"""Specialized method for GridGraphs"""
+vertex_index(v::GridNode, g::GridGraph) = num_rows(g) * (v[2]-1) + v[1]
 
 """Vector of nodes of an n1×n2 grid graph"""
 function grid_nodes(n1::Integer, n2::Integer)
@@ -51,3 +47,4 @@ function dgrid_graph(n1::Int, n2::Int)
     E = [GridEdge(i, u, v) for (i, (u, v)) in enumerate(E)]
     edgelist(V, E; is_directed=false)
 end
+    
