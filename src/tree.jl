@@ -9,7 +9,6 @@ type TreeSubGraph{V,E}
     parent::Vector{Int}
     children::Vector{Vector{Int}}
     dfs_order::Vector{Int}
-    edge_index::Dict{@compat(Tuple{Int,Int}),Int}
 end
 
 typealias ITreeSubGraph TreeSubGraph{Int,IEdge}
@@ -41,7 +40,6 @@ function create_tree(parent::Vector{Int})
     end
     edges = [Edge{Int}(i,s,t) for (i,(s,t)) in enumerate(E)]
     graph = EdgeList{Int,Edge{Int}}(false, collect(1:n), edges)
-    edge_index = Dict([(e,i) for (i,e) in enumerate(E)])
     return Tree(graph, edges, root, parent, children, dfs_order, edge_index)
 end
     
@@ -52,8 +50,7 @@ function subtree(graph, edges, root)
     parent = fill(-1, n)
     children = fill(Int[], n)
     dfs_order = fill(-1, n)
-    ei = Dict{@compat(Tuple{Int,Int}),Int}()
-    tree = TreeSubGraph(graph, edges, root, parent, children, dfs_order, ei)
+    tree = TreeSubGraph(graph, edges, root, parent, children, dfs_order)
     init_tree(tree)
     tree
 end
