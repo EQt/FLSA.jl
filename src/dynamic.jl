@@ -152,7 +152,7 @@ function dp_tree(y, λ, µ, t::Tree)
     end
     @debug @val lb
     @debug @val ub
-    @debug "$([round(e.x,3) for e in pq[t.root]])"
+    @debug "$([round(e.x,3) for e in collect(pq[t.root])])"
     xn = clip_front(pq[r], line(r, -σ(r)), 0.0)
     return dp_tree_backtrace(xn, t, lb, ub)
 end

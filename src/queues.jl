@@ -14,9 +14,11 @@ typealias Q2 DePQ{Event}
 EventQueue2() = Q2([], event_time)
 
 if isdefined(p, :debug) && typeof(p.debug) == Bool && p.debug
+    import Base.collect
     EventQueue() = (EventQueue1(), EventQueue2())
 
     pri(v::Vector{Event}) = join([@sprintf("%3.2f@%3.2f,%3.2f", e.x, e.slope, e.offset) for e in v], "|")
+    collect(q::Tuple{Q1,Q2}) = q[1]
 
     splitq(q) =  collect(keys(q[1])), [e for e in q[2]]
     function print_queues(q)
