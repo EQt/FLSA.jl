@@ -17,8 +17,8 @@ function conjugate_gradient{T<:Number, R<:Real}(A::AbstractMatrix{T},
     k::Unsigned = 1
     while r_norm2 > ɛ && k ≤ max_iter
         α = - (r' * p)[1] / (p' * A * p)[1]
-        x += α .* p
-        r += α .* A * p
+        @inplace x += α .* p
+        @inplace r += α .* A * p
         β = norm2(r)/ r_norm2
         p *=  β
         p -= r
