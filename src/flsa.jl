@@ -30,4 +30,4 @@ function gap_vec(y, alpha, grid)
     return a .* g + sign(g)
 end
 
-function duality_gap(y, alpha, grid) = sum(gap_vec(y, alpha, grid)
+duality_gap(y, alpha, grid) = sum(gap_vec(y, alpha, grid))
