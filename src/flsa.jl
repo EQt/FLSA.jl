@@ -25,9 +25,11 @@ end
 
 function gap_vec(y, alpha, grid)
     a = alpha ./ grid.lambda
+    @assert minimum(alpha) >= -1.0
+    @assert maximum(alpha) <= +1.0
     x = y - grid.D' * a
     g = - grid.D*x
-    return a .* g + sign(g)
+    return (a .* g) + abs(g)
 end
 
 duality_gap(y, alpha, grid) = sum(gap_vec(y, alpha, grid))
