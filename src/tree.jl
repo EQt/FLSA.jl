@@ -111,3 +111,23 @@ end
 @inline edge_index(tree::Tree, e::@compat(Tuple{Int,Int})) =
     tree.edge_index[E(e[1],e[2])]
 
+function non_tree(D, edges)
+    m = size(D)[1]
+    d = ones(m)
+    for e in edges
+        d[e.index] = 0
+    end
+    E = sparse(collect(1:m), collect(1:m), d, m, m)
+    return E * D
+end
+
+function tree_part(D, edges)
+    m = size(D)[1]
+    n = length(edges)
+    d = ones(Int, n)
+    for (i,e) in enumerate(edges)
+        d[i] = e.index
+    end
+    E = sparse(collect(1:n), d, ones(Int, n), n, m)
+    return E * D
+end

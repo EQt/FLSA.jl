@@ -20,10 +20,10 @@ end
 """Compute dual solution α on a tree, such that y = D' α"""
 function dual_tree(y::Vector{ℝ}, tree)
     α = zeros(length(tree.edges))
-    for c in preorder(tree)
+    for c in postorder(tree)
         v = tree.parent[c]
         e = edge_index(tree, (c,v))
-        α[e]  = sign(v-c) * y[c]
+        α[e]  = sign(c-v) * y[c]
         y[v] += sign(c-v) * α[e]
     end
     return α
