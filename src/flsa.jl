@@ -21,3 +21,13 @@ function duality_gap{T<:Number,I<:Number}(alpha::Vector{T}, lambda::T, y::Vector
     psi = D * (D' * alpha - y)
     return lambda * norm(psi, 1) + dot(alpha, psi)
 end
+
+
+function gap_vec(y, alpha, grid)
+    a = alpha ./ grid.lambda
+    x = y - grid.D' * a
+    g = - grid.D*x
+    return a .* g + sign(g)
+end
+
+function duality_gap(y, alpha, grid) = sum(gap_vec(y, alpha, grid)
