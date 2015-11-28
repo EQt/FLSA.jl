@@ -21,7 +21,7 @@ function conjugate_gradient{T<:Number, R<:Real}(A::AbstractMatrix{T},
         @inplace r += α .* A * p
         β = norm2(r)/ r_norm2
         p *=  β
-        p -= r
+        BLAS.axpy!(-1, r, p)
         k += 1
         r_norm2 = norm2(r)
     end
