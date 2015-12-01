@@ -13,7 +13,7 @@ type ImgGraph
     D::IncMat
 end
 
-gap_vec(y, alpha, grid::ImgGraph) = gap_vec(y, alpha ./ grid.lambda, grid.D)
+gap_vec(y, alpha, grid::ImgGraph) = gap_vec(y, alpha, grid.D)
 duality_gap(y, alpha, grid::ImgGraph) = sum(gap_vec(y, alpha, grid))
 dp_tree(y::Vector{ℝ}, g::ImgGraph, t::Tree) =
     dp_tree(y, g.lambda, t)
