@@ -34,6 +34,7 @@ export num_vertices,
        string
 
 include("debug.jl")
+include("inplace.jl")
 include("flsa.jl")
 include("igraph.jl")
 include("grid_graph.jl")
@@ -46,6 +47,5 @@ include("img.jl")
 include("dynamic.jl")
 include("line.jl")
 include("deque.jl")
-include("inplace.jl")
 
 end # module
