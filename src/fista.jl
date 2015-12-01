@@ -47,8 +47,8 @@ function fista(y::Vector{Float64},
     total = 0
     α = β = sign(D * y)
     t = 1
-    k = 1
-    while k <= max_iter+1 && total ≤ max_time
+    k = 0
+    while k <= max_iter && total ≤ max_time
         total += (time = toq())
         @logitfista
         if k == max_iter break end
