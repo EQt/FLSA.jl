@@ -22,3 +22,11 @@ function duality_gap{T<:Number,I<:Number}(alpha::Vector{T}, lambda::T, y::Vector
     psi = D * (D' * alpha - y)
     return lambda * norm(psi, 1) + dot(alpha, psi)
 end
+
+function gap_vec(y, alpha, D::IncMat)
+    @assert minimum(alpha) >= -1.0
+    @assert maximum(alpha) <= +1.0
+    x = y - D' * a
+    g = - D*x
+    return (a .* g) + abs(g)
+end

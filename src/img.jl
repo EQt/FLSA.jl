@@ -12,15 +12,7 @@ type ImgGraph
     D::IncMat
 end
 
-function gap_vec(y, alpha, grid::ImgGraph)
-    a = alpha ./ grid.lambda
-    @assert minimum(alpha) >= -1.0
-    @assert maximum(alpha) <= +1.0
-    x = y - grid.D' * a
-    g = - grid.D*x
-    return (a .* g) + abs(g)
-end
-
+gap_vec(y, alpha, grid::ImgGraph) = gap_vec(y, alpha ./ grid.lambda, grid.D)
 duality_gap(y, alpha, grid::ImgGraph) = sum(gap_vec(y, alpha, grid))
 
 
