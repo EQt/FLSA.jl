@@ -64,10 +64,8 @@ function fista(y::Vector{Float64},
 end
 
 """For convenience…"""
-function fista{T<:Number}(y::AbstractMatrix{T},
-                                    D::SparseMatrixCSC{Float64,Int};
-                                    params...)
+function fista(y::Matrix{Float64}, D::IncMat, params...)
     n1, n2 = size(y)
-    x = fista(reshape(y, n1*n2), D; params...)
+    x = fista(y[:], D; params...)
     return reshape(x, n1, n2)
 end
