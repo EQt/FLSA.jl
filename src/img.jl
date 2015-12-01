@@ -16,6 +16,8 @@ end
 gap_vec(y, alpha, grid::ImgGraph) = gap_vec(y, alpha, grid.D)
 duality_gap(y, alpha, grid::ImgGraph) = sum(gap_vec(y, alpha, grid))
 dp_tree(y::Vector{ℝ}, g::ImgGraph, t::Tree) = dp_tree(y, g.lambda, t)
+dp_tree(y::Matrix{ℝ}, g::ImgGraph, t::Tree) =
+    reshape(dp_tree(y[:], g.lambda, t), g.n1, g.n2)
 fista(y::Matrix{ℝ}, g::ImgGraph; ps...) =
     reshape(fista(y[:], g.D; L=g.Lip, ps...), g.n1, g.n2)
 
