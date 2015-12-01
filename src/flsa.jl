@@ -24,8 +24,8 @@ function duality_gap{T<:Number,I<:Number}(alpha::Vector{T}, lambda::T, y::Vector
 end
 
 function gap_vec(y, alpha, D::IncMat)
-    @assert minimum(alpha) >= -1.0
-    @assert maximum(alpha) <= +1.0
+    @assert minimum(alpha) >= -1.0 - 1e-9 @val(minimum(alpha))
+    @assert maximum(alpha) <= +1.0 + 1e-9 @val(maximum(alpha))
     x = y - D' * alpha
     g = - D*x
     return (alpha .* g) + abs(g)
