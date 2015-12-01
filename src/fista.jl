@@ -19,31 +19,34 @@ macro logitfista()
 end
 
 
+
 """
 Compute FLSA by FAST GRADIENT PROJECTION.
 Also called Fast Iterative Shrinkage/Thresholding Algorithm.
 
+Notice that calculation is done in normed dual variables.
+
 `D` : *weighted* oriented incidence matrix
 """
-function fista{MT<:SparseMatrix{Float64}}(y::Vector{Float64},
-                                          D::MT,
-                                          L::Float64 = 8;
-                                          α0 = λ * sign(D * y)
-                                          max_iter::Int = 100,
-                                          verbose::Bool = false,
-                                          logger = Dict{String,Any}(),
-                                          max_time::Float64 = Inf)
+function fista(y::Vector{Float64},
+               D::SparseMatrixCSC{Float64,Int};
+               L::Float64 = 8,
+               max_iter::Int = 100,
+               verbose::Bool = false,
+               logger = Dict{String,Any}(),
+               max_time::Float64 = Inf)
     m, n = size(D)
     size(y,1) == n ||
       error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
 
-    prox(x) = clamp(x, -λ, +λ)
+    prox(x) = clamp(x, -1.0, +1.0)
     grad(α) = D*(D'*α - y)              # gradient
     pL(α) = prox(α - 1/L*grad(α))
 
     tic()
     total = 0
-    α = β = 
+    λ = 0
+    α = β = λ .* sign(D * y)
     t = 1
     k = 1
     while k <= max_iter+1 && total ≤ max_time
@@ -69,4 +72,3 @@ function fista{T<:Number,I<:Number}(y::AbstractMatrix{T},
     x = fista(reshape(y, n1*n2), D, λ; params...)
     return reshape(x, n1, n2)
 end
-
