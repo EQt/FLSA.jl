@@ -34,7 +34,8 @@ export num_vertices,
        PDeQue,
        inplace,
        string,
-       img_graph
+       img_graph,
+       mst_tree
 
 include("debug.jl")
 include("inplace.jl")
@@ -50,5 +51,6 @@ include("img.jl")
 include("dynamic.jl")
 include("line.jl")
 include("deque.jl")
+include("mst_tree.jl")
 
 end # module
