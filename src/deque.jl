@@ -1,5 +1,6 @@
 using DataStructures.Deque
-import DataStructures: front, back
+## already done in FLSA.jl
+# import DataStructures: front, back 
 
 typealias DeQue Deque
 
