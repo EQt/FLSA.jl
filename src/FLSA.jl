@@ -33,7 +33,8 @@ export num_vertices,
        PWLTree,
        PDeQue,
        inplace,
-       string
+       string,
+       img_graph
 
 include("debug.jl")
 include("inplace.jl")
