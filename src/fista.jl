@@ -11,8 +11,7 @@ macro logitfista()
             x = y - D'*α
             push!(logger["flsa"], flsa(x, y, D))
             push!(logger["time"], time)
-            push!(logger["gap"], -1.0)
-                  # duality_gap(α, y, D))
+            push!(logger["gap"], duality_gap(y, α, D))
             println(@sprintf("%4d %f %f", k,
                              logger["flsa"][end], logger["gap"][end]))
         end
