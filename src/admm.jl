@@ -15,7 +15,7 @@ function admm{T<:Number,I<:Number}(y::Vector{T},
                                    ɛ_c::Real = 0.5,
                                    max_iter::Int = 100,
                                    verbose::Bool = false,
-                                   logger = Dict{String, Any}(),
+                                   logger = Dict{UTF8String, Any}(),
                                    max_time::Number = Inf,
                                    L::Real = 8)
     m, n = size(D)

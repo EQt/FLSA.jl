@@ -34,7 +34,7 @@ function fista(y::Vector{Float64},
                L::Float64 = 8,
                max_iter::Int = 100,
                verbose::Bool = false,
-               logger = Dict{String,Any}(),
+               logger = Dict{UTF8String,Any}(),
                max_time::Float64 = Inf)
     m, n = size(D)
     size(y,1) == n ||
@@ -46,7 +46,7 @@ function fista(y::Vector{Float64},
 
     tic()
     total = 0
-    α = β = sign(D * y)
+    α = β = 0.1 * sign(D * y)
     t = 1
     k = 1
     while k <= max_iter+1 && total ≤ max_time
