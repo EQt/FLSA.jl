@@ -13,13 +13,13 @@ elseif isdefined(p, :debug) && typeof(p.debug) == Function
     end
 else
     # info("Deactivating debugging in FLSA (p = $p)")
-    import Base.@assert
     macro debug(msg)
         # do nothing
     end
-    macro assert(ex, msg...)
-        # do nothing
-    end
+    ## import Base.@assert
+    ## macro assert(ex, msg...)
+    ##     # do nothing
+    ## end
 end
 
 
