@@ -30,3 +30,5 @@ function gap_vec(y, alpha, D::IncMat)
     g = - D*x
     return (alpha .* g) + abs(g)
 end
+
+duality_gap(y::Vector{ℝ}, alp::Vector{ℝ}, D::IncMat) = sum(gap_vec(y, alp, D))
