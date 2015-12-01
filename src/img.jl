@@ -22,6 +22,26 @@ dp_tree(y::Vector{ℝ}, g::ImgGraph, t::Tree) = dp_tree(y, g.lambda, t)
 
 @inline ind2pix(i::Int, g::ImgGraph) = nothing
 
+norm2(x::Pixel) = x[1]^2 + x[2]^2
+norm(x::Pixel) = sqrt(norm2(x))
+
+img_graph(n1::Int, n2::Int, ds::Vector{Pixel}) =
+    img_graph(n1, n2, [(d, 1/norm(d)) for d in ds])
+
+function img_graph(n1::Int, n2::Int, dn::Int)
+    if dn == 1
+        img_graph(n1, n2, [(1,0)])
+    elseif dn == 2
+        img_graph(n1, n2, [(1,0), (1,1)])
+    elseif dn == 3
+        img_graph(n1, n2, [(1,0), (1,1), (2,0)])
+    elseif dn == 4
+        img_graph(n1, n2, [(1,0), (1,1), (2, 0), (2,1), (1,2)])
+    else
+        throw(ArgumentError("dn >= 4 not supported"))
+    end
+end
+
 
 function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,0), 1.0)])
     n = n1 * n2
