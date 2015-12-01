@@ -33,4 +33,4 @@ function gap_vec(y, alpha, grid)
     return (a .* g) + abs(g)
 end
 
-duality_gap(y, alpha, grid) = sum(gap_vec(y, alpha, grid))
+duality_gap(y, alpha, grid::ImgGraph) = sum(gap_vec(y, alpha, grid))
