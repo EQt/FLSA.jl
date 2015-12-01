@@ -9,8 +9,20 @@ type ImgGraph
     Lip::Float64
     lambda::Vector{Float64}
     graph::AbstractGraph{Int,IEdge}
-    D::AbstractSparseArray{Float64, Int, 2}
+    D::IncMat
 end
+
+function gap_vec(y, alpha, grid::ImgGraph)
+    a = alpha ./ grid.lambda
+    @assert minimum(alpha) >= -1.0
+    @assert maximum(alpha) <= +1.0
+    x = y - grid.D' * a
+    g = - grid.D*x
+    return (a .* g) + abs(g)
+end
+
+duality_gap(y, alpha, grid::ImgGraph) = sum(gap_vec(y, alpha, grid))
+
 
 @inline pix2ind(i::Int, j::Int, g::ImgGraph) = pix2ind(i, j, g.n1)
 @inline pix2ind(i::Int, j::Int, n1::Int) = i + (j-1)*n1

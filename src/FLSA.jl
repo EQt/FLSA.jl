@@ -6,6 +6,8 @@ using Compat: findlast, @compat, @inline
 const ∞ = Inf
 typealias ℝ Float64
 typealias Node Int
+typealias IncMat SparseMatrixCSC{Float64,Int}
+
 
 export num_vertices,
        igraph,

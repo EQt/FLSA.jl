@@ -1,5 +1,3 @@
-typealias IncMat SparseMatrixCSC{Float64,Int}
-
 """More commonly used name"""
 clip(x::Float64, lo::Float64, hi::Float64) = Base.clamp(x, lo, hi)
 clip(x::Vector{Float64}, lo::Float64, hi::Float64) = Base.clamp(x, lo, hi)
@@ -24,15 +22,3 @@ function duality_gap{T<:Number,I<:Number}(alpha::Vector{T}, lambda::T, y::Vector
     psi = D * (D' * alpha - y)
     return lambda * norm(psi, 1) + dot(alpha, psi)
 end
-
-
-function gap_vec(y, alpha, grid)
-    a = alpha ./ grid.lambda
-    @assert minimum(alpha) >= -1.0
-    @assert maximum(alpha) <= +1.0
-    x = y - grid.D' * a
-    g = - grid.D*x
-    return (a .* g) + abs(g)
-end
-
-duality_gap(y, alpha, grid::ImgGraph) = sum(gap_vec(y, alpha, grid))
