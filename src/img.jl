@@ -32,6 +32,13 @@ norm(x::Pixel) = sqrt(norm2(x))
 img_graph(n1::Int, n2::Int, ds::Vector{Pixel}) =
     img_graph(n1, n2, [(d, 1/norm(d)) for d in ds])
 
+function img_graph(n1::Int, n2::Int, dn::Int, lam::Float64)
+    g = img_graph(n1, n2, dn)
+    g.D *= lam
+    g.Lip *= lam^2
+    g
+end
+
 function img_graph(n1::Int, n2::Int, dn::Int)
     if dn == 1
         img_graph(n1, n2, [(1,0)])
