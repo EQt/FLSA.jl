@@ -4,7 +4,7 @@ clip(x::Vector{Float64}, lo::Float64, hi::Float64) = Base.clamp(x, lo, hi)
 
 
 """L2 norm squared"""
-norm2(x) = dot(x, x)
+norm2(x::Vector{Float64}) = dot(x, x)
 
 """The objective function value"""
 flsa(x, y, D, λ=1.0) = 0.5 * norm2(y-x) + λ*norm(D*x, 1)
