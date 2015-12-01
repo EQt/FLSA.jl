@@ -46,7 +46,7 @@ function fista(y::Vector{Float64},
 
     tic()
     total = 0
-    α = β = 0.1 * sign(D * y)
+    α = β = sign(D * y)
     t = 1
     k = 1
     while k <= max_iter+1 && total ≤ max_time
