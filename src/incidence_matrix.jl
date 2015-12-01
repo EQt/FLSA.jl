@@ -3,7 +3,7 @@ import Graphs: edge_index
 edge_index(e::Graphs.Edge{Tuple{Int64,Int64}}) = e.index
 
 """Compute the oriented incidence matrix of g and store in a sparse matrix of type T"""
-function incidence_matrix{T<:Number}(g::AbstractGraph, ::Type{T} = Int)
+function incidence_matrix{T<:Number}(g::AbstractGraph,  ::Type{T} = Int)
     @graph_requires g vertex_list
     is_directed(g) && error("g must be undirected.")
 
@@ -52,10 +52,10 @@ function incidence_matrix{T<:Number}(g::AbstractGraph, ::Type{T} = Int)
     sparse(I, J, R, m, n)
 end
 
-incidence_matrix(n1::Int, n2::Int) =
-    incidence_matrix(grid_graph(n1, n2))
+incidence_matrix{T}(n1::Int, n2::Int, ::Type{T} = Int) =
+    incidence_matrix(grid_graph(n1, n2), T)
 
 
-incidence_matrix{T<:Number}(y::AbstractMatrix{T}) =
-    incidence_matrix(size(y)...)
+incidence_matrix{T<:Number,I<:Number}(y::AbstractMatrix{T}, ::Type{I} = Int) =
+    incidence_matrix(size(y)..., I)
 
