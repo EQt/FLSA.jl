@@ -7,7 +7,8 @@ clip(x::Vector{Float64}, lo::Float64, hi::Float64) = Base.clamp(x, lo, hi)
 norm2(x) = dot(x, x)
 
 """The objective function value"""
-flsa(x, y, D, λ) = 0.5 * norm2(y-x) + λ*norm(D*x, 1)
+flsa(x, y, D, λ=1.0) = 0.5 * norm2(y-x) + λ*norm(D*x, 1)
+
 
 """Input to compute the graph induced fused LASSO signal approximator FLSA"""
 type Instance
