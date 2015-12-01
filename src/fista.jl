@@ -9,9 +9,10 @@ macro logitfista()
                 logger["gap"]  = []
             end
             x = y - D'*α
-            push!(logger["flsa"], flsa(x, y, D, λ))
+            push!(logger["flsa"], flsa(x, y, D))
             push!(logger["time"], time)
-            push!(logger["gap"], duality_gap(α, λ, y, D))
+            push!(logger["gap"], -1.0)
+                  # duality_gap(α, y, D))
             println(@sprintf("%4d %f %f", k,
                              logger["flsa"][end], logger["gap"][end]))
         end
@@ -45,8 +46,7 @@ function fista(y::Vector{Float64},
 
     tic()
     total = 0
-    λ = 0
-    α = β = λ .* sign(D * y)
+    α = β = sign(D * y)
     t = 1
     k = 1
     while k <= max_iter+1 && total ≤ max_time
@@ -65,10 +65,10 @@ function fista(y::Vector{Float64},
 end
 
 """For convenience…"""
-function fista{T<:Number,I<:Number}(y::AbstractMatrix{T},
-                                    D::AbstractMatrix{I},
-                                    λ::Number = 1.0;params...)
+function fista{T<:Number}(y::AbstractMatrix{T},
+                                    D::SparseMatrixCSC{Float64,Int};
+                                    params...)
     n1, n2 = size(y)
-    x = fista(reshape(y, n1*n2), D, λ; params...)
+    x = fista(reshape(y, n1*n2), D; params...)
     return reshape(x, n1, n2)
 end
