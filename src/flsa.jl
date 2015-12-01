@@ -26,7 +26,7 @@ end
 function gap_vec(y, alpha, D::IncMat)
     @assert minimum(alpha) >= -1.0
     @assert maximum(alpha) <= +1.0
-    x = y - D' * a
+    x = y - D' * alpha
     g = - D*x
-    return (a .* g) + abs(g)
+    return (alpha .* g) + abs(g)
 end
