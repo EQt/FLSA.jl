@@ -20,16 +20,19 @@ end
 
 
 """
-Compute FLSA by FAST ITERATIVE SHRINKAGE/THRESHOLDING ALGORITHM.
+Compute FLSA by FAST GRADIENT PROJECTION.
+Also called Fast Iterative Shrinkage/Thresholding Algorithm.
+
+`D` : *weighted* oriented incidence matrix
 """
-function fista{MT<:AbstractMatrix}(y::Vector{Float64},
-                                   D::MT,
-                                   λ::Float64 = 1.0;
-                                   L::Float64 = 8,
-                                   max_iter::Int = 100,
-                                   verbose::Bool = false,
-                                   logger = Dict{String,Any}(),
-                                   max_time::Float64 = Inf)
+function fista{MT<:SparseMatrix{Float64}}(y::Vector{Float64},
+                                          D::MT,
+                                          L::Float64 = 8;
+                                          α0 = λ * sign(D * y)
+                                          max_iter::Int = 100,
+                                          verbose::Bool = false,
+                                          logger = Dict{String,Any}(),
+                                          max_time::Float64 = Inf)
     m, n = size(D)
     size(y,1) == n ||
       error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
@@ -40,7 +43,7 @@ function fista{MT<:AbstractMatrix}(y::Vector{Float64},
 
     tic()
     total = 0
-    α = β = λ * sign(D * y)
+    α = β = 
     t = 1
     k = 1
     while k <= max_iter+1 && total ≤ max_time
