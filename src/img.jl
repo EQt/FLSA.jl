@@ -1,3 +1,4 @@
+
 using Graphs
 
 typealias Pixel Tuple{Int,Int}
@@ -14,7 +15,8 @@ end
 
 gap_vec(y, alpha, grid::ImgGraph) = gap_vec(y, alpha ./ grid.lambda, grid.D)
 duality_gap(y, alpha, grid::ImgGraph) = sum(gap_vec(y, alpha, grid))
-
+dp_tree(y::Vector{ℝ}, g::ImgGraph, t::Tree) =
+    dp_tree(y, g.lambda, t)
 
 @inline pix2ind(i::Int, j::Int, g::ImgGraph) = pix2ind(i, j, g.n1)
 @inline pix2ind(i::Int, j::Int, n1::Int) = i + (j-1)*n1
