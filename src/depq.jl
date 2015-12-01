@@ -1,4 +1,4 @@
-import Base: push!, start, next, done, length, isempty
+import Base: push!, start, next, done, length, isempty, +
 
 """Double-ended priority queue: Implementation based on sorted arrays"""
 type DePQ{E}
@@ -14,6 +14,7 @@ push_front!{E}(q::DePQ{E}, e::E) = unshift!(q.elements, e)
 push_back!{E}(q::DePQ{E}, e::E) = push!(q.elements, e)
 
 +{E}(q::DePQ{E}, p::DePQ{E}) = merge!(p, q)
+
 function merge!{E}(q::DePQ{E}, p::DePQ{E})
     append!(q.elements, p.elements)
     sort!(q.elements, by=q.by)

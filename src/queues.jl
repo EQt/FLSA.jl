@@ -8,6 +8,10 @@ OType = typeof(event_time)
 typealias Q1 SortedSet{Event, typeof(event_order)}
 keys(q::Q1) = q
 EventQueue1() = Q1(event_order)
+if !method_exists(+, Tuple{Q1, Q1})
+    @inline +{E,O}(q::SortedSet{E,O}, p::SortedSet{E,O}) = merge!(q,p)
+end
+
 
 include("depq.jl")
 typealias Q2 DePQ{Event}
