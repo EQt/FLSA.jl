@@ -6,12 +6,12 @@ type DePQ{E}
     by::Function
 end
 
-front{E}(q::DePQ{E}) = q.elements[1]
-back{E}(q::DePQ{E})  = q.elements[end]
-pop_front!{E}(q::DePQ{E}) = shift!(q.elements)
-pop_back!{E}(q::DePQ{E})  = pop!(q.elements)
-push_front!{E}(q::DePQ{E}, e::E) = unshift!(q.elements, e)
-push_back!{E}(q::DePQ{E}, e::E) = push!(q.elements, e)
+@inline front{E}(q::DePQ{E}) = q.elements[1]
+@inline back{E}(q::DePQ{E})  = q.elements[end]
+@inline pop_front!{E}(q::DePQ{E}) = shift!(q.elements)
+@inline pop_back!{E}(q::DePQ{E})  = pop!(q.elements)
+@inline push_front!{E}(q::DePQ{E}, e::E) = unshift!(q.elements, e)
+@inline push_back!{E}(q::DePQ{E}, e::E) = push!(q.elements, e)
 
 +{E}(q::DePQ{E}, p::DePQ{E}) = merge!(p, q)
 
@@ -26,8 +26,8 @@ function push!{E}(q::DePQ{E}, e::E)
     sort!(q.elements, by=q.by)
 end
 
-length{E}(q::DePQ{E}) = length(q.elements)
-isempty{E}(q::DePQ{E}) = length(q) == 0
+@inline length{E}(q::DePQ{E}) = length(q.elements)
+@inline isempty{E}(q::DePQ{E}) = isempty(q.elements)
 
 # for convinience (map, enumerate, …)
 start{E}(q::DePQ{E}) = start(q.elements)
