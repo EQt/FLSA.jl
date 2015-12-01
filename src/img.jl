@@ -16,6 +16,8 @@ end
 gap_vec(y, alpha, grid::ImgGraph) = gap_vec(y, alpha, grid.D)
 duality_gap(y, alpha, grid::ImgGraph) = sum(gap_vec(y, alpha, grid))
 dp_tree(y::Vector{ℝ}, g::ImgGraph, t::Tree) = dp_tree(y, g.lambda, t)
+fista(y::Matrix{ℝ}, g::ImgGraph; ps...) =
+    reshape(fista(y[:], g.D; L=g.Lip, ps...), g.n1, g.n2)
 
 @inline pix2ind(i::Int, j::Int, g::ImgGraph) = pix2ind(i, j, g.n1)
 @inline pix2ind(i::Int, j::Int, n1::Int) = i + (j-1)*n1
@@ -100,6 +102,7 @@ function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,0)
     @debug @val J
     D = sparse(I, J, W, m, n)
     G = simple_edgelist(n1*n2, E; is_directed=false)
-    Lip = 1.0
+    lmax = maximum(lam)
+    Lip = lmax * 2 * 4 * sum([l for (d,l) in dir])
     ImgGraph(n1, n2, Lip, lam, G, D)
 end
