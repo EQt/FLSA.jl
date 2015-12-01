@@ -30,7 +30,7 @@ Notice that calculation is done in normed dual variables.
 `D` : *weighted* oriented incidence matrix
 """
 function fista(y::Vector{Float64},
-               D::SparseMatrixCSC{Float64,Int};
+               D::IncMat;
                L::Float64 = 8,
                max_iter::Int = 100,
                verbose::Bool = false,
