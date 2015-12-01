@@ -107,10 +107,10 @@ end
 
 
 """Extract minimal position `x` of queue `pq` or `+∞` if none exists"""
-@inline min_x{Q}(pq::Q) = try front(pq).x catch +∞ end
+@inline min_x{Q}(pq::Q) = if !isempty(pq); front(pq).x else +∞ end
 
 """Extract maximal position `x` of queue `pq` or `-∞` if none exists"""
-@inline max_x{Q}(pq::Q) = try back(pq).x  catch -∞ end
+@inline max_x{Q}(pq::Q) = if !isempty(pq); back(pq).x  else -∞ end
 
 
 """For convinience..."""
