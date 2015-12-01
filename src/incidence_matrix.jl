@@ -1,6 +1,9 @@
 import Graphs: edge_index
 
-edge_index(e::Graphs.Edge{Tuple{Int64,Int64}}) = e.index
+if !method_exists(edge_index, Tuple{IEdge})
+    edge_index(e::IEdge) = e.index
+end
+
 
 """Compute the oriented incidence matrix of g and store in a sparse matrix of type T"""
 function incidence_matrix{T<:Number}(g::AbstractGraph,  ::Type{T} = Int)
