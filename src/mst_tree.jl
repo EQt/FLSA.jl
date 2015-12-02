@@ -32,14 +32,13 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph; c0 = 0.0,
                 Lam[u] = g.lambda[e.index]
             end
         end
-        logg("lambda subtree")
+        logg("sub_lambda")
         x = FLSA.dp_tree(z, Lam , t)
         logg("dp_tree")
         alpha_t = FLSA.dual_tree(z, x, t)
         @debug("gap(tree-part) = $(norm(z - FLSA.tree_part(g.D, mst)' * alpha_t - x))")
         logg("dual_tree: \n$(alpha_t[1:min(5, length(alpha_t))])")
-        m = num_edges(g.graph)
-        alpha_old = deepcopy(alpha)
+
         for (i,e) in enumerate(mst)
             alpha[e.index] = alpha_t[i] / g.lambda[e.index]
         end
