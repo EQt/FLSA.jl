@@ -41,7 +41,7 @@ function admm(y::Vector{Float64},
             push!(logger["flsa"], flsa(x, y, D))
             push!(logger["time"], time)
             push!(logger["ɛ_CG"], ɛ_CG)
-            println(@sprintf("%4d %f", k, logger["flsa"][end]))
+            println(@sprintf("%4d %f %f", k, logger["flsa"][end], norm(x-y, 2)))
         end
         tic()
         # update x
@@ -50,7 +50,7 @@ function admm(y::Vector{Float64},
         x = conjugate_gradient(A, c, x; ɛ=ɛ_CG)
         ɛ_CG *= ɛ_c
         # update b
-        b = soft_threshold(D*x + z/μ, λ/μ)
+        b = soft_threshold(D*x + z/μ, 1/μ)
         
         # update z
         z += δ * (D*x - b)
