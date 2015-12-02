@@ -7,10 +7,9 @@ soft_threshold(x, λ) = sign(x) .* max(0, abs(x) - λ)
 Solve the FLSA by the ALTERNATING DIRECTION METHOD OF MULTIPLIERS.
 """
 function admm(y::Vector{Float64},
-              D::IncMat,
-              λ::Number = 1.0,
+              D::IncMat;
+              μ::Number = 0.5,
               δ::Number = 0.5,
-              μ::Number = 0.5;
               ɛ_CG::Real= 0.1,
               ɛ_c::Real = 0.5,
               max_iter::Int = 100,
@@ -39,7 +38,7 @@ function admm(y::Vector{Float64},
                 logger["flsa"] = []
                 logger["ɛ_CG"] = []
             end
-            push!(logger["flsa"], flsa(x, y, D, λ))
+            push!(logger["flsa"], flsa(x, y, D))
             push!(logger["time"], time)
             push!(logger["ɛ_CG"], ɛ_CG)
             println(@sprintf("%4d %f", k, logger["flsa"][end]))
@@ -61,17 +60,5 @@ function admm(y::Vector{Float64},
 end
 
 """For convenience…"""
-function admm{T<:Number,I<:Number}(y::AbstractMatrix{T},
-                                   D::AbstractMatrix{I},
-                                   λ::Number = 1.0,
-                                   δ::Number = 0.1,
-                                   μ::Number = 0.1; params...)
-    n1, n2 = size(y)
-    x = admm(reshape(y, n1*n2), D, λ, δ, μ; params...)
-    return reshape(x, n1, n2)
-end
-
-
-"""For convenience (see first admm function)"""
-admm{T<:Number}(y::AbstractMatrix{T}, λ::Number = 1.0, δ::Number = 0.1, μ::Number = 0.1; params...) =
-    admm(y, grid_graph(size(y)...), λ, δ, μ; params...)
+admm(y::Matrix{Float64}, g::ImgGraph; params...) =
+    reshape(admm(y[:], g.D; params...), g.n1, g.n2)
