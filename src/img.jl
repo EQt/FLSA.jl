@@ -27,7 +27,9 @@ fista(y::Matrix{ℝ}, g::ImgGraph; ps...) =
 @inline ind2pix(i::Int, g::ImgGraph) = nothing
 
 norm2(x::Pixel) = x[1]^2 + x[2]^2
-norm(x::Pixel) = sqrt(norm2(x))
+if !method_exists(norm, Tuple{Pixel})
+    norm(x::Pixel) = sqrt(norm2(x))
+end
 
 img_graph(n1::Int, n2::Int, ds::Vector{Pixel}) =
     img_graph(n1, n2, [(d, 1/norm(d)) for d in ds])
