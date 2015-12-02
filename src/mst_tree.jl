@@ -11,6 +11,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
     alpha = c0 * sign(g.D*y[:])
     x = zeros(y)
     total = 0.0
+    tic()
     for it = 0:max_iter
         if verbose
             time = toq()
