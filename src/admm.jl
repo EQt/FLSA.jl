@@ -6,18 +6,17 @@ soft_threshold(x, λ) = sign(x) .* max(0, abs(x) - λ)
 """
 Solve the FLSA by the ALTERNATING DIRECTION METHOD OF MULTIPLIERS.
 """
-function admm{T<:Number,I<:Number}(y::Vector{T},
-                                   D::AbstractMatrix{I},
-                                   λ::Number = 1.0,
-                                   δ::Number = 0.5,
-                                   μ::Number = 0.5;
-                                   ɛ_CG::Real= 0.1,
-                                   ɛ_c::Real = 0.5,
-                                   max_iter::Int = 100,
-                                   verbose::Bool = false,
-                                   logger = Dict{UTF8String, Any}(),
-                                   max_time::Number = Inf,
-                                   L::Real = 8)
+function admm(y::Vector{Float64},
+              D::IncMat,
+              λ::Number = 1.0,
+              δ::Number = 0.5,
+              μ::Number = 0.5;
+              ɛ_CG::Real= 0.1,
+              ɛ_c::Real = 0.5,
+              max_iter::Int = 100,
+              verbose::Bool = false,
+              logger = Dict{UTF8String, Any}(),
+              max_time::Number = Inf)
     m, n = size(D)
     size(y,1) == n ||
        error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
