@@ -1,16 +1,20 @@
-max_gap_tree(y::Matrix{Float64}, g::FLSA.ImgGraph; params...) = max_gap_tree(y[:], g; params...)
-function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph; c0 = 0.0,
+max_gap_tree(y::Matrix{Float64}, g::FLSA.ImgGraph; params...) =
+    reshape(max_gap_tree(y[:], g; params...), g.n1, g.n2)
+
+function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
+                      c0 = 0.0,
                       max_iter=1,
                       logger = Dict{UTF8String,Any}(),
                       random_tree=false)
-    function logg(msg); end
+    function logg(msg...); end
     alpha = c0 * sign(g.D*y[:])
-
+    x = zeros(y)
     for it = 0:max_iter
         logg("gap", FLSA.duality_gap(y[:], alpha, g))
         dual_obj = FLSA.norm2(y[:] - g.D'*alpha)
         logg("duality obj: $dual_obj")
-        it >= max_iter || break
+        info("iteration $it")
+        it >= max_iter && break
 
         if random_tree
             weights = randn(num_edges(g.graph))
