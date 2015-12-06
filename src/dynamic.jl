@@ -44,18 +44,6 @@ type LineSegment
 end
 
 
-"""Record what is happening, when a knot of the PWL is hit"""
-immutable Event
-    x::Float64      # position
-    slope::Float64  # delta slope
-    offset::Float64 # delta offset
-    function Event(x, s, o)
-        @assert isfinite(x)
-        @assert abs(s) > 1e-16
-        new(x, s, o)
-    end
-end
-
 @inline event_time(e::Event) = e.x
 
 include("queues.jl")

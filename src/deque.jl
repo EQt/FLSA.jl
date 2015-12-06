@@ -1,7 +1,6 @@
-using DataStructures.Deque
-import DataStructures: front, back 
-
 typealias DeQue Deque
+import DataStructures: back, front
+import Base: +, merge!
 
 """More convinient way of denoting the functions"""
 pop_front!{T}(q::DeQue{T}) = shift!(q)
