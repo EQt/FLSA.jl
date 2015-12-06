@@ -1,6 +1,8 @@
-typealias DeQue Deque
-import DataStructures: back, front
+import DataStructures: back, front, Deque
 import Base: +, merge!
+
+typealias DeQue Deque
+
 
 """More convinient way of denoting the functions"""
 pop_front!{T}(q::DeQue{T}) = shift!(q)
@@ -16,8 +18,6 @@ push_back!{T}(q::DeQue{T}, x::T) = push!(q, x)
 
 if !method_exists(+, Tuple{DeQue{Event}, DeQue{Event}})
     +{E}(q::DeQue{E}, p::DeQue{E}) = merge!(p, q)
-end
-
 
 function merge!{E}(q::DeQue{E}, p::DeQue{E})
     el = vcat(collect(q), collect(p))
@@ -28,3 +28,6 @@ function merge!{E}(q::DeQue{E}, p::DeQue{E})
     end
     return q
 end
+
+end
+
