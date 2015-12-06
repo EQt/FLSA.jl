@@ -49,6 +49,6 @@ function dp_line(y, λ, µ)
     @debug "lb = $lb"
     @debug "ub = $ub"
     @debug "pq = $pq"
-    xn = clip_front(pq, init_front(n), 0.0)
+    xn = clip_front(pq, line(n, -σ(n)), 0.0)
     return dp_line_backtrace(xn, lb, ub)
 end
