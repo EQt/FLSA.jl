@@ -53,7 +53,7 @@ end
 include("debug.jl")
 include("inplace.jl")
 include("deque.jl")
-include("flsa.jl")
+include("utils.jl")
 include("igraph.jl")
 include("grid_graph.jl")
 include("incidence_matrix.jl")
