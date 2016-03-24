@@ -60,7 +60,7 @@ function +(f::PWL, g::PWL)
         end
     end
     for k in knots
-        k.y = call(f, k.x) + call(g, k.x)
+        k.y = f(k.x) + g(k.x)
     end
     return PWL(knots)
 end
@@ -72,10 +72,10 @@ end
 function clip_x(f::PWL, x_lower::Number, x_upper::Number)
     i0 = findfirst(k -> k.x >= x_lower, f.knots)
     i1 = findlast( k -> k.x <= x_upper, f.knots)
-    knots = [Knot(x_lower, call(f, x_lower));
+    knots = [Knot(x_lower, f( x_lower));
              f.knots[i0:i1];
-             Knot(x_upper, call(f, x_upper))]
-    PWL([Knot(-INF, call(f,x_lower)); knots; Knot(+INF, call(f,x_upper))])
+             Knot(x_upper, f( x_upper))]
+    PWL([Knot(-INF, f(x_lower)); knots; Knot(+INF, f(x_upper))])
 end
 
 
