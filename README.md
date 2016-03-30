@@ -23,3 +23,13 @@ For the one dimensional version of the Johnson's dynamic programming algorithm, 
 ## Example
 
 *TODO*
+
+
+## ToDos
+- [ ] Try out QP interface of Gurobi and CPLEX.
+      In Julia, that is the `add_qpterms!` function or `JuMP.addQuadratics`
+      
+- [ ] Try out [LinearLeastSquares.minimize!][lls]
+  [lls]: https://github.com/davidlizeng/LinearLeastSquares.jl/blob/master/docs/julia_tutorial.rst#the-minimize-function
+
+- [ ] Refactor the code
