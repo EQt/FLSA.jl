@@ -51,7 +51,6 @@ immutable Event
 end
 
 include("debug.jl")
-include("inplace.jl")
 include("deque.jl")
 include("utils.jl")
 include("igraph.jl")

@@ -38,3 +38,13 @@ function gap_vec(y, alpha, D::IncMat)
 end
 
 duality_gap(y::Vector{ℝ}, alp::Vector{ℝ}, D::IncMat) = sum(gap_vec(y, alp, D))
+
+"""Overload the `+=` operator for arrays"""
+macro inplace(ex)
+    if ex.head == :+=
+        # broadcast(+, $(ex.args[1]), $(ex.args[2]), $(ex.args[2]))
+        :(BLAS.axpy!(1.0, $(ex.args[2]), $(ex.args[1])))
+    else
+        ex
+    end
+end
