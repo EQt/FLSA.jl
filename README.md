@@ -22,8 +22,12 @@ For the one dimensional version of the Johnson's dynamic programming algorithm, 
 
 ## Denoising
 The fused LASSO signal approximator can be used to denoise e.g. images:
+#### Noisy Input
 ![demo noise](resources/demo_noise.png?raw=true "noisy input data")
+
+#### Cleaned by FLSA
 ![demo flsa](resources/demo_flsa.png?raw=true "after cleaning with FLSA")
+
 
 ## Example
 
