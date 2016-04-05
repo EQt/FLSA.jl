@@ -1,6 +1,7 @@
 # FLSA
 
 [![Build Status](https://travis-ci.org/EQt/FLSA.jl.svg?branch=master)](https://travis-ci.org/EQt/FLSA.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/e28l9al5h3r0hmcu/branch/master?svg=true)](https://ci.appveyor.com/project/EQt/flsa-jl/branch/master)
 
 Computing a graph induced *Fused LASSO Signal Approximator*.
 You can use it to denoise data.
