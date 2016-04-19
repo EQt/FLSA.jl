@@ -1,5 +1,10 @@
 module FLSA
 
+# Fix https://github.com/JuliaLang/DataStructures.jl/issues/200
+if Pkg.installed("DataStructures") == v"0.4.3"
+    Pkg.checkout("DataStructures", "master")
+end
+
 using Compat: findlast, @compat, @inline
 using Graphs
 using DataStructures
