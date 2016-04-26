@@ -33,6 +33,7 @@ end
 
 
 function img_graph(n1::Int, n2::Int, dn::Int, lam::Float64)
+    println("n1 = $n1, n2 = $n2")
     g = img_graph(n1, n2, dn)
     g.D *= lam
     g.Lip *= lam^2
@@ -75,7 +76,7 @@ function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,0)
     m = 0
     for d in dir
         e = d[1]
-        @inbounds @sync @parallel for j = 1:n2-e[2]
+        @inbounds for j = 1:n2-e[2]
             for i = 1:n1-e[1]
                 l = m + i + (j-1)*(n1-e[1])
                 k = 2l - 1
@@ -93,7 +94,7 @@ function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,0)
             end
         end
         m += (n1-e[1])*(n2-e[2])
-        @inbounds @sync @parallel for j = 1:n2-e[1]
+        @inbounds for j = 1:n2-e[1]
             for i = 1+e[2]:n1
                 l = m + i - e[2] + (j-1)*(n1-e[2])
                 k = 2l -1
