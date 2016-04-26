@@ -43,11 +43,25 @@ Own algorithm based on a iterative approximation by dynamic programming algorith
 
 ## Example
 
+### Image Graph
 ```julia
 using FLSA
-graph = FLSA.img_graph(size(B)..., dn, lam=0.1)
-F = FLSA.fista(B, graph, verbose=true; max_iter=10)
+graph = FLSA.img_graph(size(B)..., dn=2, lam=0.1)   # (1)
+F = FLSA.fista(B, graph, verbose=true; max_iter=10) # (2)
 ```
+
+First you have to define graph (see `(1)`)
+
+### HDF5 Input
+```
+nodes/input
+     /weight
+
+edges/head
+     /tail
+     /weight
+```
+
 
 ## ToDos
 - [ ] Try out QP interface of Gurobi and CPLEX.
