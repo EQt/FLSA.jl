@@ -1,0 +1,23 @@
+#!/usr/bin/env julia
+## -*- mode: julia; -*-
+
+desc = """
+Compute the graph induced Fused LASSO Signal Approximator
+"""
+
+using ArgParse
+s = ArgParseSettings(description=desc)
+@add_arg_table s begin
+    "--quiet", "-q"
+        action = :store_true
+        help = "suppress any output"
+    "input"
+        help = "problem instance (in hdf5)"
+        arg_type = UTF8String
+        required = true
+end
+args = parse_args(s)
+
+using FLSA
+
+mu, D = FLSA.read_h5(args["input"])
