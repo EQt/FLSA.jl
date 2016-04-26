@@ -12,7 +12,8 @@ function read_h5(file_name::AbstractString)
         m  = length(I)
         @assert m == length(J)
         @assert m == length(V)
+        @assert n == length(mu)
         D = sparse([collect(1:m); collect(1:m)], Int[I;J;], [V; -V], m, n)
-        return mu, D
+        return y, mu, D
     end
 end

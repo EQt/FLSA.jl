@@ -20,4 +20,4 @@ args = parse_args(s)
 
 using FLSA
 
-mu, D = FLSA.read_h5(args["input"])
+y, mu, D = FLSA.read_h5(args["input"])
