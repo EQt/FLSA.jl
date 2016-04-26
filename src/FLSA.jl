@@ -69,5 +69,6 @@ include("pwl.jl")
 include("dynamic.jl")
 include("line.jl")
 include("mgt.jl")
+include("hdf5.jl")
 
 end # module
