@@ -17,8 +17,12 @@ def create_input(file_name="example.h5"):
         head = [1, 2, 3, 3, 4, 5, 6, 6]
         tail = [3, 3, 4, 5, 6, 7, 8, 9]
         edges = f.create_group("edges")
-        edges.create_dataset("head", data =head, dtype=int )
-        edges.create_dataset("tail", data =tail, dtype="i" )
+        edges.create_dataset("head",   data=head, dtype="i")
+        edges.create_dataset("tail",   data=tail, dtype="i")
+        # random edge weights
+        m = len(head); assert m == len(tail)
+        np.random.seed(42); lam  = np.random.randn(m)
+        edges.create_dataset("weight", data=lam,  dtype="f")
     
 
 if __name__ == "__main__":
