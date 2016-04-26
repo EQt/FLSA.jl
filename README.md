@@ -43,9 +43,11 @@ Own algorithm based on a iterative approximation by dynamic programming algorith
 
 ## Example
 
-*TODO*
-
-
+```julia
+using FLSA
+graph = FLSA.img_graph(size(B)..., dn, lam=0.1)
+F = FLSA.fista(B, graph, verbose=true; max_iter=10)
+```
 
 ## ToDos
 - [ ] Try out QP interface of Gurobi and CPLEX.
