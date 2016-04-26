@@ -11,6 +11,10 @@ s = ArgParseSettings(description=desc)
     "--quiet", "-q"
         action = :store_true
         help = "suppress any output"
+    "--max-iter", "-i"
+        help = "maximum number of iterations"
+        arg_type = Int
+        default = 20
     "input"
         help = "problem instance (in hdf5)"
         arg_type = UTF8String
@@ -18,6 +22,16 @@ s = ArgParseSettings(description=desc)
 end
 args = parse_args(s)
 
+using HDF5
 using FLSA
 
 y, mu, D = FLSA.read_h5(args["input"])
+D = map(Float64, D)
+y = map(Float64, y)
+mu = map(Float64, mu)
+
+x = admm(y, D, max_iter=args["max-iter"], verbose=!args["quiet"])
+
+h5open(args["input"], "w") do io
+    write(io, "nodes/output", x)
+end
