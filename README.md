@@ -53,13 +53,20 @@ F = FLSA.fista(B, graph, verbose=true; max_iter=10) # (2)
 First you have to define graph (see `(1)`)
 
 ### HDF5 Input
+In order to be easily called from other languages a HDF5 intermediate data structure is supported that looks like
 ```
+             1 2 3 ... n
 nodes/input
      /weight
 
+             1 2 3 ... m
 edges/head
      /tail
      /weight
+
+algorithm/@name
+         /@param1
+         /@param2
 ```
 
 
