@@ -30,9 +30,21 @@ The fused LASSO signal approximator can be used to denoise e.g. images:
 ![demo flsa](resources/demo_flsa.png?raw=true "after cleaning with FLSA")
 
 
+## Algorithms
+
+### Fast Gradient Projection (FGP)
+Also known as Fast Iterative Shrinkage Algorithm (FISTA).
+
+### Alternating Direction Method of Multipliers (ADMM)
+
+### Maximum Gap Tree (MGT)
+Own algorithm based on a iterative approximation by dynamic programming algorithm minimizing a sub-tree-graph.
+
+
 ## Example
 
 *TODO*
+
 
 
 ## ToDos
