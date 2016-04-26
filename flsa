@@ -11,7 +11,7 @@ s = ArgParseSettings(description=desc)
     "--quiet", "-q"
         action = :store_true
         help = "suppress any output"
-    "--max-iter", "-i"
+    "--max-iter", "-m"
         help = "maximum number of iterations"
         arg_type = Int
         default = 20
@@ -32,6 +32,9 @@ mu = map(Float64, mu)
 
 x = admm(y, D, max_iter=args["max-iter"], verbose=!args["quiet"])
 
-h5open(args["input"], "w") do io
+h5open(args["input"], "r+") do io
+    if exists(io, "nodes/output")
+        o_delete(io, "nodes/output")
+    end
     write(io, "nodes/output", x)
 end
