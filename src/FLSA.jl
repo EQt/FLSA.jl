@@ -1,3 +1,5 @@
+__precompile__()
+
 module FLSA
 
 # Fix https://github.com/JuliaLang/DataStructures.jl/issues/200
