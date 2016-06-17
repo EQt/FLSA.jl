@@ -6,7 +6,8 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       max_iter=1,
                       logger = Dict{UTF8String,Any}(),
                       random_tree=false,
-                      verbose=true)
+                      verbose=true,
+                      process=x->nothing)
     function logg(msg...); end
     alpha = c0 * sign(g.D*y[:])
     x = zeros(y)
@@ -24,6 +25,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
             push!(logger["flsa"], flsa(x, y, g.D))
             push!(logger["time"], time)
             push!(logger["gap"], FLSA.duality_gap(y[:], alpha, g))
+            process(x)
             println(@sprintf("%4d %f %f", it, logger["flsa"][end], logger["gap"][end]))
         end
         it >= max_iter && break
