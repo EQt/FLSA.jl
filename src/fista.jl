@@ -9,6 +9,7 @@ macro logitfista()
                 logger["gap"]  = []
             end
             x = y - D'*α
+            process(x)
             push!(logger["flsa"], flsa(x, y, D))
             push!(logger["time"], time)
             push!(logger["gap"], duality_gap(y, α, D))
@@ -34,7 +35,8 @@ function fista(y::Vector{Float64},
                max_iter::Int = 100,
                verbose::Bool = false,
                logger = Dict{UTF8String,Any}(),
-               max_time::Float64 = Inf)
+               max_time::Float64 = Inf,
+               process=x->nothing)
     m, n = size(D)
     size(y,1) == n ||
       error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
