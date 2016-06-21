@@ -3,13 +3,16 @@ max_gap_tree(y::Matrix{Float64}, g::FLSA.ImgGraph; params...) =
 
 function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       c0 = 0.0,
+                      alpha = Vector{Float64}[],
                       max_iter=1,
                       logger = Dict{UTF8String,Any}(),
                       random_tree=false,
                       verbose=true,
                       process=x->nothing)
     function logg(msg...); end
-    alpha = c0 * sign(g.D*y[:])
+    if length(alpha) <= 0
+        alpha = c0 * sign(g.D*y[:])
+    end
     x = zeros(y)
     total = 0.0
     tic()
