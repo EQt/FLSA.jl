@@ -10,6 +10,7 @@ macro logitfista()
             end
             x = y - D'*α
             process(x)
+            dprocess(α)
             push!(logger["flsa"], flsa(x, y, D))
             push!(logger["time"], time)
             push!(logger["gap"], duality_gap(y, α, D))
@@ -28,6 +29,9 @@ Also called Fast Iterative Shrinkage/Thresholding Algorithm.
 Notice that calculation is done in normed dual variables.
 
 `D` : *weighted* oriented incidence matrix
+
+`process`  : do something with the current primal solution x
+`dprocess` : same with dual solution α
 """
 function fista(y::Vector{Float64},
                D::IncMat;
@@ -36,7 +40,8 @@ function fista(y::Vector{Float64},
                verbose::Bool = false,
                logger = Dict{UTF8String,Any}(),
                max_time::Float64 = Inf,
-               process=x->nothing)
+               process=x->nothing,
+               dprocess=α->nothing)
     m, n = size(D)
     size(y,1) == n ||
       error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
