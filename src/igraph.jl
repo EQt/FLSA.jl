@@ -16,7 +16,7 @@ function igraph{V,E}(g::AbstractGraph{V,E},
     edgelist(collect(1:num_vertices(g)), ed; is_directed=false)
 end
 
-if Pkg.installed("Graphs") < v"0.6.0"
+if Pkg.installed("Graphs") <= v"0.6.0"
     """Fast implementation of vertex_index"""
     Graphs.vertex_index(v::Int, g::IGraph) = v
 end
