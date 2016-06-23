@@ -9,7 +9,7 @@ type ImgGraph
     n2::Int
     Lip::Float64
     lambda::Vector{Float64}
-    graph::AbstractGraph{Int,IEdge}
+    graph::IGraph
     D::IncMat
 end
 

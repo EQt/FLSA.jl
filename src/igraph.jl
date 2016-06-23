@@ -1,8 +1,8 @@
 ### Integer Graphs to avoid slow vertex_indexo calls
 
-import Graphs: IEdge, vertex_index
+import Graphs: IEdge, vertex_index, SimpleEdgeList
 
-typealias IGraph GenericEdgeList{Int,IEdge,Vector{Int},Vector{IEdge}}
+typealias IGraph SimpleEdgeList{IEdge}
 
 function igraph{V,E}(g::AbstractGraph{V,E},
                      vmap::Dict{V,Int} = Dict([(v, i) for (i,v) in enumerate(vertices(g))]))
