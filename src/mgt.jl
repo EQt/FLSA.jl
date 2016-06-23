@@ -2,15 +2,15 @@ max_gap_tree(y::Matrix{Float64}, g::FLSA.ImgGraph; params...) =
     reshape(max_gap_tree(y[:], g; params...), g.n1, g.n2)
 
 function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
-                      c0 = 0.0,
-                      alpha = Vector{Float64}[],
-                      x::Vector{Float64} = [],
-                      max_iter=1,
+                      c0::Real = 0.0,
+                      alpha::Vector{Float64} = Vector{Float64}[],
+                      x::Vector{Float64} = Vector{Float64}[],
+                      max_iter::Integer=1,
                       logger = Dict{UTF8String,Any}(),
-                      random_tree=false,
-                      verbose=true,
-                      process=x->nothing,
-                      dprocess=α->nothing)
+                      random_tree::Bool=false,
+                      verbose::Bool=true,
+                      process::Function=x->nothing,
+                      dprocess::Function=α->nothing)
     function logg(msg...); end
     if length(alpha) <= 0
         alpha = c0 * sign(g.D*y[:])
