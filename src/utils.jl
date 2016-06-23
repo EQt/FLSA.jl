@@ -26,7 +26,7 @@ function duality_gap{T<:Number,I<:Number}(alpha::Vector{T}, lambda::T, y::Vector
     return lambda * norm(psi, 1) + dot(alpha, psi)
 end
 
-function gap_vec(y, alpha, D::IncMat)
+function gap_vec(y::Vector{ℝ}, alpha::Vector{ℝ}, D::IncMat)
     m, n = size(D)
     @assert n == length(y) y, n, size(y)
     @assert m == length(alpha) m, size(alpha)
