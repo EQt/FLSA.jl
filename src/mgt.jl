@@ -14,6 +14,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
     if length(alpha) <= 0
         alpha = c0 * sign(g.D*y[:])
     end
+    x = y
     total = 0.0
     tic()
     for it = 0:max_iter
@@ -24,9 +25,6 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                 logger["time"] = Float64[]
                 logger["gap"] = Float64[]
                 logger["flsa"] = Float64[]
-            end
-            if !isdefined(:x)
-                x = y
             end
             push!(logger["flsa"], flsa(x, y, g.D))
             push!(logger["time"], time)
