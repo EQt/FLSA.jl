@@ -73,4 +73,10 @@ include("line.jl")
 include("mgt.jl")
 include("hdf5.jl")
 
+precompile(img_graph, (Int64,Int64,Array{Tuple{Tuple{Int64,Int64},Float64},1}))
+precompile(img_graph, (Int64, Int64, Int64, Float64))
+precompile(max_gap_tree, (Array{Float64,1}, ImgGraph))
+precompile(fista, (Array{Float64,1},SparseMatrixCSC{Float64,Int64}))
+precompile(admm, (Array{Float64,1},SparseMatrixCSC{Float64,Int64}))
+
 end # module
