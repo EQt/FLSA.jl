@@ -51,3 +51,12 @@ macro inplace(ex)
         ex
     end
 end
+
+
+# Compute normed histograms
+normed1(x::Vector) = x /= sum(x)
+"""Compute normed histogram"""
+nhist(x::Vector) = normed1(hist(x)[2])
+nhist(x, e) = normed1(hist(x, e)[2])
+
+export nhist
