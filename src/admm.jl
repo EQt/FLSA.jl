@@ -12,6 +12,7 @@ macro log_admm()
                 logger["flsa"] = []
                 logger["ɛ_CG"] = []
             end
+            process(x)
             push!(logger["flsa"], flsa(x, y, D))
             push!(logger["time"], time)
             push!(logger["ɛ_CG"], ɛ_CG)
@@ -33,7 +34,8 @@ function admm(y::Vector{Float64},
               max_iter::Int = 100,
               verbose::Bool = false,
               logger = Dict{UTF8String, Any}(),
-              max_time::Number = Inf)
+              max_time::Number = Inf,
+              process = x->nothing)
     m, n = size(D)              # Incidence matrix
     L = D'*D                    # Laplacian matrix
     @assert size(y,1) == n @sprintf("size(y)=%d (n=%d)", size(y,1), n)
