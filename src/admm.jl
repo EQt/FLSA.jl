@@ -28,6 +28,7 @@ Solve the FLSA by the ALTERNATING DIRECTION METHOD OF MULTIPLIERS.
 function admm(y::Vector{Float64},
               D::IncMat;
               μ::Number = 0.5,
+              c_μ::Number = 1.0,
               δ::Number = 0.5,
               c_δ::Real = 1.0,
               ɛ_CG::Real= 0.1,
@@ -56,6 +57,7 @@ function admm(y::Vector{Float64},
         x = conjugate_gradient(A, c, x; ɛ=ɛ_CG) # update x
         ɛ_CG *= ɛ_c                             # update accuracy
         δ *= c_δ
+        μ *= c_μ
         b = soft_threshold(D*x + z/μ, 1/μ)      # update b
         z += δ * (D*x - b)                      # update z
         k += 1
