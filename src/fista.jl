@@ -38,7 +38,7 @@ function fista(y::Vector{Float64},
                L::Float64 = 8,
                max_iter::Int = 100,
                verbose::Bool = false,
-               logger = Dict{UTF8String,Any}(),
+               logger = Dict{@compat String,Any}(),
                max_time::Float64 = Inf,
                process=x->nothing,
                dprocess=α->nothing)

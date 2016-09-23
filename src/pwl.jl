@@ -23,7 +23,7 @@ type PWL
     PWL(ks::Vector{Knot}) = new(ks)
 end
 
-function call(f::PWL, x::Number)
+@compat function (f::PWL)(x::Number)
     # special cases
     if length(f.knots) == 0
         return 0

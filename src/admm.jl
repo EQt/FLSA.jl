@@ -35,7 +35,7 @@ function admm(y::Vector{Float64},
               ɛ_c::Real = 0.5,
               max_iter::Int = 100,
               verbose::Bool = false,
-              logger = Dict{UTF8String, Any}(),
+              logger = Dict{@compat String, Any}(),
               max_time::Number = Inf,
               process = x->nothing)
     m, n = size(D)              # Incidence matrix
