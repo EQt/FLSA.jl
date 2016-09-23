@@ -7,7 +7,7 @@ if Pkg.installed("DataStructures") == v"0.4.3" && VERSION.minor == 5
     Pkg.checkout("DataStructures", "master")
 end
 
-using Compat: findlast, @compat, @inline
+using Compat: findlast, @compat, @inline, String
 using Graphs
 using DataStructures
 

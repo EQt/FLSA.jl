@@ -5,7 +5,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       c0::Real = 0.0,
                       alpha = Vector{Float64}[],
                       max_iter::Integer=1,
-                      logger = Dict{@compat String,Any}(),
+                      logger = Dict{String,Any}(),
                       random_tree::Bool=false,
                       verbose::Bool=true,
                       process::Function=x->nothing,
