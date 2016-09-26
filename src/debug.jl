@@ -27,3 +27,16 @@ macro val(v)
     s = "$v="
      :($s * string($v))
 end
+
+
+macro once(expr)
+    return quote
+        if !isdefined(:LastMain) || !isdefined(LastMain, :FLSA)
+            info("Defining first time")
+            $expr
+        else
+            info("Already defined")
+        end
+    end
+end
+
