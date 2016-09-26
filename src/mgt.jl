@@ -9,7 +9,8 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       random_tree::Bool=false,
                       verbose::Bool=true,
                       process::Function=x->nothing,
-                      dprocess::Function=α->nothing)
+                      dprocess::Function=α->nothing,
+                      assert_decreasing::Bool=false)
     function logg(msg...); end
     x = y
     if length(alpha) <= 0
@@ -34,6 +35,9 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
             process(x)
             dprocess(alpha)
             println(@sprintf("%4d %f %f", it, logger["flsa"][end], logger["gap"][end]))
+            if assert_decreasing && length(logger["flsa"]) >= 2
+                @assert logger["flsa"][end] <= logger["flsa"][end-1]
+            end
         end
         it >= max_iter && break
 
