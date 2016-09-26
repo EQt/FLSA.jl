@@ -2,8 +2,6 @@ module TestLine
 using FactCheck
 using FLSA
 
-reload("FLSA")
-
 facts("3 line knot") do
     y = [1.0; 2.0; 3.5]
     x = FLSA.dp_line_naive(y, 1.0)
