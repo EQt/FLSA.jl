@@ -41,8 +41,6 @@ Create an grid graph for an images of `n1`*`n2` pixels.
 `dn`  is the number of directions to go on from an internal pixel node
 
 `lam` is a scaling factor.
-
-`ds` species the directions explicitly (not scaled)
 """
 function img_graph(n1::Int, n2::Int, dn::Int, lam::Float64)
     println("n1 = $n1, n2 = $n2")
@@ -53,6 +51,9 @@ function img_graph(n1::Int, n2::Int, dn::Int, lam::Float64)
 end
 
 
+"""
+`ds` species the directions explicitly (vector d is scaled by 1/norm(d))
+"""
 img_graph(n1::Int, n2::Int, ds::Vector{Pixel}) =
     img_graph(n1, n2, [(d, 1/norm(d)) for d in ds])
 
