@@ -11,10 +11,12 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       process::Function=x->nothing,
                       dprocess::Function=α->nothing)
     function logg(msg...); end
+    x = y
     if length(alpha) <= 0
         alpha = c0 * sign(g.D*y[:])
+    else
+        x = y[:] - g.D' * alpha
     end
-    x = y
     total = 0.0
     tic()
     for it = 0:max_iter
