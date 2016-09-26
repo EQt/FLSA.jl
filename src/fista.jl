@@ -36,6 +36,7 @@ Notice that calculation is done in normed dual variables.
 function fista(y::Vector{Float64},
                D::IncMat;
                L::Float64 = 8,
+               alpha = Vector{Float64}[],
                max_iter::Int = 100,
                verbose::Bool = false,
                logger = Dict{String,Any}(),
@@ -52,7 +53,11 @@ function fista(y::Vector{Float64},
 
     tic()
     total = 0
-    α = β = sign(D * y)
+    if length(alpha) <= 0
+        α = β = sign(D * y)
+    else
+        α = β = alpha
+    end
     t = 1
     k = 0
     while k <= max_iter && total ≤ max_time
