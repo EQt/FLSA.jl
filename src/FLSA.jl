@@ -44,8 +44,10 @@ export num_vertices,
        img_graph,
        mst_tree
 
+abstract Element
+
 """Record what is happening, when a knot of the PWL is hit"""
-immutable Event
+immutable Event <: Element
     x::Float64      # position
     slope::Float64  # delta slope
     offset::Float64 # delta offset

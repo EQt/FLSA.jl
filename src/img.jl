@@ -1,7 +1,15 @@
 using Graphs
 import Graphs.IEdge
+import Base.norm
 
 typealias Pixel Tuple{Int,Int}
+
+norm2(x::Pixel) = x[1]^2 + x[2]^2
+
+function __init__()
+    norm(x::Pixel) = sqrt(norm2(x))
+end
+
 
 type ImgGraph
     n1::Int
@@ -25,11 +33,6 @@ fista(y::Matrix{ℝ}, g::ImgGraph; ps...) =
 @inline pix2ind(i::Int, j::Int, n1::Int) = i + (j-1)*n1
 
 @inline ind2pix(i::Int, g::ImgGraph) = nothing
-
-norm2(x::Pixel) = x[1]^2 + x[2]^2
-if !method_exists(norm, Tuple{Pixel})
-    norm(x::Pixel) = sqrt(norm2(x))
-end
 
 
 """

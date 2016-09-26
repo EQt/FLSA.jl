@@ -8,7 +8,7 @@ OType = typeof(event_time)
 typealias Q1 SortedSet{Event, typeof(event_order)}
 keys(q::Q1) = q
 EventQueue1() = Q1(event_order)
-@once @inline +{E,O}(q::SortedSet{E,O}, p::SortedSet{E,O}) = merge!(q,p)
+@inline +{E<:Element,O}(q::SortedSet{E,O}, p::SortedSet{E,O}) = merge!(q,p)
 
 
 
