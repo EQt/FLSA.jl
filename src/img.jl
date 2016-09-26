@@ -1,8 +1,7 @@
-
 using Graphs
+import Graphs.IEdge
 
 typealias Pixel Tuple{Int,Int}
-import Graphs.IEdge
 
 type ImgGraph
     n1::Int
@@ -13,6 +12,7 @@ type ImgGraph
     D::IncMat
 end
 
+# overload for convinience
 gap_vec(y, alpha, grid::ImgGraph) = gap_vec(y, alpha, grid.D)
 duality_gap(y, alpha, grid::ImgGraph) = sum(gap_vec(y, alpha, grid))
 dp_tree(y::Vector{ℝ}, g::ImgGraph, t::Tree) = dp_tree(y, g.lambda, t)
@@ -32,6 +32,15 @@ if !method_exists(norm, Tuple{Pixel})
 end
 
 
+"""
+Create an grid graph for an images of `n1`*`n2` pixels.
+
+`dn`  is the number of directions to go on from an internal pixel node
+
+`lam` is a scaling factor.
+
+`ds` species the directions explicitly (not scaled)
+"""
 function img_graph(n1::Int, n2::Int, dn::Int, lam::Float64)
     println("n1 = $n1, n2 = $n2")
     g = img_graph(n1, n2, dn)
@@ -60,7 +69,8 @@ function img_graph(n1::Int, n2::Int, dn::Int)
 end
 
 
-function img_graph(n1::Int, n2::Int, dir::Vector{Tuple{Pixel,Float64}} = [((1,0), 1.0)])
+function img_graph(n1::Int, n2::Int,
+                   dir::Vector{Tuple{Pixel,Float64}}=[((1,0), 1.0)])
     n = n1 * n2
     m = 0
     for d in dir
