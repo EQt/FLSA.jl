@@ -1,14 +1,27 @@
 using Graphs
 import Graphs.IEdge
-import Base.norm
+import Base: norm, convert
 
-typealias Pixel Tuple{Int,Int}
-
-norm2(x::Pixel) = x[1]^2 + x[2]^2
-
-function __init__()
-    norm(x::Pixel) = sqrt(norm2(x))
+immutable Pixel
+    x::Int
+    y::Int
 end
+
+convert(::Type{Pixel}, p::Tuple{Int,Int}) = Pixel(p...)
+convert(::Type{Tuple{Int,Int}}, p::Pixel) = (p.x, p.y)
+
+norm2(p::Pixel) = p.x^2 + p.y^2
+norm(x::Pixel) = sqrt(norm2(x))
+
+# function getindex(p::Pixel, i::Int)
+#     if i == 1
+#         return p.x
+#     elseif i == 2
+#         return p.y
+#     else
+#         throw(ArgumentErrow("i = $i"))
+#     end
+# end
 
 
 type ImgGraph
@@ -46,6 +59,7 @@ function img_graph(n1::Int, n2::Int, dn::Int, lam::Float64)
     println("n1 = $n1, n2 = $n2")
     g = img_graph(n1, n2, dn)
     g.D *= lam
+    g.lambda *= lam
     g.Lip *= lam^2
     g
 end
@@ -60,13 +74,13 @@ img_graph(n1::Int, n2::Int, ds::Vector{Pixel}) =
 
 function img_graph(n1::Int, n2::Int, dn::Int)
     if dn == 1
-        img_graph(n1, n2, [(1,0)])
+        img_graph(n1, n2, Pixel[(1,0)])
     elseif dn == 2
-        img_graph(n1, n2, [(1,0), (1,1)])
+        img_graph(n1, n2, Pixel[(1,0), (1,1)])
     elseif dn == 3
-        img_graph(n1, n2, [(1,0), (1,1), (2,0)])
+        img_graph(n1, n2, Pixel[(1,0), (1,1), (2,0)])
     elseif dn == 4
-        img_graph(n1, n2, [(1,0), (1,1), (2, 0), (2,1), (1,2)])
+        img_graph(n1, n2, Pixel[(1,0), (1,1), (2, 0), (2,1), (1,2)])
     else
         throw(ArgumentError("dn >= 4 not supported"))
     end
@@ -74,12 +88,12 @@ end
 
 
 function img_graph(n1::Int, n2::Int,
-                   dir::Vector{Tuple{Pixel,Float64}}=[((1,0), 1.0)])
+                   dir::Vector{Tuple{Pixel,Float64}}=[(Pixel(1,0), 1.0)])
     n = n1 * n2
     m = 0
     for d in dir
         e = d[1]
-        m += (n1-e[1])*(n2-e[2]) + (n1-e[2])*(n2-e[1])
+        m += (n1-e.x)*(n2-e.y) + (n1-e.y)*(n2-e.x)
     end
     @assert m > 0
     I = zeros(Int, 2m)
@@ -90,12 +104,12 @@ function img_graph(n1::Int, n2::Int,
     m = 0
     for d in dir
         e = d[1]
-        @inbounds for j = 1:n2-e[2]
-            for i = 1:n1-e[1]
-                l = m + i + (j-1)*(n1-e[1])
+        @inbounds for j = 1:n2-e.y
+            for i = 1:n1-e.x
+                l = m + i + (j-1)*(n1-e.x)
                 k = 2l - 1
                 v1 = pix2ind(i,j, n1)
-                v2 = pix2ind(i+e[1], j+e[2], n1)
+                v2 = pix2ind(i+e.x, j+e.y, n1)
                 E[l] = IEdge(l, v1, v2)
                 lam[l] = d[2]
                 I[k] = l
@@ -107,13 +121,13 @@ function img_graph(n1::Int, n2::Int,
                 W[k] = -d[2]
             end
         end
-        m += (n1-e[1])*(n2-e[2])
-        @inbounds for j = 1:n2-e[1]
-            for i = 1+e[2]:n1
-                l = m + i - e[2] + (j-1)*(n1-e[2])
+        m += (n1-e.x)*(n2-e.y)
+        @inbounds for j = 1:n2-e.x
+            for i = 1+e.y:n1
+                l = m + i - e.y + (j-1)*(n1-e.y)
                 k = 2l -1
                 v1 = pix2ind(i,j, n1)
-                v2 = pix2ind(i-e[2], j+e[1], n1)
+                v2 = pix2ind(i-e.y, j+e.x, n1)
                 E[l] = IEdge(l, v1, v2)
                 lam[l] = d[2]
                 I[k] = l
@@ -125,7 +139,7 @@ function img_graph(n1::Int, n2::Int,
                 W[k] = -d[2]
             end
         end
-        m += (n1-e[2])*(n2-e[1])
+        m += (n1-e.y)*(n2-e.x)
     end
     @debug @val I
     @debug @val J
