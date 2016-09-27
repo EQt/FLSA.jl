@@ -42,6 +42,15 @@ gap_vec(y::Matrix{ℝ}, alpha::Vector{ℝ}, D::IncMat) =
 
 duality_gap(y::Vector{ℝ}, alp::Vector{ℝ}, D::IncMat) = sum(gap_vec(y, alp, D))
 
+
+"""Dual objective function"""
+dual_obj(alpha::Vector{Float64}, D::IncMat, y::Vector{Float64}) =
+    norm2(y - D'*alpha)
+
+dual_obj(alpha::Vector{Float64}, D::IncMat, y::Matrix{Float64}) =
+    dual_obj(alpha, D, y[:])
+
+
 """Overload the `+=` operator for arrays"""
 macro inplace(ex)
     if ex.head == :+=
