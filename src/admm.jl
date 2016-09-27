@@ -49,7 +49,7 @@ function admm(y::Vector{Float64},
     total = 0                   # total runtime
     tic()
     while k ≤ max_iter && total ≤ max_time
-        total += toq()                          # stop cloc for logging
+        total += (time = toq())
         @log_admm
         tic()
         A = eye(L) + μ*L                        # lhs matrix
