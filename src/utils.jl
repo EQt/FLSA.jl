@@ -26,7 +26,9 @@ type Instance
 end
 
 """Compute the duality gap"""
-function duality_gap{T<:Number,I<:Number}(alpha::Vector{T}, lambda::T, y::Vector{T}, D::AbstractMatrix{I})
+function duality_gap{T<:Number,I<:Number}(alpha::Vector{T},
+                                          lambda::T, y::Vector{T},
+                                          D::AbstractMatrix{I})
     psi = D * (D' * alpha - y)
     return lambda * norm(psi, 1) + dot(alpha, psi)
 end
