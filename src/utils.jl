@@ -7,10 +7,15 @@ clip(x::Vector{Float64}, lo::Float64, hi::Float64) = Base.clamp(x, lo, hi)
 
 """L2 norm squared"""
 norm2(x::Vector{Float64}) = dot(x, x)
+norm2(x::Matrix{Float64}) = norm2(x[:])
+
 
 """The objective function value"""
-flsa(x, y::Vector{Float64}, D::IncMat) =
+flsa(x::Vector{Float64}, y::Vector{Float64}, D::IncMat) =
     0.5 * norm2(y-x) + norm(D*x, 1)
+flsa(x::Matrix{Float64}, y::Matrix{Float64}, D::IncMat) =
+    flsa(x[:], y[:], D)
+
 
 
 """Input to compute the graph induced fused LASSO signal approximator FLSA"""
@@ -44,11 +49,11 @@ duality_gap(y::Vector{ℝ}, alp::Vector{ℝ}, D::IncMat) = sum(gap_vec(y, alp, D
 
 
 """Dual objective function"""
-dual_obj(alpha::Vector{Float64}, D::IncMat, y::Vector{Float64}) =
+dual_obj(alpha::Vector{Float64}, y::Vector{Float64}, D::IncMat) =
     norm2(y - D'*alpha)
 
-dual_obj(alpha::Vector{Float64}, D::IncMat, y::Matrix{Float64}) =
-    dual_obj(alpha, D, y[:])
+dual_obj(alpha::Vector{Float64}, y::Matrix{Float64}, D::IncMat) =
+    dual_obj(alpha, y[:], D)
 
 
 """Overload the `+=` operator for arrays"""
