@@ -7,6 +7,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       max_iter::Integer=1,
                       logger = Dict{String,Any}(),
                       random_tree::Bool=false,
+                      abs_tree::Bool=false,
                       verbose::Bool=true,
                       process::Function=x->nothing,
                       dprocess::Function=α->nothing,
@@ -46,6 +47,8 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         tic()
         if random_tree
             weights = randn(num_edges(g.graph))
+        elseif abs_tree
+            weights = abs(g.graph.edges)
         else
             weights = - FLSA.gap_vec(y[:], alpha, g)
         end
