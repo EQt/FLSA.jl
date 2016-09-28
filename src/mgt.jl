@@ -35,9 +35,14 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
             push!(logger["flsa"], flsa(x, y, g.D))
             push!(logger["time"], time)
             push!(logger["gap"], FLSA.duality_gap(y[:], alpha, g))
+            push!(logger["dual"], FLSA.dual_obj(alpha, y, g.D))
             process(x)
             dprocess(alpha)
-            println(@sprintf("%4d %f %f", it, logger["flsa"][end], logger["gap"][end]))
+            println(@sprintf("%4d %f %f %f",
+                             it,
+                             logger["flsa"][end],
+                             logger["gap"][end],
+                             logger["dual"][end]))
             if assert_decreasing && length(logger["flsa"]) >= 2
                 @assert logger["flsa"][end] <= logger["flsa"][end-1]
             end
