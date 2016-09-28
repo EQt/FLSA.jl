@@ -42,8 +42,9 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
             println(@sprintf("%4d %f %f %f",
                              it,
                              logger["flsa"][end],
-                             logger["gap"][end],
-                             logger["dual"][end]))
+                             logger["dual"][end],
+                             logger["gap"][end]
+                             ))
             if assert_decreasing && length(logger["flsa"]) >= 2
                 @assert logger["flsa"][end] <= logger["flsa"][end-1]
             end
