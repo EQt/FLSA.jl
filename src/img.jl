@@ -31,6 +31,7 @@ type ImgGraph
     lambda::Vector{Float64}
     graph::IGraph
     D::IncMat
+    dir::Vector{Tuple{Pixel,Float64}}
 end
 
 # overload for convinience
@@ -147,5 +148,5 @@ function img_graph(n1::Int, n2::Int,
     G = simple_edgelist(n1*n2, E; is_directed=false)
     lmax = maximum(lam)
     Lip = lmax * 2 * 4 * sum([l for (d,l) in dir])
-    ImgGraph(n1, n2, Lip, lam, G, D)
+    ImgGraph(n1, n2, Lip, lam, G, D, dir)
 end
