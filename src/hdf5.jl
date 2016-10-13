@@ -5,15 +5,22 @@ function read_h5(file_name::AbstractString)
     h5open(file_name, "r") do io
         y  = read(io, "nodes/input")
         mu = read(io, "nodes/weight")
-        I  = read(io, "edges/head")
-        J  = read(io, "edges/tail")
-        V  = read(io, "edges/weight")
+        H  = read(io, "edges/head")
+        T  = read(io, "edges/tail")
+        L  = read(io, "edges/weight")
         n  = length(y)
-        m  = length(I)
-        @assert m == length(J)
-        @assert m == length(V)
+        m  = length(H)
+        @assert m == length(T)
+        @assert m == length(L)
         @assert n == length(mu)
-        D = sparse([collect(1:m); collect(1:m)], Int[I;J;], [V; -V], m, n)
+        @assert 1 <= minimum(T) "minimum(T) = $(minimum(T))"
+        @assert 1 <= minimum(H) "minimum(H) = $(minimum(H))"
+        @assert maximum(T) <= n "n=$(n), maximum(T)=$(maximum(T))"
+        @assert maximum(H) <= n "n=$(n), maximum(H)=$(maximum(H))"
+        I = [collect(1:m); collect(1:m)]
+        J = Int[H;T]
+        V = [L; -L]
+        D = sparse(I, J, V, m, n)
         return y, mu, D
     end
 end
