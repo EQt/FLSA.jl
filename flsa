@@ -1,6 +1,8 @@
 #!/usr/bin/env julia
 ## -*- mode: julia; -*-
 
+using Compat.String
+
 desc = """
 Compute the graph induced Fused LASSO Signal Approximator
 """
@@ -17,7 +19,7 @@ s = ArgParseSettings(description=desc)
         default = 20
     "input"
         help = "problem instance (in hdf5)"
-        arg_type = UTF8String
+        arg_type = String
         required = true
 end
 args = parse_args(s)
