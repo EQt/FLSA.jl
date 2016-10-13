@@ -13,10 +13,10 @@ function read_h5(file_name::AbstractString)
         @assert m == length(T)
         @assert m == length(L)
         @assert n == length(mu)
-        @assert 1 <= minimum(T) "minimum(T) = $(minimum(T))"
-        @assert 1 <= minimum(H) "minimum(H) = $(minimum(H))"
-        @assert maximum(T) <= n "n=$(n), maximum(T)=$(maximum(T))"
-        @assert maximum(H) <= n "n=$(n), maximum(H)=$(maximum(H))"
+        @assert 1 <= minimum(T) "minimum(edges/tail) = $(minimum(T))"
+        @assert 1 <= minimum(H) "minimum(edges/head) = $(minimum(H))"
+        @assert maximum(T) <= n "n=$(n), maximum(edges/tail)=$(maximum(T))"
+        @assert maximum(H) <= n "n=$(n), maximum(edges/head)=$(maximum(H))"
         I = [collect(1:m); collect(1:m)]
         J = Int[H;T]
         V = [L; -L]
