@@ -17,7 +17,13 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       process::Function=x->nothing,
                       dprocess::Function=α->nothing,
                       assert_decreasing::Bool=false)
-    function logg(msg...); end
+    function logg(msg...)
+        if verbose
+            println(msg...)
+        end
+    end
+
+
     x = y
     if length(alpha) <= 0
         alpha = c0 * sign(g.D*y[:])
@@ -81,9 +87,11 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         else
             FLSA.dp_tree(z, i->Lam[i], mu_f, t)
         end
+        @assert all(isfinite(x))
+        @assert !any(isnan(x))
         logg("dp_tree")
-        alpha_t = FLSA.dual_tree(z, x, t)
-        @debug("gap(tree-part) = $(norm(z - FLSA.tree_part(g.D, mst)' * alpha_t -))")
+        alpha_t = dual_mu ? FLSA.dual_tree0(z, x, t, mu) :
+                            FLSA.dual_tree(z, x, t)
         logg("dual_tree: \n$(alpha_t[1:min(5, length(alpha_t))])")
 
         for (i,e) in enumerate(mst)
