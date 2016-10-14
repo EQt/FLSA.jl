@@ -52,8 +52,8 @@ immutable Event <: Element
     slope::Float64  # delta slope
     offset::Float64 # delta offset
     function Event(x, s, o)
-        @assert isfinite(x)
-        @assert abs(s) > 1e-16
+        # @assert isfinite(x)
+        # @assert abs(s) > 1e-16
         new(x, s, o)
     end
 end

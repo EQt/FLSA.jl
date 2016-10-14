@@ -37,8 +37,8 @@ dual_tree(y::Vector{Float64}, x::Vector{Float64}, tree) = dual_tree(x-y, tree)
 type LineSegment
     slope::ℝ
     offset::ℝ
-    function LineSegment(s, o)
-        @assert abs(s) > 1e-15
+    function LineSegment(s::ℝ, o::ℝ)
+        # @assert abs(s) > 1e-15
         new(s,o)
     end
 end
@@ -53,18 +53,16 @@ string(e::Event) = "$(e.x) @ $(e.slope)x + $(e.slope))"
 
 
 """Find x, such that t = slope*x + offset"""
-@inline find_x(t::ℝ, slope::ℝ, offset::ℝ) = (t - offset)/slope
+@inline find_x(t::ℝ, slope::ℝ, offset::ℝ, def::ℝ = 0.0) =
+    abs(slope) < 1e-15 ? def : (t - offset)/slope
 
-@inline function find_x(t::ℝ, ls::LineSegment)
-    x = find_x(t, ls.slope, ls.offset)
-    @assert isfinite(x) "t=$t, ls=$ls"
-    x
-end
+@inline find_x(t::ℝ, ls::LineSegment, def::ℝ = 0.0) = 
+    find_x(t, ls.slope, ls.offset, def)
 
 
 """Clip PWL represented by `pq` from negative until `t`, starting with `l`"""
 function clip_front{Q}(pq::Q, l::LineSegment, t::ℝ)
-    x = find_x(t, l)
+    x = find_x(t, l, -Inf)
     @debug "Starting with l=$l, x=$x, min_x = $(min_x(pq))"
     while x > min_x(pq)
         e = pop_front!(pq)
@@ -81,7 +79,7 @@ end
 
 """Same as `clip_front` just everything reversed"""
 function clip_back{Q}(pq::Q, l::LineSegment, t::ℝ)
-    x = find_x(t, l)
+    x = find_x(t, l, +Inf)
     while max_x(pq) > x
         e = pop_back!(pq)
         l.offset -= e.offset
