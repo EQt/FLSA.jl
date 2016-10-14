@@ -75,8 +75,10 @@ normed1(x::Vector) = x /= sum(x)
 nhist(x::Vector) = normed1(hist(x)[2])
 nhist(x, e) = normed1(hist(x, e)[2])
 
+typealias LoggerT Dict{String,Vector{Float64}}
+
 """Logg iteration information"""
-function _field(logger::Dict{String,Vector{Float64}}, name::String, value::Float64)
+function _field(logger::LoggerT, name::String, value::Float64)
     if !haskey(logger, name)
         logger[name] = Float64[]
     end

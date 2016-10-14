@@ -3,10 +3,10 @@ max_gap_tree(y::Matrix{Float64}, g::FLSA.ImgGraph; params...) =
 
 function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       c0::Real = 0.0,
-                      mu::Vector{Float64} = Vector{Float64}[],
-                      alpha = Vector{Float64}[],
+                      mu::Vector{Float64} = Vector{Float64}(),
+                      alpha::Vector{Float64} = Vector{Float64}(),
                       max_iter::Integer=1,
-                      logger = Dict{String,Any}(),
+                      logger::LoggerT = LoggerT(),
                       random_tree::Bool=false,
                       abs_tree::Bool=false,
                       verbose::Bool=true,
