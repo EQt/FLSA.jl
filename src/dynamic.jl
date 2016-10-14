@@ -124,8 +124,13 @@ end
 
 
 """For convinience..."""
-dp_tree(y::Vector{ℝ}, λ::ℝ, t::Tree) = dp_tree(y, i->λ, i->1.0, t)
-dp_tree(y::Vector{ℝ}, λ::Vector{ℝ}, t::Tree) = dp_tree(y, i->λ[i], i->1.0, t)
+dp_tree(y::Vector{ℝ}, λ::ℝ, t::Tree) =
+    dp_tree(y, i->λ, i->1.0, t)
+dp_tree(y::Vector{ℝ}, λ::Vector{ℝ}, t::Tree) =
+    dp_tree(y, i->λ[i], i->1.0, t)
+dp_tree(y::Vector{ℝ}, λ::Vector{ℝ}, µ::Vector{ℝ}, t::Tree) =
+    dp_tree(y, i->λ[i], i->µ[i], t)
+
 
 """FLSA on a line, computed by Johnson's fast *dynamic programming* algorithm"""
 function dp_tree(y, λ, µ, t::Tree)
