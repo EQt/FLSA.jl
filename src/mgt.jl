@@ -92,11 +92,16 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         logg("dp_tree")
         alpha_t = dual_mu ? FLSA.dual_tree0(z, x, t, mu_f) :
                             FLSA.dual_tree(z, x, t)
+        @assert all(isfinite(alpha_t))
+        @assert !any(isnan(alpha_t))
         logg("dual_tree: \n$(alpha_t[1:min(5, length(alpha_t))])")
 
         for (i,e) in enumerate(mst)
             alpha[e.index] = alpha_t[i] / g.lambda[e.index]
+            @assert abs(g.lambda[e.index]) > 1e-15 (@val e.index)
         end
+        @assert all(isfinite(alpha))
+        @assert !any(isnan(alpha))
     end
     return x
 end
