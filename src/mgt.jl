@@ -41,7 +41,8 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
             time = toq()
             total += time
             _field(logger, "time", time)
-            _field(logger, "flsa", flsa(x, y, g.D))
+            _field(logger, "flsa", dual_mu ? flsa0(x, y, g.D, mu)
+                                           : flsa(x, y, g.D))
             _field(logger, "gap", FLSA.duality_gap(y[:], alpha, g))
             _field(logger, "dual", FLSA.dual_obj(alpha, y, g.D))
             process(x)
