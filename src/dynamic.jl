@@ -29,8 +29,22 @@ function dual_tree(y::Vector{ℝ}, tree)
     return α
 end
 
+function dual_tree0(y::Vector{ℝ}, tree, mu)
+    α = zeros(length(tree.edges))
+    for c in postorder(tree)
+        v = tree.parent[c]
+        e = edge_index(tree, (c,v))
+        α[e]  = sign(c-v) * mu(c) * y[c]
+        y[v] += sign(c-v) * α[e]
+    end
+    return α
+end
+
+
 """For convinience..."""
 dual_tree(y::Vector{Float64}, x::Vector{Float64}, tree) = dual_tree(x-y, tree)
+dual_tree0(y::Vector{Float64}, x::Vector{Float64}, tree, mu) =
+    dual_tree0(x-y, tree, mu)
 
 
 """Represent a line segment"""

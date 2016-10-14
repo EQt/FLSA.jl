@@ -5,6 +5,7 @@ ONE_FUNCTION = i -> 1.0
 
 function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       c0::Real = 0.0,
+                      dual_mu::Bool = false,
                       mu_f::Function = ONE_FUNCTION,
                       mu::Vector{Float64} = Vector{Float64}(),
                       alpha::Vector{Float64} = Vector{Float64}(),
@@ -82,7 +83,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         end
         logg("dp_tree")
         alpha_t = FLSA.dual_tree(z, x, t)
-        @debug("gap(tree-part) = $(norm(z - FLSA.tree_part(g.D, mst)' * alpha_t - x))")
+        @debug("gap(tree-part) = $(norm(z - FLSA.tree_part(g.D, mst)' * alpha_t -))")
         logg("dual_tree: \n$(alpha_t[1:min(5, length(alpha_t))])")
 
         for (i,e) in enumerate(mst)
