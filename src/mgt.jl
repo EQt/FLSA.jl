@@ -3,6 +3,7 @@ max_gap_tree(y::Matrix{Float64}, g::FLSA.ImgGraph; params...) =
 
 function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       c0::Real = 0.0,
+                      mu::Vector{Float64} = Vector{Float64}[],
                       alpha = Vector{Float64}[],
                       max_iter::Integer=1,
                       logger = Dict{String,Any}(),
@@ -71,7 +72,11 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         end
         logg("sub_lambda")
 
-        x = FLSA.dp_tree(z, Lam, t)
+        x = if length(mu) > 0
+            FLSA.dp_tree(z, Lam, mu, t)
+        else
+            FLSA.dp_tree(z, Lam, t)
+        end
         logg("dp_tree")
         alpha_t = FLSA.dual_tree(z, x, t)
         @debug("gap(tree-part) = $(norm(z - FLSA.tree_part(g.D, mst)' * alpha_t - x))")
