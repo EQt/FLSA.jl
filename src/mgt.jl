@@ -1,8 +1,11 @@
 max_gap_tree(y::Matrix{Float64}, g::FLSA.ImgGraph; params...) =
     reshape(max_gap_tree(y[:], g; params...), g.n1, g.n2)
 
+ONE_FUNCTION = i -> 1.0
+
 function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       c0::Real = 0.0,
+                      mu_f::Function = ONE_FUNCTION,
                       mu::Vector{Float64} = Vector{Float64}(),
                       alpha::Vector{Float64} = Vector{Float64}(),
                       max_iter::Integer=1,
@@ -75,7 +78,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         x = if length(mu) > 0
             FLSA.dp_tree(z, Lam, mu, t)
         else
-            FLSA.dp_tree(z, Lam, t)
+            FLSA.dp_tree(z, i->Lam[i], mu_f, t)
         end
         logg("dp_tree")
         alpha_t = FLSA.dual_tree(z, x, t)
