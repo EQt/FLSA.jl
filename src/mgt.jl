@@ -16,9 +16,11 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       verbose::Bool=true,
                       process::Function=x->nothing,
                       dprocess::Function=α->nothing,
-                      assert_decreasing::Bool=false)
+                      assert_decreasing::Bool=false,
+                      verbose_debug::Bool=false,
+                      root_node::Int = 1)
     function logg(msg...)
-        if verbose
+        if verbose_debug
             println(msg...)
         end
     end
@@ -67,7 +69,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         mst, wmst = kruskal_minimum_spantree(g.graph, weights)
 
         logg("tree")
-        t = FLSA.subtree(g.graph, mst, 1)
+        t = FLSA.subtree(g.graph, mst, root_node)
         logg("created subtree")
         z = y[:] - FLSA.non_tree(g.D, mst)'*alpha
         logg("non_tree")
