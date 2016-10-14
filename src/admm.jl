@@ -52,7 +52,7 @@ function admm(y::Vector{Float64},
         total += (time = toq())
         @log_admm
         tic()
-        A = eye(L) + μ*L                        # lhs matrix
+        A = speye(L) + μ*L                        # lhs matrix
         c = y + D'*(μ*b - z)                    # rhs
         x = conjugate_gradient(A, c, x; ɛ=ɛ_CG) # update x
         ɛ_CG *= ɛ_c                             # update accuracy
