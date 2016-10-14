@@ -90,7 +90,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         @assert all(isfinite(x))
         @assert !any(isnan(x))
         logg("dp_tree")
-        alpha_t = dual_mu ? FLSA.dual_tree0(z, x, t, mu) :
+        alpha_t = dual_mu ? FLSA.dual_tree0(z, x, t, mu_f) :
                             FLSA.dual_tree(z, x, t)
         logg("dual_tree: \n$(alpha_t[1:min(5, length(alpha_t))])")
 
