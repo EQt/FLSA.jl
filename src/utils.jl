@@ -69,10 +69,18 @@ macro inplace(ex)
 end
 
 
-# Compute normed histograms
+"""Compute normed histograms"""
 normed1(x::Vector) = x /= sum(x)
 """Compute normed histogram"""
 nhist(x::Vector) = normed1(hist(x)[2])
 nhist(x, e) = normed1(hist(x, e)[2])
+
+"""Logg iteration information"""
+function _field(logger::Dict{String,Vector{Float64}}, name::String, value::Float64)
+    if !haskey(logger, name)
+        logger[name] = Float64[]
+    end
+    push!(logger[name], value)
+end
 
 export nhist
