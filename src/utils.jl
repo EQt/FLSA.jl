@@ -16,6 +16,8 @@ flsa(x::Vector{Float64}, y::Vector{Float64}, D::IncMat) =
 flsa(x::Matrix{Float64}, y::Matrix{Float64}, D::IncMat) =
     flsa(x[:], y[:], D)
 
+flsa0(x::Vector{Float64}, y::Vector{Float64}, D::IncMat, mu::Vector{Float64}) =
+    dot(mu, (y-x).^2) + norm(D*x, 1)
 
 
 """Input to compute the graph induced fused LASSO signal approximator FLSA"""
