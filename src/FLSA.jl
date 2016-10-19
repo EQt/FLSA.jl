@@ -58,6 +58,18 @@ immutable Event <: Element
     end
 end
 
+import Base.string
+function string(e::Event)
+    @sprintf "@%f : Δs = %f, Δo = %f" e.x e.slope e.offset
+end
+
+
+import Base.show
+function show(io::IO, e::Event)
+    print(io, string(e))
+end
+
+
 include("debug.jl")
 include("deque.jl")
 include("utils.jl")
