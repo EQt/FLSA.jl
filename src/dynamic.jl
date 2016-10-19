@@ -1,6 +1,3 @@
-import Base.string
-
-
 """
 After computing the bounds [lb, ub] for each node, compute optimal solution `x`
 by clipping each edge, i.e. backtracing from root value `xr` down to children
@@ -61,10 +58,6 @@ end
 @inline event_time(e::Event) = e.x
 
 include("queues.jl")
-
-"""Print them more readable"""
-string(e::Event) = "$(e.x) @ $(e.slope)x + $(e.slope))"
-
 
 """Find x, such that t = slope*x + offset"""
 @inline find_x(t::ℝ, slope::ℝ, offset::ℝ, def::ℝ = 0.0) =
