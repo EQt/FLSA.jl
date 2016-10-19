@@ -6,6 +6,12 @@ type DePQ{E}
     by::Function
 end
 
+import Base.show
+function show{E}(io::IO, pq::DePQ{E})
+    Base.showarray(IOContext(io, :limit => true), pq.elements, false)
+end
+
+
 @inline front{E}(q::DePQ{E}) = q.elements[1]
 @inline back{E}(q::DePQ{E})  = q.elements[end]
 @inline pop_front!{E}(q::DePQ{E}) = shift!(q.elements)
