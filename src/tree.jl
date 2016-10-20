@@ -15,6 +15,47 @@ end
 typealias ITreeSubGraph TreeSubGraph{Int,IEdge}
 typealias Tree ITreeSubGraph
 
+"""Tree(n): create an empty tree containing n nodes"""
+function Tree(n::Int)
+    graph = Graphs.simple_edgelist(n, IEdge[])
+    Tree(graph, [], n, [], Array{Array{Int64,1},1}(), [], Dict{Tuple{Int64,Int64},Int64}())
+end
+
+
+
+function Tree(pi::Vector{Int})
+    n = length(pi)
+    edges = Vector{IEdge}()
+    sizehint!(edges, n-1)
+    children = [Vector{Int}() for i=1:n]
+    root = 0
+    k = 1
+    for (i,j) in enumerate(pi)
+        if i == j
+            root = i
+        else
+            push!(edges, IEdge(k, i,j))
+            k += 1
+            push!(children[j], i)
+        end
+    end
+    graph = Graphs.simple_edgelist(n, edges; is_directed=false)
+    dfs_order = Vector{Int}(n)
+    stack = Vector{Int}()
+    sizehint!(stack, n)
+    push!(stack, root)
+    dfs_num = 1
+    while !isempty(stack)
+        v = pop!(stack)
+        dfs_order[dfs_num] = v
+        dfs_num += 1
+        append!(stack, children[v])
+    end
+    Tree(graph, edges, root, pi, children, dfs_order,
+              Dict{Tuple{Int64,Int64},Int64}())
+end
+
+
 """Create a tree out of a parent array"""
 function create_tree(parent::Vector{Int})
     n = length(parent)
