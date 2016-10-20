@@ -40,3 +40,9 @@ start{E}(q::DePQ{E}) = start(q.elements)
 next{E}(q::DePQ{E}, s) = next(q.elements, s)
 done{E}(q::DePQ{E}, s) = done(q.elements, s)
 
+import Base.string
+function string{E}(pq::DePQ{E})
+    io = IOBuffer()
+    show(io, pq)
+    takebuf_string(io)
+end
