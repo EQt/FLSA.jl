@@ -76,6 +76,8 @@ normed1(x::Vector) = x /= sum(x)
 """Compute normed histogram"""
 nhist(x::Vector) = normed1(hist(x)[2])
 nhist(x, e) = normed1(hist(x, e)[2])
+export nhist
+
 
 typealias LoggerT Dict{String,Vector{Float64}}
 
@@ -86,5 +88,3 @@ function _field(logger::LoggerT, name::String, value::Float64)
     end
     push!(logger[name], value)
 end
-
-export nhist
