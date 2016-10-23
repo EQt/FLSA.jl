@@ -11,11 +11,10 @@ norm2(x::Matrix{Float64}) = norm2(x[:])
 
 
 """The objective function value"""
+flsa(x::Matrix{Float64}, y::Matrix{Float64}, D::IncMat) =
+    flsa(vec(x), vec(y), D)
 flsa(x::Vector{Float64}, y::Vector{Float64}, D::IncMat) =
     0.5 * norm2(y-x) + norm(D*x, 1)
-flsa(x::Matrix{Float64}, y::Matrix{Float64}, D::IncMat) =
-    flsa(x[:], y[:], D)
-
 flsa0(x::Vector{Float64}, y::Vector{Float64}, D::IncMat, mu::Vector{Float64}) =
     0.5dot(mu, (y-x).^2) + norm(D*x, 1)
 
