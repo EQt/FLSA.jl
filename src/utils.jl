@@ -56,7 +56,7 @@ dual_obj(alpha::Vector{Float64}, y::Vector{Float64}, D::IncMat) =
     norm2(y - D'*alpha)
 
 dual_obj(alpha::Vector{Float64}, y::Matrix{Float64}, D::IncMat) =
-    dual_obj(alpha, y[:], D)
+    dual_obj(alpha, vec(y), D)
 
 
 """Overload the `+=` operator for arrays"""
