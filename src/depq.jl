@@ -6,9 +6,19 @@ type DePQ{E}
     by::Function
 end
 
-import Base.show
-function show{E}(io::IO, pq::DePQ{E})
-    Base.showarray(IOContext(io, :limit => true), pq.elements, false)
+
+if CUSTOM_PRINTER
+    import Base.show
+    function show{E}(io::IO, pq::DePQ{E})
+        Base.showarray(IOContext(io, :limit => true), pq.elements, false)
+    end
+
+    import Base.string
+    function string{E}(pq::DePQ{E})
+        io = IOBuffer()
+        show(io, pq)
+        takebuf_string(io)
+    end
 end
 
 
@@ -39,10 +49,3 @@ end
 start{E}(q::DePQ{E}) = start(q.elements)
 next{E}(q::DePQ{E}, s) = next(q.elements, s)
 done{E}(q::DePQ{E}, s) = done(q.elements, s)
-
-import Base.string
-function string{E}(pq::DePQ{E})
-    io = IOBuffer()
-    show(io, pq)
-    takebuf_string(io)
-end
