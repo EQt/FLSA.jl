@@ -100,6 +100,7 @@ function subtree(graph, edges, root)
     tree
 end
 
+"""Initialize all the values by performing a dfs according to the edges"""
 function init_tree(t::TreeSubGraph)
     local n = num_vertices(t.graph)
     local neighbors = [Int[] for i=1:n ]
@@ -127,7 +128,7 @@ function init_tree(t::TreeSubGraph)
     @inbounds for (k,e) in enumerate(t.edges)
         i, j = source(e), target(e)
         i, j = min(i,j), max(i,j)
-        t.edge_index[(i,j)] = k
+        t.edge_index[(i,j)] = e.index
     end
     t
 end
