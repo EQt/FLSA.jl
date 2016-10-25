@@ -28,14 +28,14 @@ end
 @inline pop_back!{E}(q::DePQ{E})  = pop!(q.elements)
 @inline function push_front!{E}(q::DePQ{E}, e::E)
     if !isempty(q.elements)
-        @assert first(q.elements).x <= e.x "e=$e, q=$q"
+        @assert e.x <= first(q.elements).x "push_front!; e=$e; q=$q"
     end
     unshift!(q.elements, e)
 end
 
 @inline function push_back!{E}(q::DePQ{E}, e::E)
     if !isempty(q.elements)
-        @assert last(q.elements).x <= e.x "e=$e, q=$q"
+        @assert last(q.elements).x <= e.x "push_back!; e=$e; q=$q"
     end
     push!(q.elements, e)
 end
