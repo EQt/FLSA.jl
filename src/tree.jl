@@ -128,7 +128,7 @@ function init_tree(t::TreeSubGraph)
     @inbounds for (k,e) in enumerate(t.edges)
         i, j = source(e), target(e)
         i, j = min(i,j), max(i,j)
-        t.edge_index[(i,j)] = e.index
+        t.edge_index[(i,j)] = k
     end
     t
 end
