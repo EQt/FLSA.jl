@@ -33,7 +33,13 @@ end
     unshift!(q.elements, e)
 end
 
-@inline push_back!{E}(q::DePQ{E}, e::E) = push!(q.elements, e)
+@inline function push_back!{E}(q::DePQ{E}, e::E)
+    if !isempty(q.elements)
+        @assert last(q.elements).x <= e.x "e=$e, q=$q"
+    end
+    push!(q.elements, e)
+end
+
 
 +{E}(q::DePQ{E}, p::DePQ{E}) = merge!(p, q)
 
