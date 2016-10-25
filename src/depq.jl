@@ -26,7 +26,13 @@ end
 @inline back{E}(q::DePQ{E})  = q.elements[end]
 @inline pop_front!{E}(q::DePQ{E}) = shift!(q.elements)
 @inline pop_back!{E}(q::DePQ{E})  = pop!(q.elements)
-@inline push_front!{E}(q::DePQ{E}, e::E) = unshift!(q.elements, e)
+@inline function push_front!{E}(q::DePQ{E}, e::E)
+    if !isempty(q.elements)
+        @assert first(q.elements).x <= e.x "e=$e, q=$q"
+    end
+    unshift!(q.elements, e)
+end
+
 @inline push_back!{E}(q::DePQ{E}, e::E) = push!(q.elements, e)
 
 +{E}(q::DePQ{E}, p::DePQ{E}) = merge!(p, q)
