@@ -4,11 +4,11 @@ using Compat.issymmetric
 conjugate gradient method to solve A*x = b.
 Break after max_iter iterations or as soon as ||A*x - b|| < ɛ holds.
 """
-function conjugate_gradient{T<:Number, R<:Real}(A::AbstractMatrix{T},
-                                                b::Vector{R},
-                                                x::Vector{R};
-                                                ɛ::Real = 1e-6,
-                                                max_iter::Integer = 100)
+function conjugate_gradient{MatT<:AbstractMatrix{Float64}}(A::MatT,
+                                                           b::Vector{Float64},
+                                                           x::Vector{Float64};
+                                                           ɛ::Float64 = 1e-6,
+                                                           max_iter::Int = 100)
     size(A,1) == size(A,2) || error("Matrix A has to be a square matrix")
     issymmetric(A) || error("Matrix A has to be a symmetric matrix")
 
