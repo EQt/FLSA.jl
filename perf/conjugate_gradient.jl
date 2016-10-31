@@ -1,8 +1,22 @@
 norm2(x::Vector{Float64}) = dot(x,x)
 
-
 square{MatT<:AbstractMatrix{Float64}}(A::MatT, p::Vector{Float64}) =
     (p' * A * p)[1]
+
+"""Invoke a fast BLAS routine"""
+macro blas(e)
+    # println(e)
+    @assert e.head in [:+=, :.+=]
+    first = e.args[1]
+    rest = e.args[2]
+    op = rest.args[1]
+    @assert op in [:.*, :*]
+    second = rest.args[2]
+    third = rest.args[3]
+    quote
+        BLAS.axpy!($second, $third, $first)
+    end
+end
 
 # include("../src/conjugate_gradient.jl")
 function conjugate_gradient{MatT<:AbstractMatrix{Float64}}(A::MatT,
@@ -22,14 +36,12 @@ function conjugate_gradient{MatT<:AbstractMatrix{Float64}}(A::MatT,
     while r_norm2 > ɛ && k ≤ max_iter
         Ap .= A * p
         α = - dot(r, p) / dot(p, Ap)
-        # x .+= α .* p
-        BLAS.axpy!(α, p, x)
-        # r .+= α .* Ap
-        BLAS.axpy!(α, Ap, r) # r .+= α .* Ap
+        @blas x .+= α .* p
+        @blas r .+= α .* Ap
         β = norm2(r)/ r_norm2
         # p .*=  β
         BLAS.scal!(length(p), β, p, 1)
-        BLAS.axpy!(-1, r, p)
+        @blas p += -1.0 * r
         k += 1
         r_norm2 = norm2(r)
     end
