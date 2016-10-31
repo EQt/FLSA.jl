@@ -59,17 +59,6 @@ dual_obj(alpha::Vector{Float64}, y::Matrix{Float64}, D::IncMat) =
     dual_obj(alpha, vec(y), D)
 
 
-"""Overload the `+=` operator for arrays"""
-macro inplace(ex)
-    if ex.head == :+=
-        # broadcast(+, $(ex.args[1]), $(ex.args[2]), $(ex.args[2]))
-        :(BLAS.axpy!(1.0, $(ex.args[2]), $(ex.args[1])))
-    else
-        ex
-    end
-end
-
-
 """Compute normed histograms"""
 normed1(x::Vector) = x /= sum(x)
 """Compute normed histogram"""

@@ -19,8 +19,8 @@ function conjugate_gradient{MatT<:AbstractMatrix{Float64}}(A::MatT,
     k::Unsigned = 1
     while r_norm2 > ɛ && k ≤ max_iter
         α = - (r' * p)[1] / (p' * A * p)[1]
-        @inplace x += α .* p
-        @inplace r += α .* A * p
+        x += α .* p
+        r += α .* A * p
         β = norm2(r)/ r_norm2
         p *=  β
         BLAS.axpy!(-1, r, p)

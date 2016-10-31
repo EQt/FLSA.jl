@@ -41,7 +41,6 @@ export num_vertices,
        PWLNode,
        PWLTree,
        PDeQue,
-       inplace,
        string,
        img_graph,
        mst_tree
