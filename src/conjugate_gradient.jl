@@ -1,5 +1,28 @@
 using Compat.issymmetric
 
+"""Invoke a fast BLAS routine"""
+macro blas(e)
+    # println(e)
+    if e.head == :.*=
+        @assert length(e.args) == 2
+        x = e.args[1]
+        a = e.args[2]
+        ex = :(BLAS.scal!(length($x), $a, $x, 1))
+        # println(ex)
+        ex
+    else
+        @assert e.head in [:+=, :.+=]
+        first = e.args[1]
+        rest = e.args[2]
+        op = rest.args[1]
+        @assert op in [:.*, :*]
+        second = rest.args[2]
+        third = rest.args[3]
+        :(BLAS.axpy!($second, $third, $first))
+    end
+end
+
+
 """
 conjugate gradient method to solve A*x = b.
 Break after max_iter iterations or as soon as ||A*x - b|| < ɛ holds.
@@ -17,15 +40,17 @@ function conjugate_gradient{MatT<:AbstractMatrix{Float64}}(A::MatT,
     ɛ = max(ɛ*norm(A, Inf) * norm(b, Inf), 1e-6)
     r_norm2 = norm2(r)
     k::Unsigned = 1
+    Ap = Vector{Float64}(length(r))
     while r_norm2 > ɛ && k ≤ max_iter
-        α = - (r' * p)[1] / (p' * A * p)[1]
-        x += α .* p
-        r += α .* A * p
-        β = norm2(r)/ r_norm2
-        p *=  β
-        BLAS.axpy!(-1, r, p)
+        Ap .= A * p
+        α = - dot(r, p) / dot(p, Ap)
+        @blas x .+= α .* p
+        @blas r .+= α .* Ap
+        rn = norm2(r)
+        @blas p .*= rn / r_norm2
+        @blas p += -1.0 * r
         k += 1
-        r_norm2 = norm2(r)
+        r_norm2 = rn
     end
     x
 end
