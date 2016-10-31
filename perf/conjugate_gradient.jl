@@ -6,15 +6,22 @@ square{MatT<:AbstractMatrix{Float64}}(A::MatT, p::Vector{Float64}) =
 """Invoke a fast BLAS routine"""
 macro blas(e)
     # println(e)
-    @assert e.head in [:+=, :.+=]
-    first = e.args[1]
-    rest = e.args[2]
-    op = rest.args[1]
-    @assert op in [:.*, :*]
-    second = rest.args[2]
-    third = rest.args[3]
-    quote
-        BLAS.axpy!($second, $third, $first)
+    if e.head == :.*=
+        @assert length(e.args) == 2
+        x = e.args[1]
+        a = e.args[2]
+        ex = :(BLAS.scal!(length($x), $a, $x, 1))
+        # println(ex)
+        ex
+    else
+        @assert e.head in [:+=, :.+=]
+        first = e.args[1]
+        rest = e.args[2]
+        op = rest.args[1]
+        @assert op in [:.*, :*]
+        second = rest.args[2]
+        third = rest.args[3]
+        :(BLAS.axpy!($second, $third, $first))
     end
 end
 
@@ -39,8 +46,7 @@ function conjugate_gradient{MatT<:AbstractMatrix{Float64}}(A::MatT,
         @blas x .+= α .* p
         @blas r .+= α .* Ap
         β = norm2(r)/ r_norm2
-        # p .*=  β
-        BLAS.scal!(length(p), β, p, 1)
+        @blas p .*=  β
         @blas p += -1.0 * r
         k += 1
         r_norm2 = norm2(r)
