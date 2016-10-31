@@ -45,11 +45,11 @@ function conjugate_gradient{MatT<:AbstractMatrix{Float64}}(A::MatT,
         α = - dot(r, p) / dot(p, Ap)
         @blas x .+= α .* p
         @blas r .+= α .* Ap
-        β = norm2(r)/ r_norm2
-        @blas p .*=  β
+        rn = norm2(r)
+        @blas p .*= rn / r_norm2
         @blas p += -1.0 * r
         k += 1
-        r_norm2 = norm2(r)
+        r_norm2 = rn
     end
     x
 end
