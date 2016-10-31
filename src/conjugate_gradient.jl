@@ -11,6 +11,7 @@ macro blas(e)
         # println(ex)
         ex
     else
+        # axpy: a*x plus y
         @assert e.head in [:+=, :.+=]
         first = e.args[1]
         rest = e.args[2]
