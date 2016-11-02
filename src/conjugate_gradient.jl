@@ -40,7 +40,7 @@ function conjugate_gradient{MatT<:AbstractMatrix{Float64}}(A::MatT,
     p = -r
     ɛ = max(ɛ*norm(A, Inf) * norm(b, Inf), 1e-6)
     r_norm2 = norm2(r)
-    k::Unsigned = 1
+    k = 1
     Ap = Vector{Float64}(length(r))
     while r_norm2 > ɛ && k ≤ max_iter
         Ap .= A * p
