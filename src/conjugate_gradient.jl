@@ -24,6 +24,13 @@ macro blas(e)
 end
 
 
+# type CGState
+#     r::Vector{Float64}
+#     p::Vector{Float64}
+#     Ap::Vector{Float64}
+# end
+
+
 """
 conjugate gradient method to solve A*x = b.
 Break after max_iter iterations or as soon as ||A*x - b|| < ɛ holds.
