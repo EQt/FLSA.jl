@@ -18,7 +18,8 @@ typealias Tree ITreeSubGraph
 """Tree(n): create an empty tree containing n nodes"""
 function Tree(n::Int)
     graph = Graphs.simple_edgelist(n, IEdge[])
-    Tree(graph, [], n, [], Array{Array{Int64,1},1}(), [], Dict{Tuple{Int64,Int64},Int64}())
+    Tree(graph, [], n, [], Array{Array{Int64,1},1}(), [],
+         Dict{Tuple{Int64,Int64},Int64}())
 end
 
 
