@@ -37,5 +37,7 @@ num_edges(g::GenericEdgeList) = length(g.edges)
 edges(g::GenericEdgeList) = g.edges
 edge_index(e, g::GenericEdgeList) = edge_index(e)
 
+implements_adjacency_list(g::GenericEdgeList) = false
+implements_edge_list(g::GenericEdgeList) = true
 
 end
