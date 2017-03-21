@@ -1,6 +1,5 @@
 """Compute the oriented incidence matrix of g and store in a sparse matrix of type T"""
 function incidence_matrix{T<:Number}(g::AbstractGraph,  ::Type{T} = Int)
-    @graph_requires g vertex_list
     is_directed(g) && error("g must be undirected.")
 
     local n = num_vertices(g)
