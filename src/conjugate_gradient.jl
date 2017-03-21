@@ -7,7 +7,7 @@ macro blas(e)
         @assert length(e.args) == 2
         x = e.args[1]
         a = e.args[2]
-        ex = :(BLAS.scal!(length($x), $a, $x, 1))
+        ex = :(BLAS.scal!(length($x), $(esc(a)), $(esc(x)), 1))
         # println(ex)
         ex
     else
@@ -19,7 +19,7 @@ macro blas(e)
         @assert op in [:.*, :*]
         second = rest.args[2]
         third = rest.args[3]
-        :(BLAS.axpy!($second, $third, $first))
+        :(BLAS.axpy!($(esc(second)), $(esc(third)), $(esc(first))))
     end
 end
 
