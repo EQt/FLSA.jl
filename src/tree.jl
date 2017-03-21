@@ -1,9 +1,8 @@
 ### Some algorithms for tree (sub)graphs
-
-using Graphs
+import Graph: AbstractGraph
 
 type TreeSubGraph{V,E}
-    graph::AbstractGraph{V,E}
+    graph::Graph.AbstractGraph{V,E}
     edges::Vector{E}
     root::V
     parent::Vector{Int}
