@@ -1,4 +1,5 @@
 import Base.norm
+import Graph: AbstractGraph
 
 """More commonly used name"""
 clip(x::Float64, lo::Float64, hi::Float64) = Base.clamp(x, lo, hi)
@@ -23,7 +24,7 @@ flsa0(x::Vector{Float64}, y::Vector{Float64}, D::IncMat, mu::Vector{Float64}) =
 type Instance
     y::Vector{Float64}
     lambda::Float64
-    graph::AbstractGraph
+    graph::Graph.AbstractGraph
 end
 
 """Compute the duality gap"""

@@ -18,6 +18,7 @@ type GenericEdgeList{V,E,VList,EList} <: AbstractGraph{V,E}
 end
 
 typealias SimpleEdgeList{E} GenericEdgeList{Int,E,UnitRange{Int},Vector{E}}
+typealias EdgeList{V,E} GenericEdgeList{V,E,Vector{V},Vector{E}}
 
 # construction
 
