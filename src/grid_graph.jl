@@ -1,8 +1,11 @@
-import Graph: Edge, EdgeList
+import Graph: Edge, EdgeList, num_vertices
 
 typealias GridNode @compat Tuple{Int, Int}
 typealias GridEdge Graph.Edge{GridNode}
 typealias GridGraph Graph.EdgeList{GridNode, GridEdge}
+
+"""Specialized method for GridGraphs"""
+vertex_index(v::GridNode, g::GridGraph) = num_rows(g) * (v[2]-1) + v[1]
 
 """Number of rows of the grid"""
 num_rows(g::GridGraph) = max(findfirst(x -> x == (1,2), g.vertices)-1, 1)
