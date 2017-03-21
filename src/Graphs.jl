@@ -3,7 +3,14 @@
 module Graph
 export edgelist,
     is_directed,
-    num_vertices
+    num_vertices,
+    num_edges,
+    source,
+    target,
+    implements_edge_list,
+    implements_adjacency_list,
+    edges,
+    vertices
 
 abstract AbstractGraph{V, E}
 
@@ -13,6 +20,11 @@ immutable Edge{V}
     target::V
 end
 typealias IEdge Edge{Int}
+
+source(e::Edge) = e.source
+target(e::Edge) = e.target
+source{V}(e::Edge{V}, g::AbstractGraph{V}) = e.source
+target{V}(e::Edge{V}, g::AbstractGraph{V}) = e.target
 
 type GenericEdgeList{V,E,VList,EList} <: AbstractGraph{V,E}
     is_directed::Bool
