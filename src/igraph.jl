@@ -1,6 +1,6 @@
 ### Integer Graphs to avoid slow vertex_indexo calls
 
-import Graphs: IEdge, vertex_index, SimpleEdgeList
+import Graphs: IEdge, SimpleEdgeList
 
 typealias IGraph SimpleEdgeList{IEdge}
 
@@ -15,8 +15,4 @@ function igraph{V,E}(g::AbstractGraph{V,E},
     end
     edgelist(collect(1:num_vertices(g)), ed; is_directed=false)
 end
-
-"""Fast implementation of vertex_index"""
-Graphs.vertex_index(v::Int, g::IGraph) = v
-
 
