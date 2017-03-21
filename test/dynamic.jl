@@ -2,9 +2,9 @@ module TestDynamic
 
 # debug(msg) = println("DEBUG: $msg")
 
-using Graphs
 using FactCheck
 using FLSA
+using Graph
 import FLSA.@debug
 
 digits = 3

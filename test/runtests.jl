@@ -1,6 +1,6 @@
 using Base.Test
 using FLSA
-using Graphs
+using Graph
 
 tests = ["grid_graph", "incidence_matrix", "conjugate_gradient", "pwl", "line", "dynamic"]
 

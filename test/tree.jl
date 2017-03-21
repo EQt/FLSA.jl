@@ -1,6 +1,6 @@
 """Some tests how to compute MST in julia"""
 using FLSA
-using Graphs
+using Graph
 
 srand(42)
 

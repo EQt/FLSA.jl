@@ -1,6 +1,7 @@
 # Legacy import of needed Graphs algorithms
 
 module Graph
+export edgelist
 
 abstract AbstractGraph{V, E}
 
