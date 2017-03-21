@@ -1,5 +1,4 @@
-using Graphs
-import Graphs.IEdge
+import Graph.IEdge
 import Base: norm, convert
 
 immutable Pixel

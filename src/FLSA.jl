@@ -10,7 +10,6 @@ module FLSA
 const CUSTOM_PRINTER = false
 
 using Compat: findlast, @compat, @inline, String
-using Graphs
 using DataStructures
 
 const ∞ = Inf
@@ -72,6 +71,7 @@ if CUSTOM_PRINTER
     end
 end
 
+include("Graphs.jl")
 include("debug.jl")
 include("deque.jl")
 include("utils.jl")

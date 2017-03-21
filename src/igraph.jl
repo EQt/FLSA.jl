@@ -1,6 +1,6 @@
 ### Integer Graphs to avoid slow vertex_indexo calls
 
-import Graphs: IEdge, SimpleEdgeList
+import Graph: IEdge, SimpleEdgeList
 
 typealias IGraph SimpleEdgeList{IEdge}
 
