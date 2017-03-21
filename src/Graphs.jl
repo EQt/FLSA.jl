@@ -2,6 +2,8 @@
 
 module Graph
 
+abstract AbstractGraph{V, E}
+
 immutable Edge{V}
     index::Int
     source::V
