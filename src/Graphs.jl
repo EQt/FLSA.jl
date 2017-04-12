@@ -58,7 +58,7 @@ vertices(g::GenericEdgeList) = g.vertices
 num_edges(g::GenericEdgeList) = length(g.edges)
 edges(g::GenericEdgeList) = g.edges
 @inline edge_index(e::Edge) = e.index
-edge_index(e, g::GenericEdgeList) = edge_index(e)
+@inline edge_index(e, g::GenericEdgeList) = edge_index(e)
 
 @inline vertex_index(v::Int) = v
 @inline vertex_index(v, g::GenericEdgeList) = vertex_index(v)
