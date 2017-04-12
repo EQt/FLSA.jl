@@ -38,7 +38,6 @@ function dual_tree0(y::Vector{ℝ}, tree, mu)
 end
 
 
-"""For convinience..."""
 dual_tree(y::Vector{Float64}, x::Vector{Float64}, tree) = dual_tree(x-y, tree)
 dual_tree0(y::Vector{Float64}, x::Vector{Float64}, tree, mu) =
     dual_tree0(x-y, tree, mu)
@@ -127,8 +126,7 @@ function dp_tree_naive(y::Vector{ℝ}, λ, µ, t::Tree)
     dp_tree_backtrace(xr, t, lb, ub)
 end
 
-
-"""For convinience..."""
+"""FLSA on a tree, computed by a *dynamic programming* algorithm"""
 dp_tree(y::Vector{ℝ}, λ::ℝ, t::Tree) =
     dp_tree(y, i->λ, i->1.0, t)
 dp_tree(y::Vector{ℝ}, λ::Vector{ℝ}, t::Tree) =
@@ -136,8 +134,6 @@ dp_tree(y::Vector{ℝ}, λ::Vector{ℝ}, t::Tree) =
 dp_tree(y::Vector{ℝ}, λ::Vector{ℝ}, µ::Vector{ℝ}, t::Tree) =
     dp_tree(y, i->λ[i], i->µ[i], t)
 
-
-"""FLSA on a line, computed by Johnson's fast *dynamic programming* algorithm"""
 function dp_tree(y, λ, µ, t::Tree)
     n, r = length(y), t.root
     lb, ub = fill(-∞, n), fill(∞, n)
