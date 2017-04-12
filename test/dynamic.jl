@@ -2,14 +2,14 @@ module TestDynamic
 
 # debug(msg) = println("DEBUG: $msg")
 
-using FactCheck
 import FLSA
-import Graph: kruskal_minimum_spantree
 import FLSA.@debug
+import Graph: kruskal_minimum_spantree
+using Base.Test
 
 digits = 3
 
-facts("3 line knots") do
+@testset "3 line knots" begin
     sol = [2.0; 2.0; 2.5]
     y = [1.0; 2.0; 3.5]
     t = FLSA.create_tree([2,3,3])
@@ -17,13 +17,13 @@ facts("3 line knots") do
     xl = FLSA.dp_line_naive(y, 1.0)
     @debug "*"^70
     x = FLSA.dp_tree_naive(y, 1.0, t)
-    @fact x --> roughly(sol)
+    @test x ≈ sol
     @debug "*"^70
     x = FLSA.dp_tree(y, 1.0, t)
-    @fact x --> roughly(sol)
+    @test x ≈ sol
 end
 
-facts("A random example") do
+@testset "A random example" begin
     srand(13)
     lambda = 1.0
     n1, n2 = 43, 31
@@ -39,7 +39,7 @@ facts("A random example") do
     x = FLSA.dp_tree_naive(y, lambda, t)
     @debug "*"^80
     x2 = FLSA.dp_tree(y, lambda, t)
-    @fact round(x, digits) --> roughly(round(x2, digits))
+    @test round(x, digits) == round(x2, digits)
 end
 
 end # module
