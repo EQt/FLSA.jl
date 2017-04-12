@@ -80,7 +80,7 @@ function create_tree(parent::Vector{Int})
         dfs_num += 1
         append!(stack, children[v])
     end
-    edges = [Edge{Int}(i,s,t) for (i,(s,t)) in enumerate(E)]
+    edges = [Edge{Int}(i,min(s,t), max(s,t)) for (i,(s,t)) in enumerate(E)]
     graph = EdgeList{Int,Edge{Int}}(false, collect(1:n), edges)
     edge_index = Dict([(e,i) for (i,e) in enumerate(E)])
     return Tree(graph, edges, root, parent, children, dfs_order, edge_index)
