@@ -2,7 +2,13 @@ using Base.Test
 using FLSA
 using Graph
 
-tests = ["grid_graph", "incidence_matrix", "conjugate_gradient", "pwl", "line", "dynamic"]
+tests = ["grid_graph",
+         "incidence_matrix",
+         "conjugate_gradient",
+         "pwl",
+         "line",
+         "dynamic",
+         "tree"]
 
 for t in tests
     tp = joinpath(Pkg.dir("FLSA"),"test","$(t).jl")
