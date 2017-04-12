@@ -14,7 +14,11 @@ function dp_tree_backtrace(xr::ℝ, t::Tree, lb, ub)
 end
 
 
-"""Compute dual solution α on a tree, such that y = D' α"""
+"""
+    dual_tree(y, tree)
+
+Compute dual solution α on a tree, such that `y = D'*α`.
+Due to computational issues, `α` is sorted in parent-order."""
 function dual_tree(y::Vector{ℝ}, tree)
     α = zeros(length(tree.edges))
     for c in postorder(tree)
