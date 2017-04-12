@@ -18,14 +18,15 @@ end
     dual_tree(y, tree)
 
 Compute dual solution α on a tree, such that `y = D'*α`.
-Due to computational issues, `α` is sorted in parent-order."""
+The index order of `α` is according `tree.edge_index`
+"""
 function dual_tree(y::Vector{ℝ}, tree)
     α = zeros(length(tree.edges))
     for c in postorder(tree)
         v = tree.parent[c]
         e = edge_index(tree, (c,v))
-        α[e]  = sign(c-v) * y[c]
-        y[v] += sign(c-v) * α[e]
+        α[e]  = sign(v-c) * y[c]
+        y[v] += sign(v-c) * α[e]
     end
     return α
 end
@@ -42,7 +43,7 @@ function dual_tree0(y::Vector{ℝ}, tree, mu)
 end
 
 
-dual_tree(y::Vector{Float64}, x::Vector{Float64}, tree) = dual_tree(x-y, tree)
+dual_tree(y::Vector{Float64}, x::Vector{Float64}, tree) = dual_tree(y-x, tree)
 dual_tree0(y::Vector{Float64}, x::Vector{Float64}, tree, mu) =
     dual_tree0(x-y, tree, mu)
 
