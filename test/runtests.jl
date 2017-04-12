@@ -11,7 +11,7 @@ tests = ["grid_graph",
          "tree"]
 
 for t in tests
-    tp = joinpath(Pkg.dir("FLSA"),"test","$(t).jl")
+    tp = Pkg.dir("FLSA", "test", "$(t).jl")
     println("running $(tp) ...")
     include(tp)
 end
