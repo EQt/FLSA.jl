@@ -48,4 +48,3 @@ function dgrid_graph(n1::Int, n2::Int)
     E = [GridEdge(i, u, v) for (i, (u, v)) in enumerate(E)]
     edgelist(V, E; is_directed=false)
 end
-    
