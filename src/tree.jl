@@ -80,9 +80,10 @@ function create_tree(parent::Vector{Int})
         dfs_num += 1
         append!(stack, children[v])
     end
+    E = [(min(s,t), max(s,t)) for (s,t) in E]
     edges = [Edge{Int}(i,min(s,t), max(s,t)) for (i,(s,t)) in enumerate(E)]
     graph = EdgeList{Int,Edge{Int}}(false, collect(1:n), edges)
-    edge_index = Dict([(e,i) for (i,e) in enumerate(E)])
+    edge_index = Dict((e,i) for (i,e) in enumerate(E))
     return Tree(graph, edges, root, parent, children, dfs_order, edge_index)
 end
     
@@ -138,7 +139,12 @@ end
 @inline preorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[2:end]
 
 """Give the indices of an post-order run through the nodes of `t`, excluding root"""
-@inline postorder{V,E}(t::TreeSubGraph{V,E}) = t.dfs_order[end:-1:2]
+@inline postorder{V,E}(t::TreeSubGraph{V,E}; include_root::Bool=false) =
+    if include_root
+        t.dfs_order[end:-1:1]
+    else
+        t.dfs_order[end:-1:2]
+    end
 
 
 """Number of nodes in the graph"""
