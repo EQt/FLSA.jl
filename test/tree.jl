@@ -27,12 +27,6 @@ tm = FLSA.subtree(g, mst, 1)
 end
 
 
-@testset "test1" begin
-    x = FLSA.dp_tree(y, lambda, tm)
-    alpha = FLSA.dual_tree(y, x, tm)
-    @test all(abs(alpha) .<= lambda + 1e-9)
-end
-
 
 @testset "test2" begin
     @test norm(img.D * ones(n)) < 1e-12
@@ -49,5 +43,12 @@ end
     a = FLSA.dual_tree(deepcopy(c), tm)
     @test norm(c + D'*a) < 1e-10
 end
+
+@testset "test ||alpha||∞ <= lambda" begin
+    x = FLSA.dp_tree(y, lambda, tm)
+    alpha = FLSA.dual_tree(y, x, tm)
+    @test maximum(abs(alpha)) <= lambda + 1e-9
+end
+
 
 end
