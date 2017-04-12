@@ -23,7 +23,7 @@ tm = FLSA.subtree(g, mst, 1)
     c = [0.0, -1.5, 0.5]
     t = FLSA.create_tree([1,1,1])
     a = FLSA.dual_tree(c, t)
-    @test a ≈ [-1.5, 0.5]
+    @test a ≈ [1.5, -0.5]
 end
 
 
@@ -47,7 +47,7 @@ end
 
     c = rand(size(D, 2))
     a = FLSA.dual_tree(deepcopy(c), tm)
-    @test norm(c - D'*a) < 1e-10
+    @test norm(c + D'*a) < 1e-10
 end
 
 end
