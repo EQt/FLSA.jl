@@ -12,7 +12,8 @@ export edgelist,
     implements_adjacency_list,
     edges,
     vertices,
-    kruskal_minimum_spantree
+    kruskal_minimum_spantree,
+    simple_edgelist
 
 import Base.isless
 using DataStructures: IntDisjointSets, in_same_set, union!, num_groups
@@ -41,6 +42,7 @@ typealias SimpleEdgeList{E} GenericEdgeList{Int,E,UnitRange{Int},Vector{E}}
 typealias EdgeList{V,E} GenericEdgeList{V,E,Vector{V},Vector{E}}
 
 # construction
+intrange(n::Integer) = 1:convert(Int,n)
 
 simple_edgelist{E}(nv::Integer, edges::Vector{E}; is_directed::Bool=true) =
     SimpleEdgeList{E}(is_directed, intrange(nv), edges)
