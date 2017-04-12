@@ -129,6 +129,8 @@ end
 """FLSA on a tree, computed by a *dynamic programming* algorithm"""
 dp_tree(y::Vector{ℝ}, λ::ℝ, t::Tree) =
     dp_tree(y, i->λ, i->1.0, t)
+dp_tree(y::Matrix{ℝ}, λ::ℝ, t::Tree) =
+    reshape(dp_tree(vec(y), λ, t), size(y))
 dp_tree(y::Vector{ℝ}, λ::Vector{ℝ}, t::Tree) =
     dp_tree(y, i->λ[i], i->1.0, t)
 dp_tree(y::Vector{ℝ}, λ::Vector{ℝ}, µ::Vector{ℝ}, t::Tree) =
