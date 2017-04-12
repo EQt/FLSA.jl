@@ -27,8 +27,7 @@ tm = FLSA.subtree(g, mst, 1)
 end
 
 
-
-@testset "test2" begin
+@testset "tree_part, dual_tree" begin
     @test norm(img.D * ones(n)) < 1e-12
 
     D = FLSA.tree_part(img.D, mst)
@@ -40,9 +39,12 @@ end
     @test norm(D * ones(n)) < 1e-12
 
     c = rand(size(D, 2))
+    c -= mean(c)
+    @test_approx_eq_eps mean(c)  0 1e-16
     a = FLSA.dual_tree(deepcopy(c), tm)
-    @test norm(c + D'*a) < 1e-10
+    @test c ≈ D'*a
 end
+
 
 @testset "test ||alpha||∞ <= lambda" begin
     x = FLSA.dp_tree(y, lambda, tm)
