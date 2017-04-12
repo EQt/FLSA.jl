@@ -1,3 +1,5 @@
+import FLSA: PWL, Knot, clip_x, find_x
+
 const1 = PWL([Knot(0,1)])
 @test const1(-1) == 1
 @test const1(13) == 1
