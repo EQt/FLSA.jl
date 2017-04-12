@@ -3,8 +3,8 @@ module TestDynamic
 # debug(msg) = println("DEBUG: $msg")
 
 using FactCheck
-using FLSA
-using Graph
+import FLSA
+import Graph: kruskal_minimum_spantree
 import FLSA.@debug
 
 digits = 3
