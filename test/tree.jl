@@ -7,7 +7,7 @@ import Graph
 using Base.Test
 
 @testset "construct a tree" begin
-    @test FLSA.Tree([1,1,2,2])
+    @test FLSA.Tree([1,1,2,2]) != nothing
 end
 
 srand(42)

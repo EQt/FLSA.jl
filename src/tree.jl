@@ -39,7 +39,7 @@ function Tree(pi::Vector{Int})
             push!(children[j], i)
         end
     end
-    graph = Graphs.simple_edgelist(n, edges; is_directed=false)
+    graph = Graph.simple_edgelist(n, edges; is_directed=false)
     dfs_order = Vector{Int}(n)
     stack = Vector{Int}()
     sizehint!(stack, n)
