@@ -6,6 +6,9 @@ import FLSA
 import Graph
 using Base.Test
 
+@testset "construct a tree" begin
+    @test FLSA.Tree([1,1,2,2])
+end
 
 srand(42)
 n1, n2 = 3, 2
