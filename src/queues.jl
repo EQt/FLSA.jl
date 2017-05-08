@@ -1,21 +1,19 @@
-# include("heap2.jl")
 include("heap.jl")
+include("depq.jl")
+# include("heap2.jl")
 
-p = module_parent(current_module())
-event_order = Base.Order.By(event_time)
-OType = typeof(event_time)
+const event_order = Base.Order.By(event_time)
 # typealias Q1 SortedMultiDict{Event, Void, typeof(event_order)}
 typealias Q1 SortedSet{Event, typeof(event_order)}
+typealias Q2 DePQ{Event}
+
 keys(q::Q1) = q
 EventQueue1() = Q1(event_order)
 @inline +{E<:Element,O}(q::SortedSet{E,O}, p::SortedSet{E,O}) = merge!(q,p)
 
-
-
-include("depq.jl")
-typealias Q2 DePQ{Event}
 EventQueue2() = Q2([], event_time)
 
+const p = module_parent(current_module())
 if isdefined(p, :debug) && typeof(p.debug) == Bool && p.debug
     import Base: collect, ==
     EventQueue() = (EventQueue1(), EventQueue2())
