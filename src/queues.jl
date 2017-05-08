@@ -13,14 +13,28 @@ EventQueue1() = Q1(event_order)
 
 EventQueue2() = Q2([], event_time)
 
-const p = module_parent(current_module())
-if isdefined(p, :debug) && typeof(p.debug) == Bool && p.debug
+
+macro parent_defines(c)
+    local pm = esc(module_parent(current_module()))
+    s = string(c)
+    return quote
+        isdefined($pm, Symbol($s)) &&
+            typeof($pm.$c) == Bool &&
+            $pm.$c
+    end
+end
+
+
+if @parent_defines debug
     import Base: collect, ==
     EventQueue() = (EventQueue1(), EventQueue2())
 
-    ==(e::Event, g::Event) = abs(e.x - g.x) <= 1e-11 && e.slope == g.slope && e.offset == g.offset
+    ==(e::Event, g::Event) =
+        abs(e.x - g.x) <= 1e-11 && e.slope == g.slope && e.offset == g.offset
 
-    pri(v::Vector{Event}) = join([@sprintf("%3.2f@%3.2f,%3.2f", e.x, e.slope, e.offset) for e in v], "|")
+    pri(v::Vector{Event}) =
+        join([@sprintf("%3.2f@%3.2f,%3.2f", e.x, e.slope, e.offset)
+              for e in v], "|")
     collect(q::Tuple{Q1,Q2}) = q[1]
 
     splitq(q) =  collect(keys(q[1])), [e for e in q[2]]
@@ -92,7 +106,7 @@ if isdefined(p, :debug) && typeof(p.debug) == Bool && p.debug
         r
     end
 
-elseif isdefined(p, :sortedset) && typeof(p.sortedset) == Bool && p.sortedset
+elseif @parent_defines sortedset
     info("Activating SortedSet")
     include("heap.jl")
     EventQueue = EventQueue1
