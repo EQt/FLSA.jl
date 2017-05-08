@@ -25,7 +25,7 @@ macro parent_defines(c)
 end
 
 
-if @parent_defines debug
+if @parent_defines debug_queues
     import Base: collect, ==
     EventQueue() = (EventQueue1(), EventQueue2())
 
