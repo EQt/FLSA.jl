@@ -55,8 +55,10 @@ Create an grid graph for an images of `n1`*`n2` pixels.
 
 `lam` is a scaling factor.
 """
-function img_graph(n1::Int, n2::Int, dn::Int, lam::Float64)
-    println("n1 = $n1, n2 = $n2")
+function img_graph(n1::Int, n2::Int, dn::Int, lam::Float64; verbose=true)
+    if verbose
+        println("n1 = $n1, n2 = $n2")
+    end
     g = img_graph(n1, n2, dn)
     g.D *= lam
     g.lambda *= lam
