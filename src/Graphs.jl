@@ -27,6 +27,10 @@ immutable Edge{V}
 end
 typealias IEdge Edge{Int}
 
+function show(io::IO, e::Edge)
+    print(io, "edge [$(e.index)]: $(e.source) -- $(e.target)")
+end
+
 source(e::Edge) = e.source
 target(e::Edge) = e.target
 source{V}(e::Edge{V}, g::AbstractGraph{V}) = e.source
