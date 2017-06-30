@@ -27,6 +27,7 @@ immutable Edge{V}
 end
 typealias IEdge Edge{Int}
 
+import Base.show
 function show(io::IO, e::Edge)
     print(io, "edge [$(e.index)]: $(e.source) -- $(e.target)")
 end
