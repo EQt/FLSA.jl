@@ -50,6 +50,10 @@ immutable Event <: Element
     end
 end
 
+import Base.isless
+isless(e1::Event, e2::Event) = isless(e1.x, e2.x)
+
+
 if CUSTOM_PRINTER
     import Base.string
     function string(e::Event)
