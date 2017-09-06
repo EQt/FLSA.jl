@@ -2,7 +2,7 @@
 
 import Graph: IEdge, SimpleEdgeList
 
-typealias IGraph Graph.SimpleEdgeList{IEdge}
+const IGraph = Graph.SimpleEdgeList{IEdge}
 
 function igraph{V,E}(g::Graph.AbstractGraph{V,E},
                      vmap::Dict{V,Int} =

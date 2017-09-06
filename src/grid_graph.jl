@@ -1,8 +1,8 @@
 import Graph: Edge, EdgeList, num_vertices
 
-typealias GridNode @compat Tuple{Int, Int}
-typealias GridEdge Graph.Edge{GridNode}
-typealias GridGraph Graph.EdgeList{GridNode, GridEdge}
+const GridNode = @compat Tuple{Int,Int}
+const GridEdge = Graph.Edge{GridNode}
+const GridGraph = Graph.EdgeList{GridNode,GridEdge}
 
 """Specialized method for GridGraphs"""
 vertex_index(v::GridNode, g::GridGraph) = num_rows(g) * (v[2]-1) + v[1]

@@ -4,8 +4,8 @@ include("depq.jl")
 
 const event_order = Base.Order.By(event_time)
 # typealias Q1 SortedMultiDict{Event, Void, typeof(event_order)}
-typealias Q1 SortedSet{Event, typeof(event_order)}
-typealias Q2 DePQ{Event}
+const Q1 = SortedSet{Event,typeof(event_order)}
+const Q2 = DePQ{Event}
 
 keys(q::Q1) = q
 EventQueue1() = Q1(event_order)

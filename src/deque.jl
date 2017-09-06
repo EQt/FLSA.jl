@@ -1,7 +1,7 @@
 import DataStructures: back, front, Deque
 import Base: +, merge!
 
-typealias DeQue Deque
+const DeQue = Deque
 
 
 """More convinient way of denoting the functions"""

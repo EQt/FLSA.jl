@@ -16,9 +16,9 @@ using Graph
 using DataStructures
 
 const ∞ = Inf
-typealias ℝ Float64
-typealias Node Int
-typealias IncMat SparseMatrixCSC{Float64,Int}
+const ℝ = Float64
+const Node = Int
+const IncMat = SparseMatrixCSC{Float64,Int}
 
 
 export num_vertices,
@@ -36,7 +36,7 @@ export num_vertices,
        img_graph,
        mst_tree
 
-abstract Element
+abstract type Element end
 
 """Record what is happening, when a knot of the PWL is hit"""
 immutable Event <: Element

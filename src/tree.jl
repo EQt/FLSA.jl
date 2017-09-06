@@ -11,8 +11,8 @@ type TreeSubGraph{V,E}
     edge_index::Dict{@compat(Tuple{Int,Int}),Int}
 end
 
-typealias ITreeSubGraph TreeSubGraph{Int,IEdge}
-typealias Tree ITreeSubGraph
+const ITreeSubGraph = TreeSubGraph{Int,IEdge}
+const Tree = ITreeSubGraph
 
 """Tree(n): create an empty tree containing n nodes"""
 function Tree(n::Int)

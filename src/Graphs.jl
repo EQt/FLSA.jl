@@ -18,14 +18,14 @@ export edgelist,
 import Base.isless
 using DataStructures: IntDisjointSets, in_same_set, union!, num_groups
 
-abstract AbstractGraph{V, E}
+abstract type AbstractGraph{V,E} end
 
 immutable Edge{V}
     index::Int
     source::V
     target::V
 end
-typealias IEdge Edge{Int}
+const IEdge = Edge{Int}
 
 import Base.show
 function show(io::IO, e::Edge)
@@ -43,8 +43,8 @@ type GenericEdgeList{V,E,VList,EList} <: AbstractGraph{V,E}
     edges::EList
 end
 
-typealias SimpleEdgeList{E} GenericEdgeList{Int,E,UnitRange{Int},Vector{E}}
-typealias EdgeList{V,E} GenericEdgeList{V,E,Vector{V},Vector{E}}
+SimpleEdgeList{E} = GenericEdgeList{Int,E,UnitRange{Int},Vector{E}}
+EdgeList{V,E} = GenericEdgeList{V,E,Vector{V},Vector{E}}
 
 # construction
 intrange(n::Integer) = 1:convert(Int,n)
@@ -79,7 +79,7 @@ immutable WeightedEdge{E,W}
 end
 isless{E,W}(a::WeightedEdge{E,W}, b::WeightedEdge{E,W}) = a.weight < b.weight
 
-abstract AbstractEdgePropertyInspector{T}
+abstract type AbstractEdgePropertyInspector{T} end
 
 type VectorEdgePropertyInspector{T} <: AbstractEdgePropertyInspector{T}
   values::Vector{T}

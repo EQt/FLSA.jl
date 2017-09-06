@@ -74,7 +74,7 @@ nhist(x, e) = normed1(hist(x, e)[2])
 export nhist
 
 
-typealias LoggerT Dict{String,Vector{Float64}}
+const LoggerT = Dict{String,Vector{Float64}}
 
 """Logg iteration information"""
 function _field(logger::LoggerT, name::String, value::Float64)
