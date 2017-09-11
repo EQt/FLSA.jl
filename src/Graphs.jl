@@ -1,6 +1,7 @@
 # Legacy import of needed Graphs algorithms
 
 module Graph
+using Compat: @compat
 
 export edgelist,
     is_directed,
@@ -18,7 +19,7 @@ export edgelist,
 import Base.isless
 using DataStructures: IntDisjointSets, in_same_set, union!, num_groups
 
-abstract type AbstractGraph{V,E} end
+@compat abstract type AbstractGraph{V,E} end
 
 immutable Edge{V}
     index::Int
@@ -34,8 +35,8 @@ end
 
 source(e::Edge) = e.source
 target(e::Edge) = e.target
-source{V}(e::Edge{V}, g::AbstractGraph{V}) = e.source
-target{V}(e::Edge{V}, g::AbstractGraph{V}) = e.target
+source{V}(e::Edge{V}, ::AbstractGraph{V,Any}) = e.source
+target{V}(e::Edge{V}, ::AbstractGraph{V,Any}) = e.target
 
 type GenericEdgeList{V,E,VList,EList} <: AbstractGraph{V,E}
     is_directed::Bool
@@ -43,8 +44,8 @@ type GenericEdgeList{V,E,VList,EList} <: AbstractGraph{V,E}
     edges::EList
 end
 
-SimpleEdgeList{E} = GenericEdgeList{Int,E,UnitRange{Int},Vector{E}}
-EdgeList{V,E} = GenericEdgeList{V,E,Vector{V},Vector{E}}
+@compat SimpleEdgeList{E} = GenericEdgeList{Int,E,UnitRange{Int},Vector{E}}
+@compat EdgeList{V,E} = GenericEdgeList{V,E,Vector{V},Vector{E}}
 
 # construction
 intrange(n::Integer) = 1:convert(Int,n)
@@ -79,7 +80,7 @@ immutable WeightedEdge{E,W}
 end
 isless{E,W}(a::WeightedEdge{E,W}, b::WeightedEdge{E,W}) = a.weight < b.weight
 
-abstract type AbstractEdgePropertyInspector{T} end
+@compat abstract type AbstractEdgePropertyInspector{T} end
 
 type VectorEdgePropertyInspector{T} <: AbstractEdgePropertyInspector{T}
   values::Vector{T}

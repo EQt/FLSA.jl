@@ -36,7 +36,7 @@ export num_vertices,
        img_graph,
        mst_tree
 
-abstract type Element end
+@compat abstract type Element end
 
 """Record what is happening, when a knot of the PWL is hit"""
 immutable Event <: Element
