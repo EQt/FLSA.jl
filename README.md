@@ -16,7 +16,7 @@ This work is provided under the simplified BSD license (see [LICENSE.md](/LICENS
 
 ## Mathematical Formulation
 
-*TODO*
+![flsa formula](resources/flsa-formula.svg?sanitize=true "objective function")
 
 For the one dimensional version of the Johnson's dynamic programming algorithm, have a look into
 [Lasso.jl](https://github.com/simonster/Lasso.jl)
