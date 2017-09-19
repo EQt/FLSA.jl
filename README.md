@@ -10,7 +10,7 @@ apply it to *images* as well es *ion-mobilty spectrometry* (IMS) data sets.
 
 ## Copyright
 
-[Elias Kuthe](mailto:elias.kuthe@tu-dortmund.de) 2015, 2016.
+[Elias Kuthe](mailto:elias.kuthe@tu-dortmund.de) 2015, 2016, 2017.
 This work is provided under the simplified BSD license (see [LICENSE.md](/LICENSE.md)).
 
 
