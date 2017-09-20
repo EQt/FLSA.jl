@@ -43,7 +43,11 @@ end
 
     c = rand(size(D, 2))
     c -= mean(c)
-    @test mean(c) ≈ 0 atol=1e-16
+    @static if VERSION < v"0.6"
+        @test abs(mean(c)) <= 1e-16
+    else
+        @test mean(c) ≈ 0 atol=1e-16
+    end
     a = FLSA.dual_tree(deepcopy(c), tm)
     @test c ≈ D'*a
 end
