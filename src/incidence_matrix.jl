@@ -7,9 +7,9 @@ function incidence_matrix{T<:Number}(g::AbstractGraph, ::Type{T} = Int)
     local n = num_vertices(g)
     local m = num_edges(g)
     local nnz = 2*m
-    I = Array(Int, nnz)
-    J = Array(Int, nnz)
-    R = Array(T, nnz)
+    I = Array{Int}(nnz)
+    J = Array{Int}(nnz)
+    R = Array{T}(nnz)
 
     if implements_edge_list(g)
         if isa(g, GridGraph)
