@@ -27,7 +27,7 @@ facts("line: 3 rand knots same") do
     z = FLSA.dp_line_naive(y, 0.3)
     x = FLSA.dp_line(y, 0.3)
     d = 3
-    @fact round(x,d) --> roughly(round(z,d))
+    @fact round.(x,d) --> roughly(round.(z,d))
 end
 
 end
