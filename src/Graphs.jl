@@ -35,8 +35,8 @@ end
 
 source(e::Edge) = e.source
 target(e::Edge) = e.target
-source{V}(e::Edge{V}, ::AbstractGraph{V,Any}) = e.source
-target{V}(e::Edge{V}, ::AbstractGraph{V,Any}) = e.target
+source{V}(e::Edge{V}, ::AbstractGraph{V,Edge{V}}) = e.source
+target{V}(e::Edge{V}, ::AbstractGraph{V,Edge{V}}) = e.target
 
 type GenericEdgeList{V,E,VList,EList} <: AbstractGraph{V,E}
     is_directed::Bool
