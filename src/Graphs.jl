@@ -96,7 +96,7 @@ function collect_weighted_edges{V,E,W}(graph::AbstractGraph{V,E}, weights::Abstr
 
     # edge_property_requirement(weights, graph)
 
-    wedges = Array(WeightedEdge{E,W}, 0)
+    wedges = Array{WeightedEdge{E,W}}(0)
     sizehint!(wedges, num_edges(graph))
 
     if implements_edge_list(graph)
@@ -127,8 +127,8 @@ function kruskal_select{V,E,W}(
     K::Integer)
 
     n = num_vertices(graph)
-    re = Array(E, 0)
-    rw = Array(W, 0)
+    re = Array{E}(0)
+    rw = Array{W}(0)
 
     if n > 1
         dsets = IntDisjointSets(n)

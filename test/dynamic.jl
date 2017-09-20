@@ -31,7 +31,7 @@ end
     v = FLSA.vertices(g)
     n = length(v)
     w = rand(size(g.edges))
-    y = round(10*rand(n1*n2), 1)
+    y = round.(10*rand(n1*n2), 1)
     root = 1
 
     mst, wmst = kruskal_minimum_spantree(g, w)
@@ -39,7 +39,7 @@ end
     x = FLSA.dp_tree_naive(y, lambda, t)
     @debug "*"^80
     x2 = FLSA.dp_tree(y, lambda, t)
-    @test round(x, digits) == round(x2, digits)
+    @test round.(x, digits) == round.(x2, digits)
 end
 
 end # module

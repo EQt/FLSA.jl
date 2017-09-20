@@ -43,7 +43,7 @@ end
 
     c = rand(size(D, 2))
     c -= mean(c)
-    @test_approx_eq_eps mean(c)  0 1e-16
+    @test mean(c) ≈ 0 atol=1e-16
     a = FLSA.dual_tree(deepcopy(c), tm)
     @test c ≈ D'*a
 end
@@ -52,7 +52,7 @@ end
 @testset "test ||alpha||∞ <= lambda" begin
     x = FLSA.dp_tree(y, lambda, tm)
     alpha = FLSA.dual_tree(y, x, tm)
-    @test maximum(abs(alpha)) <= lambda + 1e-9
+    @test maximum(abs.(alpha)) <= lambda + 1e-9
 end
 
 
