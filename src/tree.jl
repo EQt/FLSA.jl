@@ -66,7 +66,7 @@ function create_tree(parent::Vector{Int})
             break
         end
     end
-    E = collect(filter(e -> e[1] != e[2], enumerate(parent)))
+    E = collect(Iterators.filter(e -> e[1] != e[2], enumerate(parent)))
     children = [Int[] for i=1:n]
     for (i,p) in E
         push!(children[p], i)
