@@ -1,5 +1,6 @@
 ### Some algorithms for tree (sub)graphs
 import Graph: AbstractGraph
+using Compat.Iterators
 
 type TreeSubGraph{V,E}
     graph::Graph.AbstractGraph{V,E}
