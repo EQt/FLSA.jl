@@ -1,7 +1,7 @@
 include("conjugate_gradient.jl")
 
 """Componentwise soft threshold on x by width λ"""
-soft_threshold(x, λ) = sign(x) .* max(0, abs(x) - λ)
+soft_threshold(x, λ) = sign.(x) .* max.(0, abs.(x) - λ)
 
 
 macro log_admm()
