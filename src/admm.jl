@@ -6,17 +6,22 @@ soft_threshold(x, λ) = sign(x) .* max(0, abs(x) - λ)
 
 macro log_admm()
     return quote
-        if verbose
+        if $(esc(:verbose))
+            logger = $(esc(:logger))
             if !haskey(logger, "flsa")
                 logger["time"] = []
                 logger["flsa"] = []
                 logger["ɛ_CG"] = []
             end
-            process(x)
+            x = $(esc(:x))
+            y = $(esc(:y))
+            D = $(esc(:D))
+            $(esc(:process))(x)
             push!(logger["flsa"], flsa(x, y, D))
-            push!(logger["time"], time)
-            push!(logger["ɛ_CG"], ɛ_CG)
-            println(@sprintf("%4d %f %f", k, logger["flsa"][end], norm(x-y, 2)))
+            push!(logger["time"], $(esc(:time)))
+            push!(logger["ɛ_CG"], $(esc(:ɛ_CG)))
+            println(@sprintf("%4d %f %f", $(esc(:k)),
+                             logger["flsa"][end], norm(x-y, 2)))
         end
     end
 end    
