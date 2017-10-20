@@ -49,7 +49,7 @@ function gap_vec(y::Vector{ℝ}, alpha::Vector{ℝ}, D::IncMat)
     @assert maximum(alpha) <= +1.0 + 1e-9 @val(maximum(alpha))
     x = y - D' * alpha
     g = - D*x
-    return (alpha .* g) + abs(g)
+    return (alpha .* g) + abs.(g)
 end
 # convinience
 gap_vec(y::Matrix{ℝ}, alpha::Vector{ℝ}, D::IncMat) =

@@ -25,14 +25,14 @@ function fista(y::Vector{Float64},
     size(y,1) == n ||
       error(@sprintf("y has wrong dimension %d (should be %d", size(y,1), n))
 
-    prox(x) = clamp(x, -1.0, +1.0)
+    prox(x) = clamp.(x, -1.0, +1.0)
     grad(α) = D*(D'*α - y)              # gradient
     pL(α) = prox(α - 1/L*grad(α))
 
     tic()
     total = 0
     if length(alpha) <= 0
-        α = β = sign(D * y)
+        α = β = sign.(D * y)
     else
         α = β = alpha
     end
