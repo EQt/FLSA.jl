@@ -17,6 +17,10 @@ s = ArgParseSettings(description=desc)
         help = "maximum number of iterations"
         arg_type = Int
         default = 20
+    "--optim", "-o"
+        help = "optimizer (admm|fista)"
+        arg_type = String
+        default = "admm"
     "input"
         help = "problem instance (in hdf5)"
         arg_type = String
@@ -32,7 +36,9 @@ D = map(Float64, D)
 y = map(Float64, y)
 mu = map(Float64, mu)
 
-x = admm(y, D, max_iter=args["max-iter"], verbose=!args["quiet"])
+@assert y isa Vector{Float64}
+optim = eval(Symbol(args["optim"]))
+x = optim(y, D,  max_iter=args["max-iter"], verbose=!args["quiet"])
 
 h5open(args["input"], "r+") do io
     if exists(io, "nodes/output")
