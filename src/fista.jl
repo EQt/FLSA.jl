@@ -1,31 +1,5 @@
 # using Devectorize
 
-macro logitfista()
-    return quote
-        if verbose
-            if !haskey(logger, "flsa")
-                logger["flsa"] = []
-                logger["time"] = []
-                logger["gap"]  = []
-                logger["dual"] = Float64[]
-            end
-            x = y - D'*α
-            process(x)
-            dprocess(α)
-            push!(logger["flsa"], flsa(x, y, D))
-            push!(logger["time"], time)
-            push!(logger["gap"], duality_gap(y, α, D))
-            push!(logger["dual"], FLSA.dual_obj(α, y, D))
-            println(@sprintf("%4d %f %f %f", k,
-                             logger["flsa"][end],
-                             logger["dual"][end],
-                             logger["gap"][end]))
-        end
-    end
-end
-
-
-
 """
 Compute FLSA by FAST GRADIENT PROJECTION.
 Also called Fast Iterative Shrinkage/Thresholding Algorithm.
@@ -39,8 +13,8 @@ Notice that calculation is done in normed dual variables.
 """
 function fista(y::Vector{Float64},
                D::IncMat;
-               L::Float64 = 8,
-               alpha = Vector{Float64}[],
+               L::Float64 = 8.0,
+               alpha = Vector{Float64}(),
                max_iter::Int = 100,
                verbose::Bool = false,
                logger = Dict{String,Any}(),
@@ -66,7 +40,25 @@ function fista(y::Vector{Float64},
     k = 0
     while k <= max_iter && total ≤ max_time
         total += (time = toq())
-        @logitfista
+        if verbose
+            if !haskey(logger, "flsa")
+                logger["flsa"] = []
+                logger["time"] = []
+                logger["gap"]  = []
+                logger["dual"] = Float64[]
+            end
+            x = y - D'*α
+            process(x)
+            dprocess(α)
+            push!(logger["flsa"], flsa(x, y, D))
+            push!(logger["time"], time)
+            push!(logger["gap"], duality_gap(y, α, D))
+            push!(logger["dual"], FLSA.dual_obj(α, y, D))
+            println(@sprintf("%4d %f %f %f", k,
+                             logger["flsa"][end],
+                             logger["dual"][end],
+                             logger["gap"][end]))
+        end
         if k == max_iter break end
         tic()
         α₀ = α
