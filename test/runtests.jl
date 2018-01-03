@@ -1,4 +1,8 @@
-using Base.Test
+if VERSION >= v"0.7-"
+    using Test
+else
+    using Base.Test
+end
 using FLSA
 using Graph
 
@@ -13,5 +17,5 @@ tests = ["grid_graph",
 for t in tests
     tp = Pkg.dir("FLSA", "test", "$(t).jl")
     println("running $(tp) ...")
-    include(tp)
+    Base.include(tp)
 end
