@@ -1,6 +1,11 @@
 __precompile__()
 
-include("Graphs.jl")
+if VERSION >= v"0.7-"
+    using Base.include
+else
+    include("Graphs.jl")
+end
+
 
 module FLSA
 
@@ -12,8 +17,16 @@ module FLSA
 const CUSTOM_PRINTER = false
 
 using Compat: findlast, @compat, @inline, String
-using Graph
-using Graph: IEdge
+if VERSION >= v"0.7-"
+    include("Graphs.jl")
+    using .Graph
+    using .Graph: IEdge
+    using Printf
+else
+    using Graph
+    using Graph: IEdge
+end
+
 using DataStructures
 
 const ∞ = Inf

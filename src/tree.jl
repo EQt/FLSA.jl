@@ -1,5 +1,10 @@
 ### Some algorithms for tree (sub)graphs
-import Graph: AbstractGraph
+if VERSION >= v"0.7-"
+    import .Graph: AbstractGraph
+else
+    import Graph: AbstractGraph
+end
+
 using Compat.Iterators
 
 mutable struct TreeSubGraph{V,E}

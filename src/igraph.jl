@@ -1,6 +1,10 @@
 ### Integer Graphs to avoid slow vertex_indexo calls
 
-import Graph: IEdge, SimpleEdgeList
+if VERSION >= v"0.7-"
+    import .Graph: IEdge, SimpleEdgeList
+else
+    import Graph: IEdge, SimpleEdgeList
+end
 
 const IGraph = Graph.SimpleEdgeList{IEdge}
 

@@ -1,4 +1,9 @@
-import Graph.IEdge
+if VERSION >= v"0.7-"
+    import .Graph.IEdge
+else
+    import Graph.IEdge
+end
+
 import Base: norm, convert
 
 struct Pixel

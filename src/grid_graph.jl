@@ -1,4 +1,9 @@
-import Graph: Edge, EdgeList, num_vertices
+if VERSION >= v"0.7-"
+    import .Graph: Edge, EdgeList, num_vertices
+else
+    import Graph: Edge, EdgeList, num_vertices
+end
+
 
 const GridNode = @compat Tuple{Int,Int}
 const GridEdge = Graph.Edge{GridNode}

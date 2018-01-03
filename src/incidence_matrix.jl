@@ -1,4 +1,9 @@
-using Graph: implements_edge_list, implements_adjacency_list
+if VERSION >= v"0.7-"
+    using .Graph: implements_edge_list, implements_adjacency_list
+else
+    using Graph: implements_edge_list, implements_adjacency_list
+end
+
 
 """Compute the oriented incidence matrix of g and store in a sparse matrix of type T"""
 function incidence_matrix{T<:Number}(g::AbstractGraph, ::Type{T} = Int)

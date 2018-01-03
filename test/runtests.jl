@@ -1,10 +1,12 @@
 if VERSION >= v"0.7-"
     using Test
+    using FLSA
+    using FLSA.Graph
 else
     using Base.Test
+    using FLSA
+    using Graph
 end
-using FLSA
-using Graph
 
 tests = ["grid_graph",
          "incidence_matrix",

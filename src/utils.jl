@@ -1,5 +1,9 @@
 import Base.norm
-import Graph: AbstractGraph
+if VERSION >= v"0.7-"
+    import .Graph: AbstractGraph
+else
+    import Graph: AbstractGraph
+end
 
 """More commonly used name"""
 clip(x::Float64, lo::Float64, hi::Float64) = Base.clamp(x, lo, hi)
