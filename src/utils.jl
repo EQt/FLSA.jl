@@ -21,7 +21,7 @@ flsa0(x::Vector{Float64}, y::Vector{Float64}, D::IncMat, mu::Vector{Float64}) =
 
 
 """Input to compute the graph induced fused LASSO signal approximator FLSA"""
-type Instance
+mutable struct Instance
     y::Vector{Float64}
     lambda::Float64
     graph::Graph.AbstractGraph

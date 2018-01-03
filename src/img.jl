@@ -1,7 +1,7 @@
 import Graph.IEdge
 import Base: norm, convert
 
-immutable Pixel
+struct Pixel
     x::Int
     y::Int
 end
@@ -23,7 +23,7 @@ norm(x::Pixel) = sqrt(norm2(x))
 # end
 
 
-type ImgGraph
+mutable struct ImgGraph
     n1::Int
     n2::Int
     Lip::Float64

@@ -74,7 +74,7 @@ implements_edge_list(g::GenericEdgeList) = true
 
 # Kruskal's algorithm for minimum spanning tree/forest
 
-immutable WeightedEdge{E,W}
+struct WeightedEdge{E,W}
     edge::E
     weight::W
 end
@@ -82,7 +82,7 @@ isless{E,W}(a::WeightedEdge{E,W}, b::WeightedEdge{E,W}) = a.weight < b.weight
 
 @compat abstract type AbstractEdgePropertyInspector{T} end
 
-type VectorEdgePropertyInspector{T} <: AbstractEdgePropertyInspector{T}
+mutable struct VectorEdgePropertyInspector{T} <: AbstractEdgePropertyInspector{T}
   values::Vector{T}
 end
 

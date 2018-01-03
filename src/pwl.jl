@@ -6,7 +6,7 @@ EPS = 1e-9
 """
 Point in a PWL
 """
-type Knot
+mutable struct Knot
     x::Float64
     y::Float64
 end
@@ -16,7 +16,7 @@ Piecewise linear function.
 The function is stored as a list of knots.
 TODO: consider storing it as a list of (x_i, slope_i).
 """
-type PWL
+mutable struct PWL
     knots::Vector{Knot}
     PWL(x::Float64, y::Float64; slope::Float64 = 1.0) = new([Knot(x-INF,y-INF), Knot(x+INF, y+INF)])
     PWL(y::Float64; slope::Float64 = 1.0) = PWL(0.0, y; slope=slope)

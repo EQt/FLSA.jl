@@ -13,13 +13,13 @@ const CUSTOM_PRINTER = false
 
 using Compat: findlast, @compat, @inline, String
 using Graph
+using Graph: IEdge
 using DataStructures
 
 const ∞ = Inf
 const ℝ = Float64
 const Node = Int
 const IncMat = SparseMatrixCSC{Float64,Int}
-
 
 export num_vertices,
        grid_graph,
@@ -39,7 +39,7 @@ export num_vertices,
 @compat abstract type Element end
 
 """Record what is happening, when a knot of the PWL is hit"""
-immutable Event <: Element
+struct Event <: Element
     x::Float64      # position
     slope::Float64  # delta slope
     offset::Float64 # delta offset

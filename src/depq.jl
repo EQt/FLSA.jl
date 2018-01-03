@@ -1,7 +1,7 @@
 import Base: push!, start, next, done, length, isempty, +
 
 """Double-ended priority queue: Implementation based on sorted arrays"""
-type DePQ{E}
+mutable struct DePQ{E}
     elements::Vector{E}
     by::Function
 end
