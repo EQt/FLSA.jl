@@ -2,14 +2,14 @@
 import Graph: AbstractGraph
 using Compat.Iterators
 
-type TreeSubGraph{V,E}
+mutable struct TreeSubGraph{V,E}
     graph::Graph.AbstractGraph{V,E}
     edges::Vector{E}
     root::V
     parent::Vector{Int}
     children::Vector{Vector{Int}}
     dfs_order::Vector{Int}
-    edge_index::Dict{@compat(Tuple{Int,Int}),Int}
+    edge_index::Dict{Tuple{Int,Int},Int}
 end
 
 const ITreeSubGraph = TreeSubGraph{Int,IEdge}

@@ -21,7 +21,7 @@ using DataStructures: IntDisjointSets, in_same_set, union!, num_groups
 
 @compat abstract type AbstractGraph{V,E} end
 
-immutable Edge{V}
+struct Edge{V}
     index::Int
     source::V
     target::V
@@ -38,7 +38,7 @@ target(e::Edge) = e.target
 source{V}(e::Edge{V}, ::AbstractGraph{V,Edge{V}}) = e.source
 target{V}(e::Edge{V}, ::AbstractGraph{V,Edge{V}}) = e.target
 
-type GenericEdgeList{V,E,VList,EList} <: AbstractGraph{V,E}
+mutable struct GenericEdgeList{V,E,VList,EList} <: AbstractGraph{V,E}
     is_directed::Bool
     vertices::VList
     edges::EList
