@@ -9,6 +9,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
                       mu_f::Function = ONE_FUNCTION,
                       mu::Vector{Float64} = Vector{Float64}(),
                       alpha::Vector{Float64} = Vector{Float64}(),
+                      eps_gap::Float64 = 1e-14,
                       max_iter::Integer=1,
                       logger::LoggerT = LoggerT(),
                       random_tree::Bool=false,
@@ -35,15 +36,20 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         logg("predfined x")
     end
     total = 0.0
+    gap = Inf
     tic()
     for it = 0:max_iter
+        if gap <= eps_gap
+            break
+        end
         if verbose
             time = toq()
             total += time
             _field(logger, "time", time)
             _field(logger, "flsa", dual_mu ? flsa0(x, y, g.D, mu)
                                            : flsa(x, y, g.D))
-            _field(logger, "gap", FLSA.duality_gap(vec(y), alpha, g))
+            gap = FLSA.duality_gap(vec(y), alpha, g)
+            _field(logger, "gap", gap)
             _field(logger, "dual", FLSA.dual_obj(alpha, y, g.D))
             process(x)
             dprocess(alpha)
