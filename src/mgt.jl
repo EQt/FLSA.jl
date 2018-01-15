@@ -1,5 +1,5 @@
 max_gap_tree(y::Matrix{Float64}, g::FLSA.ImgGraph; params...) =
-    reshape(max_gap_tree(y[:], g; params...), g.n1, g.n2)
+    reshape(max_gap_tree(vec(y), g; params...), g.n1, g.n2)
 
 ONE_FUNCTION = i -> 1.0
 
@@ -28,10 +28,10 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
 
     x = y
     if length(alpha) <= 0
-        alpha = c0 * sign.(g.D*y[:])
+        alpha = c0 * sign.(g.D*vec(y))
         logg("sign alpha")
     else
-        x = y[:] - g.D' * alpha
+        x = vec(y) - g.D' * alpha
         logg("predfined x")
     end
     total = 0.0
@@ -43,7 +43,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
             _field(logger, "time", time)
             _field(logger, "flsa", dual_mu ? flsa0(x, y, g.D, mu)
                                            : flsa(x, y, g.D))
-            _field(logger, "gap", FLSA.duality_gap(y[:], alpha, g))
+            _field(logger, "gap", FLSA.duality_gap(vec(y), alpha, g))
             _field(logger, "dual", FLSA.dual_obj(alpha, y, g.D))
             process(x)
             dprocess(alpha)
@@ -64,7 +64,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         elseif abs_tree
             weights = abs(alpha)
         else
-            weights = - FLSA.gap_vec(y[:], alpha, g)
+            weights = - FLSA.gap_vec(vec(y), alpha, g)
         end
         logg("weights")
         mst, wmst = kruskal_minimum_spantree(g.graph, weights)
@@ -72,7 +72,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         logg("tree")
         t = FLSA.subtree(g.graph, mst, root_node)
         logg("created subtree")
-        z = y[:] - FLSA.non_tree(g.D, mst)'*alpha
+        z = vec(y) - FLSA.non_tree(g.D, mst)'*alpha
         logg("non_tree")
         Lam = fill(Inf, length(y))
         for e in mst
