@@ -1,3 +1,7 @@
+if VERSION >= v"0.7-"
+    using Random
+end
+
 srand(42)   # always use same random numbers
 n = 40
 A = rand(n, n)
