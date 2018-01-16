@@ -1,6 +1,7 @@
 ### Some algorithms for tree (sub)graphs
 if VERSION >= v"0.7-"
     import .Graph: AbstractGraph
+    using SparseArrays
 else
     import Graph: AbstractGraph
 end

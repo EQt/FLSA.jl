@@ -1,5 +1,6 @@
 if VERSION >= v"0.7-"
     using .Graph: implements_edge_list, implements_adjacency_list
+    using SparseArrays
 else
     using Graph: implements_edge_list, implements_adjacency_list
 end

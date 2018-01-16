@@ -1,6 +1,10 @@
 if isfile(Pkg.dir("HDF5", "src", "HDF5.jl"))
 
 using HDF5
+if VERSION >= v"0.7-"
+    using SparseArrays
+end
+
 
 # file_name = Pkg.dir("FLSA", "examples", "example.h5")
 function read_h5(file_name::AbstractString)

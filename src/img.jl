@@ -1,5 +1,6 @@
 if VERSION >= v"0.7-"
     import .Graph.IEdge
+    using SparseArrays
 else
     import Graph.IEdge
 end
