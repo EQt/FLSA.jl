@@ -1,3 +1,5 @@
+if isfile(Pkg.dir("HDF5", "src", "HDF5.jl"))
+
 using HDF5
 
 # file_name = Pkg.dir("FLSA", "examples", "example.h5")
@@ -23,4 +25,6 @@ function read_h5(file_name::AbstractString)
         D = sparse(I, J, V, m, n)
         return y, mu, D
     end
+end
+
 end
