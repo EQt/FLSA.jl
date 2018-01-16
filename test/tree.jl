@@ -1,14 +1,21 @@
-# Some tests how to compute MST in julia
-
+"""Some tests how to compute MST in julia"""
 module TestTreeFunctions
-
-import FLSA
-import Graph
 using Base.Test
+import FLSA
+import FLSA.Graph
 
+@testset "tree" begin
 @testset "construct a tree" begin
     @test FLSA.Tree([1,1,2,2]) != nothing
 end
+
+@testset "very basic" begin
+    c = [0.0, -1.5, 0.5]
+    t = FLSA.create_tree([1,1,1])
+    a = FLSA.dual_tree(c, t)
+    @test a ≈ [1.5, -0.5]
+end
+
 
 srand(42)
 n1, n2 = 3, 2
@@ -20,14 +27,6 @@ y = rand(n1*n2)
 mst, wmst = Graph.kruskal_minimum_spantree(g, rand(size(g.edges)))
 lambda = 0.1
 tm = FLSA.subtree(g, mst, 1)
-
-
-@testset "very basic" begin
-    c = [0.0, -1.5, 0.5]
-    t = FLSA.create_tree([1,1,1])
-    a = FLSA.dual_tree(c, t)
-    @test a ≈ [1.5, -0.5]
-end
 
 
 @testset "tree_part, dual_tree" begin
@@ -58,6 +57,4 @@ end
     alpha = FLSA.dual_tree(y, x, tm)
     @test maximum(abs.(alpha)) <= lambda + 1e-9
 end
-
-
 end
