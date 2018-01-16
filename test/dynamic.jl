@@ -1,13 +1,11 @@
 module TestDynamic
-
-# debug(msg) = println("DEBUG: $msg")
-
+using Base.Test
 import FLSA
 import FLSA.@debug
-import Graph: kruskal_minimum_spantree
-using Base.Test
+import FLSA.Graph: kruskal_minimum_spantree
 
-digits = 3
+# debug(msg) = println("DEBUG: $msg")
+const digits = 3
 
 @testset "3 line knots" begin
     sol = [2.0; 2.0; 2.5]
