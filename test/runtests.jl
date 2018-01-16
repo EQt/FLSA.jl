@@ -19,5 +19,5 @@ tests = ["grid_graph",
 for t in tests
     tp = Pkg.dir("FLSA", "test", "$(t).jl")
     println("running $(tp) ...")
-    Base.include(tp)
+    include(tp)
 end
