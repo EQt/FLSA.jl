@@ -11,7 +11,6 @@ end
 tests = ["grid_graph",
          "incidence_matrix",
          "conjugate_gradient",
-         "pwl",
          "line",
          "dynamic",
          "tree"]

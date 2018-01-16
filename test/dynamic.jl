@@ -1,5 +1,6 @@
 module TestDynamic
 using Base.Test
+if VERSION >= v"0.7-" using Random end
 import FLSA
 import FLSA.@debug
 import FLSA.Graph: kruskal_minimum_spantree

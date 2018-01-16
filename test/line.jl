@@ -1,6 +1,7 @@
 module TestLine
-using FLSA
 using Base.Test
+if VERSION >= v"0.7-" using Random end
+using FLSA
 
 @testset "line" begin
     @testset "3 line knot" begin

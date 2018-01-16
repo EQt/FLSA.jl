@@ -1,6 +1,10 @@
 """Some tests how to compute MST in julia"""
 module TestTreeFunctions
 using Base.Test
+if VERSION >= v"0.7-"
+    using Random
+    using SparseArrays
+end
 import FLSA
 import FLSA.Graph
 
