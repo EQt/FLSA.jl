@@ -12,7 +12,7 @@ clip(x::Vector{Float64}, lo::Float64, hi::Float64) = Base.clamp(x, lo, hi)
 
 """L2 norm squared"""
 norm2(x::Vector{Float64}) = dot(x, x)
-norm2(x::Matrix{Float64}) = norm2(x[:])
+norm2(x::Matrix{Float64}) = norm2(vec(x))
 
 
 """The objective function value"""

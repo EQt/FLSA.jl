@@ -114,4 +114,3 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
     end
     return x
 end
-
