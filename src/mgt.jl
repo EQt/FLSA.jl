@@ -79,6 +79,11 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         t = FLSA.subtree(g.graph, mst, root_node)
         logg("created subtree")
         z = vec(y) - FLSA.non_tree(g.D, mst)'*alpha
+        if length(z) == 10
+            println("z:")
+            show(STDOUT, MIME("text/plain"), reshape(z, 5, 2))
+            println("\n")
+        end
         logg("non_tree")
         Lam = fill(Inf, length(y))
         for e in mst

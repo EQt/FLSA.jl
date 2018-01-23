@@ -1,4 +1,4 @@
-__precompile__()
+# __precompile__()
 
 if VERSION >= v"0.7-"
     using Base.include
