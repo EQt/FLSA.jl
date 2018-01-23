@@ -114,6 +114,9 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
             alpha[e.index] = alpha_t[i] / g.lambda[e.index]
             @assert abs(g.lambda[e.index]) > 1e-15 (@val e.index)
         end
+        if length(alpha) <= 30
+            println(alpha)
+        end
         @assert all(isfinite.(alpha))
         @assert !any(isnan.(alpha))
     end
