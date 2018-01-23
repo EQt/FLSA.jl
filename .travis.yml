@@ -6,7 +6,7 @@ julia:
   - nightly
   - 0.6
 notifications:
-  email: true
+  email: change
 addons:
   apt:
     packages:
