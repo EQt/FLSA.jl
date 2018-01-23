@@ -38,6 +38,10 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
     total = 0.0
     gap = Inf
     tic()
+    if length(alpha) <= 30
+        println("α0 ≈ ", round.(alpha, 2))
+    end
+
     for it = 0:max_iter
         if gap <= eps_gap
             break
@@ -101,6 +105,13 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
         else
             FLSA.dp_tree(z, i->Lam[i], mu_f, t)
         end
+        if length(z) == 10
+            println("weights:  ", round.(weights*10, 2))
+            println("parent:   ", t.parent)
+            println("x:")
+            show(STDOUT, MIME("text/plain"), reshape(x, 5, 2))
+            println("\n")
+        end
         @assert all(isfinite.(x))
         @assert !any(isnan.(x))
         logg("dp_tree")
@@ -115,7 +126,7 @@ function max_gap_tree(y::Vector{Float64}, g::FLSA.ImgGraph;
             @assert abs(g.lambda[e.index]) > 1e-15 (@val e.index)
         end
         if length(alpha) <= 30
-            println(alpha)
+            println("α ≈ ", round.(alpha, 2))
         end
         @assert all(isfinite.(alpha))
         @assert !any(isnan.(alpha))
