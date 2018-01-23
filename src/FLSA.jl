@@ -2,6 +2,7 @@ __precompile__()
 
 if VERSION >= v"0.7-"
     using Base.include
+    using LinearAlgebra     # for norm
 else
     include("Graphs.jl")
 end

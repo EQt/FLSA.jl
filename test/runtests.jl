@@ -2,6 +2,7 @@ if VERSION >= v"0.7-"
     using Test
     using FLSA
     using FLSA.Graph
+    using LinearAlgebra     # for norm
 else
     using Base.Test
     using FLSA
