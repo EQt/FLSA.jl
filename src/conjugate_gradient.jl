@@ -1,4 +1,7 @@
-using Compat.issymmetric
+if VERSION >= v"0.7-"
+    using LinearAlgebra     # for issymmetric
+end
+
 
 """Invoke a fast BLAS routine"""
 macro blas(e)
