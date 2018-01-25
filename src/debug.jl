@@ -25,5 +25,5 @@ end
 
 macro val(v)
     s = "$v="
-     :($s * string($v))
+     :($s * string($(esc(v))))
 end
