@@ -1,7 +1,6 @@
 # Legacy import of needed Graphs algorithms
 
 module Graph
-using Compat: @compat
 
 export edgelist,
     is_directed,
@@ -19,7 +18,7 @@ export edgelist,
 import Base.isless
 using DataStructures: IntDisjointSets, in_same_set, union!, num_groups
 
-@compat abstract type AbstractGraph{V,E} end
+abstract type AbstractGraph{V,E} end
 
 struct Edge{V}
     index::Int
@@ -44,8 +43,8 @@ mutable struct GenericEdgeList{V,E,VList,EList} <: AbstractGraph{V,E}
     edges::EList
 end
 
-@compat SimpleEdgeList{E} = GenericEdgeList{Int,E,UnitRange{Int},Vector{E}}
-@compat EdgeList{V,E} = GenericEdgeList{V,E,Vector{V},Vector{E}}
+SimpleEdgeList{E} = GenericEdgeList{Int,E,UnitRange{Int},Vector{E}}
+EdgeList{V,E} = GenericEdgeList{V,E,Vector{V},Vector{E}}
 
 # construction
 intrange(n::Integer) = 1:convert(Int,n)
@@ -80,7 +79,7 @@ struct WeightedEdge{E,W}
 end
 isless{E,W}(a::WeightedEdge{E,W}, b::WeightedEdge{E,W}) = a.weight < b.weight
 
-@compat abstract type AbstractEdgePropertyInspector{T} end
+abstract type AbstractEdgePropertyInspector{T} end
 
 mutable struct VectorEdgePropertyInspector{T} <: AbstractEdgePropertyInspector{T}
   values::Vector{T}
