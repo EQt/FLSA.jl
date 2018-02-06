@@ -1,8 +1,9 @@
-import Base.norm
 if VERSION >= v"0.7-"
     import .Graph: AbstractGraph
+    import LinearAlgebra.norm
 else
     import Graph: AbstractGraph
+    import Base.norm
 end
 
 """More commonly used name"""
@@ -72,10 +73,10 @@ dual_obj(alpha::Vector{Float64}, y::Matrix{Float64}, D::IncMat) =
 
 """Compute normed histograms"""
 normed1(x::Vector) = x /= sum(x)
+
 """Compute normed histogram"""
 nhist(x::Vector) = normed1(hist(x)[2])
 nhist(x, e) = normed1(hist(x, e)[2])
-export nhist
 
 
 const LoggerT = Dict{String,Vector{Float64}}

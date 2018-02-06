@@ -22,7 +22,7 @@ const digits = 3
     @test x ≈ sol
 end
 
-@testset "A random example" begin
+@testset "random(13)" begin
     srand(13)
     lambda = 1.0
     n1, n2 = 43, 31
