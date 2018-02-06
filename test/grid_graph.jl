@@ -1,4 +1,4 @@
-@test 1 == 1
+@testset "grid_graph" begin
 
 V23 = reshape([(1,1) (1,2) (1,3);
                (2,1) (2,2) (2,3)], 6)
@@ -42,3 +42,5 @@ F23 = [((1,1),(2,2))
 
 g = FLSA.dgrid_graph(2,3)
 @test g.vertices == V23
+
+end

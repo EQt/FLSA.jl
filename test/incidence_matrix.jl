@@ -1,3 +1,5 @@
+@testset "incidence_mat" begin
+
 n1, n2 = 2, 3
 G = grid_graph(n1, n2)
 D = incidence_matrix(G)
@@ -22,3 +24,5 @@ D23 = [# vertices
        ]
 
 @test full(D) == D23
+
+end

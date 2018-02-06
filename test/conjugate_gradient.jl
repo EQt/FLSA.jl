@@ -2,6 +2,8 @@ if VERSION >= v"0.7-"
     using Random
 end
 
+@testset "conjug_grad" begin
+
 srand(42)   # always use same random numbers
 n = 40
 A = rand(n, n)
@@ -13,3 +15,6 @@ y = rand(n)
 x = conjugate_gradient(A, b, y; ɛ=ɛ, max_iter=1000)
 
 @test norm2(A*x - b) <= ɛ * norm(A, Inf) * norm(b, Inf)
+
+end
+ 
