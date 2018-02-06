@@ -3,32 +3,25 @@ __precompile__()
 if VERSION >= v"0.7-"
     using Base.include
     using LinearAlgebra     # for norm
+    using Printf
 else
     include("Graphs.jl")
 end
 
-
 module FLSA
 
-# Fix https://github.com/JuliaLang/DataStructures.jl/issues/200
-# if Pkg.installed("DataStructures") == v"0.4.3" && VERSION.minor == 5
-#     Pkg.checkout("DataStructures", "master")
-# end
-
 const CUSTOM_PRINTER = false
+using Compat: @compat
+using DataStructures
 
-using Compat: findlast, @compat, @inline, String
 if VERSION >= v"0.7-"
     include("Graphs.jl")
     using .Graph
     using .Graph: IEdge
-    using Printf
 else
     using Graph
     using Graph: IEdge
 end
-
-using DataStructures
 
 const ∞ = Inf
 const ℝ = Float64
@@ -64,21 +57,15 @@ struct Event <: Element
     end
 end
 
-import Base.isless
-isless(e1::Event, e2::Event) = isless(e1.x, e2.x)
 
+Base.isless(e1::Event, e2::Event) = isless(e1.x, e2.x)
 
 if CUSTOM_PRINTER
-    import Base.string
-    function string(e::Event)
+    Base.string(e::Event) = 
         @sprintf "@%f : Δs = %f, Δo = %f" e.x e.slope e.offset
-    end
 
-
-    import Base.show
-    function show(io::IO, e::Event)
+    Base.show(io::IO, e::Event) =
         print(io, string(e))
-    end
 end
 
 include("debug.jl")
@@ -105,4 +92,4 @@ precompile(max_gap_tree, (Array{Float64,1}, ImgGraph))
 precompile(fista, (Array{Float64,1},SparseMatrixCSC{Float64,Int64}))
 precompile(admm, (Array{Float64,1},SparseMatrixCSC{Float64,Int64}))
 
-end # module
+end # module FLSA

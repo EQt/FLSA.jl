@@ -1,5 +1,5 @@
 import DataStructures: back, front, Deque
-import Base: +, merge!
+import Base: +
 
 const DeQue = Deque
 
@@ -18,7 +18,7 @@ push_back!{T}(q::DeQue{T}, x::T) = push!(q, x)
 
 +{E<:Element}(q::DeQue{E}, p::DeQue{E}) = merge!(p, q)
 
-function merge!{E<:Element}(q::DeQue{E}, p::DeQue{E})
+function Base.merge!{E<:Element}(q::DeQue{E}, p::DeQue{E})
     el = vcat(collect(q), collect(p))
     sort!(el, by=event_time)
     q = deque(E)
