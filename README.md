@@ -54,7 +54,7 @@ First you have to define graph (see `(1)`)
 
 ### HDF5 Input
 In order to be easily called from other languages a HDF5 intermediate data structure is supported that looks like.
-See [hdf5.py](/examples/hdf5.py) for a working python example.
+See [generate_hdf5.py](/generate_hdf5.py) for a working python example.
 
 ```
              1 2 3 ... n
