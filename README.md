@@ -8,12 +8,6 @@ You can use it to denoise data.
 The package includes some utility methods to assess the algorithms and
 apply it to *images* as well es *ion-mobilty spectrometry* (IMS) data sets.
 
-## Copyright
-
-[Elias Kuthe](mailto:elias.kuthe@tu-dortmund.de) 2015, 2016, 2017.
-This work is provided under the simplified BSD license (see [LICENSE.md](/LICENSE.md)).
-
-
 ## Mathematical Formulation
 
 ![flsa formula](resources/flsa-formula.svg?sanitize=true "objective function")
@@ -50,11 +44,12 @@ graph = FLSA.img_graph(size(B)..., dn=2, lam=0.1)   # (1)
 F = FLSA.fista(B, graph, verbose=true; max_iter=10) # (2)
 ```
 
-First you have to define graph (see `(1)`)
+First you have to define graph (line `(1)`).
+Then one of the algorithms above are called (see `(2)`).
 
 ### HDF5 Input
-In order to be easily called from other languages a HDF5 intermediate data structure is supported that looks like.
-See [generate_hdf5.py](/generate_hdf5.py) for a working python example.
+In order to be easily called from other languages a HDF5 intermediate data structure is supported that looks as follows 
+(see [generate_hdf5.py](/generate_hdf5.py) for a working python example):
 
 ```
              1 2 3 ... n
@@ -72,11 +67,7 @@ algorithm/@name
 ```
 
 
-## ToDos
-- [ ] Try out QP interface of Gurobi and CPLEX.
-      In Julia, that is the `add_qpterms!` function or `JuMP.addQuadratics`
-      
-- [ ] Try out [LinearLeastSquares.minimize!][lls]
-  [lls]: https://github.com/davidlizeng/LinearLeastSquares.jl/blob/master/docs/julia_tutorial.rst#the-minimize-function
+## Copyright
 
-- [ ] Refactor the code
+[Elias Kuthe](mailto:elias.kuthe@tu-dortmund.de) 2015, 2016, 2017, 2018.
+This work is provided under the simplified BSD license (see [LICENSE.md](/LICENSE.md)).
