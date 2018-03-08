@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/EQt/FLSA.jl.svg?branch=master)](https://travis-ci.org/EQt/FLSA.jl)
 [![Build status](https://ci.appveyor.com/api/projects/status/e28l9al5h3r0hmcu/branch/master?svg=true)](https://ci.appveyor.com/project/EQt/flsa-jl/branch/master)
 
+**At the moment, the code is being refactored!!!**
+
 Computing a graph induced *Fused LASSO Signal Approximator*.
 You can use it to denoise data.
 The package includes some utility methods to assess the algorithms and
@@ -29,42 +31,8 @@ The fused LASSO signal approximator can be used to denoise e.g. images:
 ### Fast Gradient Projection (FGP)
 Also known as Fast Iterative Shrinkage Algorithm (FISTA).
 
-### Alternating Direction Method of Multipliers (ADMM)
-
 ### Maximum Gap Tree (MGT)
 Own algorithm based on a iterative approximation by dynamic programming algorithm minimizing a sub-tree-graph.
-
-
-## Example
-
-### Image Graph
-```julia
-using FLSA
-graph = FLSA.img_graph(size(B)..., dn=2, lam=0.1)   # (1)
-F = FLSA.fista(B, graph, verbose=true; max_iter=10) # (2)
-```
-
-First you have to define graph (line `(1)`).
-Then one of the algorithms above are called (see `(2)`).
-
-### HDF5 Input
-In order to be easily called from other languages a HDF5 intermediate data structure is supported that looks as follows 
-(see [generate_hdf5.py](/generate_hdf5.py) for a working python example):
-
-```
-             1 2 3 ... n
-nodes/input
-     /weight
-
-             1 2 3 ... m
-edges/head
-     /tail
-     /weight
-
-algorithm/@name
-         /@param1
-         /@param2
-```
 
 
 ## Copyright
