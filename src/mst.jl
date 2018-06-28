@@ -108,7 +108,6 @@ function minimum_spantree_e(g, weights, root = 1)
 end
 
 
-
 function _init_spantree(edges, n)
     m = length(edges)
     finished = Vector{Bool}(n)
