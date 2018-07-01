@@ -71,7 +71,9 @@ function percolate_up!(pq::PriorityQueue, i::Integer)
 end
 
 
-# Change the priority of an existing element, or equeue it if it isn't present.
+"""
+Change the priority of an existing element, or equeue it if it isn't present.
+"""
 function Base.setindex!(pq::PriorityQueue{K, V}, value, key) where {K,V}
     if haskey(pq, key)
         i = pq.index[key]
