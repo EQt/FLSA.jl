@@ -74,7 +74,7 @@ end
 """
 Change the priority of an existing element, or equeue it if it isn't present.
 """
-function Base.setindex!(pq::PriorityQueue{K, V}, value, key) where {K,V}
+function Base.setindex!(pq::PriorityQueue{K, V}, value::V, key::K) where {K,V}
     if haskey(pq, key)
         i = pq.index[key]
         oldvalue = pq.xs[i].second
