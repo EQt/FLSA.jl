@@ -1,10 +1,5 @@
-__precompile__()
-
-if VERSION >= v"0.7-"
-    using Base.include
-    using LinearAlgebra     # for norm
-    using Printf
-end
+using LinearAlgebra     # for norm
+using Printf
 
 module FLSA
 
